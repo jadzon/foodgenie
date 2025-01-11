@@ -28,3 +28,23 @@ func (h *Handler) Login(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, user)
 }
+func (h *Handler) Register(c *gin.Context) {
+	var user models.User
+	err := c.ShouldBindJSON(&user)
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": "bad request"})
+	}
+	_, err = h.App.UserService.GetUserByEmail(user.Email)
+	if err == nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": "user with that email already exists"})
+	}
+	_, err = h.App.UserService.GetUserByUsername(user.Username)
+	if err == nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": "user with that email already exists"})
+	}
+	err = h.App.UserService.CreateUser(&user)
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"message": "could not create the user"})
+	}
+	c.JSON(http.StatusCreated, gin.H{"message": "user created"})
+}

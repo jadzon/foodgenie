@@ -10,6 +10,8 @@ import (
 type UserService interface {
 	CreateUser(user *models.User) error
 	ValidateUser(user *models.User) error
+	GetUserByEmail(email string) (models.User, error)
+	GetUserByUsername(username string) (models.User, error)
 }
 type userService struct {
 	userRepo repositories.UserRepository
@@ -38,4 +40,10 @@ func (us *userService) ValidateUser(user *models.User) error {
 	}
 	err = security.ComparePasswordAndHash(userInDb.Password, user.Password)
 	return err
+}
+func (us *userService) GetUserByEmail(email string) (models.User, error) {
+	return us.userRepo.GetUserByEmail(email)
+}
+func (us *userService) GetUserByUsername(username string) (models.User, error) {
+	return us.userRepo.GetUserByUsername(username)
 }
