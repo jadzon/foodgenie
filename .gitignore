@@ -1,0 +1,29 @@
+# Binaries for programs and plugins
+*.exe
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+
+# Build and debug folders
+/build/
+/bin/
+*.log
+
+# Go modules and dependencies
+/go.sum
+/vendor/
+
+# IDE settings and files
+.idea/
+.vscode/
+*.swp
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Environment files
+.env
+
