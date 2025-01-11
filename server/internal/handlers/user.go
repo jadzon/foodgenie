@@ -21,30 +21,36 @@ func (h *Handler) Login(c *gin.Context) {
 	err := c.ShouldBindJSON(&user)
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": "bad request"})
+		return
 	}
 	err = h.App.UserService.ValidateUser(&user)
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"message": "incorrect credentials"})
+		return
 	}
-	c.JSON(http.StatusOK, user)
+	c.JSON(http.StatusOK, gin.H{"message": "logged in"})
 }
 func (h *Handler) Register(c *gin.Context) {
 	var user models.User
 	err := c.ShouldBindJSON(&user)
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": "bad request"})
+		return
 	}
 	_, err = h.App.UserService.GetUserByEmail(user.Email)
-	if err == nil {
+	if err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": "user with that email already exists"})
+		return
 	}
 	_, err = h.App.UserService.GetUserByUsername(user.Username)
-	if err == nil {
+	if err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": "user with that email already exists"})
+		return
 	}
 	err = h.App.UserService.CreateUser(&user)
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"message": "could not create the user"})
+		return
 	}
 	c.JSON(http.StatusCreated, gin.H{"message": "user created"})
 }

@@ -35,10 +35,11 @@ func (us *userService) CreateUser(user *models.User) error {
 }
 func (us *userService) ValidateUser(user *models.User) error {
 	userInDb, err := us.userRepo.GetUserByUsername(user.Username)
+	fmt.Println("USERNAME: ", user.Username)
 	if err != nil {
 		return err
 	}
-	err = security.ComparePasswordAndHash(userInDb.Password, user.Password)
+	err = security.ComparePasswordAndHash(user.Password, userInDb.Password)
 	return err
 }
 func (us *userService) GetUserByEmail(email string) (models.User, error) {

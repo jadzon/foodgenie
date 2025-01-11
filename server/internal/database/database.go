@@ -9,7 +9,8 @@ import (
 )
 
 func InitDatabase() (*gorm.DB, error) {
-	dsn := "host=localhost user=hotdog password=hotdog dbname=foodgenie_db port=5432 sslmode=disable TimeZone=TimeZone=Europe/Warsaw"
+	dsn := "host=localhost user=hotdog password=hotdog dbname=foodgenie_db port=5432 sslmode=disable TimeZone=Europe/Warsaw"
+
 	var err error
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {

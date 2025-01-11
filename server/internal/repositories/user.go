@@ -35,16 +35,21 @@ func (ur *userRepository) DeleteUser(user *models.User) error {
 }
 func (ur *userRepository) GetUserByUsername(username string) (models.User, error) {
 	var user models.User
-	user.Username = username
-	if err := ur.db.Find(&user).Error; err != nil {
+	if err := ur.db.Where("username = ?", username).First(&user).Error; err != nil {
+		if err == gorm.ErrRecordNotFound {
+			return models.User{}, nil
+		}
 		return models.User{}, err
 	}
 	return user, nil
 }
+
 func (ur *userRepository) GetUserByEmail(email string) (models.User, error) {
 	var user models.User
-	user.Email = email
-	if err := ur.db.Find(&user).Error; err != nil {
+	if err := ur.db.Where("email = ?", email).First(&user).Error; err != nil {
+		if err == gorm.ErrRecordNotFound {
+			return models.User{}, nil
+		}
 		return models.User{}, err
 	}
 	return user, nil

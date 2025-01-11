@@ -18,7 +18,7 @@ func main() {
 	handler := handlers.NewHandler(application)
 	router.POST("/api/user/register", handler.Register)
 	router.POST("/api/user/login", handler.Login)
-	err = router.Run("8080")
+	err = router.Run("localhost:8080")
 	if err != nil {
 		log.Fatal("failed to initialize server")
 	}
