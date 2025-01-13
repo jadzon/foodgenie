@@ -28,7 +28,24 @@ func (h *Handler) Login(c *gin.Context) {
 		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"message": "incorrect credentials"})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"message": "logged in"})
+	user, _ = h.App.UserService.GetUserByUsername(user.Username)
+	ac, err := h.App.SecurityService.GenerateAccessToken(user)
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"message": "failed generating access token"})
+		return
+	}
+	rt, err := h.App.SecurityService.GenerateRefreshToken(user)
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"message": "failed generating refresh token"})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"data": gin.H{
+			"access_token":  ac,
+			"refresh_token": rt,
+		},
+	})
+
 }
 func (h *Handler) Register(c *gin.Context) {
 	var user models.User

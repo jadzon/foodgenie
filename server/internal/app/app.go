@@ -8,7 +8,8 @@ import (
 )
 
 type App struct {
-	UserService services.UserService
+	UserService     services.UserService
+	SecurityService services.SecurityService
 }
 
 func Init(db *gorm.DB, cfg *config.AppConfig) *App {
@@ -16,6 +17,7 @@ func Init(db *gorm.DB, cfg *config.AppConfig) *App {
 	securityService := services.NewSecurityService(cfg.JWT)
 	userService := services.NewUserService(userRepository, securityService)
 	return &App{
-		UserService: userService,
+		UserService:     userService,
+		SecurityService: securityService,
 	}
 }
