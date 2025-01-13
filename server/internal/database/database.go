@@ -2,14 +2,22 @@ package database
 
 import (
 	"fmt"
+	"foodgenie/internal/config"
 	"foodgenie/internal/models"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"log"
 )
 
-func InitDatabase() (*gorm.DB, error) {
-	dsn := "host=localhost user=hotdog password=hotdog dbname=foodgenie_db port=5432 sslmode=disable TimeZone=Europe/Warsaw"
+func InitDatabase(cfg config.DBConfig) (*gorm.DB, error) {
+	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=%s TimeZone=Europe/Warsaw",
+		cfg.Host,
+		cfg.User,
+		cfg.Password,
+		cfg.Name,
+		cfg.Port,
+		cfg.SSLMode,
+	)
 
 	var err error
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})

@@ -2,6 +2,7 @@ package main
 
 import (
 	"foodgenie/internal/app"
+	"foodgenie/internal/config"
 	"foodgenie/internal/database"
 	"foodgenie/internal/handlers"
 	"github.com/gin-gonic/gin"
@@ -9,11 +10,15 @@ import (
 )
 
 func main() {
-	db, err := database.InitDatabase()
+	cfg, err := config.LoadConfig()
+	if err != nil {
+		log.Fatalf("Failed to load config: %v", err)
+	}
+	db, err := database.InitDatabase(cfg.DB)
 	if err != nil {
 		panic("Failed to initialize database")
 	}
-	application := app.Init(db)
+	application := app.Init(db, &cfg.App)
 	router := gin.Default()
 	handler := handlers.NewHandler(application)
 	router.POST("/api/user/register", handler.Register)

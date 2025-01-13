@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"foodgenie/internal/models"
 	"foodgenie/internal/repositories"
-	"foodgenie/internal/security"
 )
 
 type UserService interface {
@@ -14,17 +13,19 @@ type UserService interface {
 	GetUserByUsername(username string) (models.User, error)
 }
 type userService struct {
-	userRepo repositories.UserRepository
+	userRepo        repositories.UserRepository
+	securityService SecurityService
 }
 
-func NewUserService(userRepo repositories.UserRepository) UserService {
+func NewUserService(userRepo repositories.UserRepository, securityService SecurityService) UserService {
 	return &userService{
-		userRepo: userRepo,
+		userRepo:        userRepo,
+		securityService: securityService,
 	}
 }
 
 func (us *userService) CreateUser(user *models.User) error {
-	hashedPassword, err := security.GenerateHashFromPassword(user.Password)
+	hashedPassword, err := us.securityService.GenerateHashFromPassword(user.Password)
 	if err != nil {
 		fmt.Println("Failed to generate hash from password")
 		return err
@@ -39,7 +40,7 @@ func (us *userService) ValidateUser(user *models.User) error {
 	if err != nil {
 		return err
 	}
-	err = security.ComparePasswordAndHash(user.Password, userInDb.Password)
+	err = us.securityService.ComparePasswordAndHash(user.Password, userInDb.Password)
 	return err
 }
 func (us *userService) GetUserByEmail(email string) (models.User, error) {
