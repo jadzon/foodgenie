@@ -1,3 +1,51 @@
+# Flutter/Dart/Pub related
+**/build/
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+.idea/
+.vscode/
+*.iml
+
+# macOS
+*.DS_Store
+
+# Web related
+lib/generated_plugin_registrant.dart
+
+# Android related
+android/local.properties
+android/key.properties
+**/*.keystore
+**/android/app/debug.keystore
+
+# iOS related
+ios/Flutter/.last_build_id
+ios/Flutter/Generated.xcconfig
+ios/.generated
+*.xcworkspace
+!default.xcworkspace
+Podfile.lock
+Pods/
+Runner.xcworkspace
+
+# Linux related
+linux/.dart_tool/
+linux/flutter/generated_plugin_registrant.cc
+
+# Windows related
+windows/.dart_tool/
+windows/flutter/generated_plugin_registrant.cc
+
+# Coverage
+coverage/
+*.gcda
+*.gcno
+*.info
+
 # Binaries for programs and plugins
 *.exe
 *.dll
@@ -27,3 +75,11 @@ Thumbs.db
 # Environment files
 .env
 
+# Firebase related
+*.firebase
+
+# Other
+*.log
+*.swp
+*.lock
+*.pyc
