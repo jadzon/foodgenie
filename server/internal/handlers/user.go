@@ -5,6 +5,7 @@ import (
 	"foodgenie/internal/models"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"strings"
 )
 
 type Handler struct {
@@ -70,4 +71,31 @@ func (h *Handler) Register(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusCreated, gin.H{"message": "user created"})
+}
+func (h *Handler) AuthCheck() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		authHeader := c.GetHeader("Authorization")
+		if authHeader == "" {
+			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"message": "Missing Authorization header"})
+			return
+		}
+
+		// Oczekiwany format: "Bearer <token>"
+		parts := strings.Split(authHeader, " ")
+		if len(parts) != 2 || parts[0] != "Bearer" {
+			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"message": "Invalid Authorization header format"})
+			return
+		}
+
+		accessToken := parts[1]
+
+		userID, err := h.App.SecurityService.ExtractUserIDfromAccessToken(accessToken)
+		if err != nil {
+			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"message": "Invalid access token"})
+			return
+		}
+
+		c.Set("userID", userID)
+		c.Next()
+	}
 }

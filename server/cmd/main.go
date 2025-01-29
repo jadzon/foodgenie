@@ -24,7 +24,9 @@ func main() {
 	mediaHandler := handlers.NewMediaHandler(application)
 	router.POST("/api/user/register", handler.Register)
 	router.POST("/api/user/login", handler.Login)
-	router.POST("/api/image", mediaHandler.UploadImage)
+	authorized := router.Group("/api", handler.AuthCheck())
+	authorized.POST("/image", mediaHandler.UploadImage)
+	router.GET("")
 	err = router.Run("localhost:8080")
 	if err != nil {
 		log.Fatal("failed to initialize server")
