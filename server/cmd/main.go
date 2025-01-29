@@ -26,6 +26,7 @@ func main() {
 	router.POST("/api/user/login", handler.Login)
 	authorized := router.Group("/api", handler.AuthCheck())
 	authorized.POST("/image", mediaHandler.UploadImage)
+	authorized.GET("/user/get-data", handler.GetUserData)
 	router.GET("")
 	err = router.Run("localhost:8080")
 	if err != nil {

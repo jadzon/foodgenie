@@ -4,6 +4,7 @@ import (
 	"foodgenie/internal/app"
 	"foodgenie/internal/models"
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 	"net/http"
 	"strings"
 )
@@ -98,4 +99,31 @@ func (h *Handler) AuthCheck() gin.HandlerFunc {
 		c.Set("userID", userID)
 		c.Next()
 	}
+}
+func (h *Handler) GetUserData(c *gin.Context) {
+	userID, exists := c.Get("userID")
+	if !exists {
+		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"message": "User not authenticated"})
+		return
+	}
+
+	userUUID, ok := userID.(uuid.UUID)
+	if !ok {
+		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"message": "Invalid user ID format"})
+		return
+	}
+
+	user, err := h.App.UserService.GetUserById(userUUID)
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"message": "Failed to retrieve user data"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"username":      user.Username,
+		"email":         user.Email,
+		"first_name":    user.FirstName,
+		"last_name":     user.LastName,
+		"date_of_birth": user.DateOfBirth.Format("2006-01-02"), // Formatowanie daty
+	})
 }

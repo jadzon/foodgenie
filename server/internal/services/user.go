@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"foodgenie/internal/models"
 	"foodgenie/internal/repositories"
+	"github.com/google/uuid"
 )
 
 type UserService interface {
@@ -11,6 +12,7 @@ type UserService interface {
 	ValidateUser(user *models.User) error
 	GetUserByEmail(email string) (models.User, error)
 	GetUserByUsername(username string) (models.User, error)
+	GetUserById(id uuid.UUID) (models.User, error)
 }
 type userService struct {
 	userRepo        repositories.UserRepository
@@ -48,4 +50,7 @@ func (us *userService) GetUserByEmail(email string) (models.User, error) {
 }
 func (us *userService) GetUserByUsername(username string) (models.User, error) {
 	return us.userRepo.GetUserByUsername(username)
+}
+func (us *userService) GetUserById(id uuid.UUID) (models.User, error) {
+	return us.userRepo.GetUserById(id)
 }
