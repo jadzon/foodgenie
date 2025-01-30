@@ -17,7 +17,7 @@ func Init(db *gorm.DB, cfg *config.AppConfig) *App {
 	userRepository := repositories.NewUserRepository(db)
 	securityService := services.NewSecurityService(cfg.JWT)
 	userService := services.NewUserService(userRepository, securityService)
-	aiService := services.NewAIService()
+	aiService := services.NewAIService("http://localhost:5000")
 	mediaService := services.NewMediaService(aiService)
 	return &App{
 		UserService:     userService,

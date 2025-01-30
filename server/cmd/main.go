@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"foodgenie/internal/app"
 	"foodgenie/internal/config"
 	"foodgenie/internal/database"
@@ -20,6 +21,7 @@ func main() {
 	}
 	application := app.Init(db, &cfg.App)
 	router := gin.Default()
+	router.Use(logRequestMiddleware())
 	handler := handlers.NewHandler(application)
 	mediaHandler := handlers.NewMediaHandler(application)
 	router.POST("/api/user/register", handler.Register)
@@ -31,5 +33,17 @@ func main() {
 	err = router.Run("localhost:8080")
 	if err != nil {
 		log.Fatal("failed to initialize server")
+	}
+}
+func logRequestMiddleware() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		fmt.Println("Method:", c.Request.Method)
+		fmt.Println("URL:", c.Request.URL)
+		fmt.Println("Headers:")
+		for key, values := range c.Request.Header {
+			fmt.Printf("%s: %s\n", key, values)
+		}
+
+		c.Next()
 	}
 }
