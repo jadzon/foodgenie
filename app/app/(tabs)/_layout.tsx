@@ -49,14 +49,11 @@ const TabLayout = () => {
 
         },
         tabBarStyle:{
-            backgroundColor: '#25242A',
+            backgroundColor: '#2A2A2A',
             height: 52,
             paddingBottom:70,
             paddingTop: 20,
-            borderTopWidth:0.5,
-            borderTopColor: '#A1A1A1'
-
-
+            borderTopWidth:0,
         }
       }}
     >
@@ -76,6 +73,7 @@ const TabLayout = () => {
           tabBarIcon: ({ focused }) => (
             <StandardTabIcon focused={focused} IconComponent={Camera} />
           ),
+          
         }}
       />
       <Tabs.Screen

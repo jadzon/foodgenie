@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from 'react-native'
 
 const Social = () => {
   return (
-    <View>
+    <View className='bg-night h-full'>
       <Text>Search</Text>
     </View>
   )

@@ -1,7 +1,8 @@
+import { useFonts } from 'expo-font';
 import { Stack, router, usePathname } from 'expo-router';
 import { X as CloseIcon } from 'lucide-react-native';
 import React, { useState } from 'react';
-import { Image, Platform, Text, TextInput, TouchableOpacity, View } from 'react-native'; // StyleSheet removed
+import { Image, Text, TextInput, TouchableOpacity, View } from 'react-native'; // StyleSheet removed
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Logo from "../assets/images/icon.png";
 import './globals.css';
@@ -20,7 +21,7 @@ function ProfileOverlayIcon() {
   };
   const userProfileImageUrl = 'https://thispersondoesnotexist.com';
   const iconContainerStyle = {
-    top: insets.top + (Platform.OS === 'ios' ? 5 : 15),
+    top: insets.top + 15,
     right: 15,
   };
 
@@ -33,7 +34,7 @@ function ProfileOverlayIcon() {
     >
       {isProfileScreen ? (
         <View className="w-12 h-12 rounded-full items-center justify-center bg-[rgba(0,0,0,0.3)]">
-          <CloseIcon color="#FFFFFF" size={28} strokeWidth={2.5} />
+          <CloseIcon color="#FFFFFF" size={28} strokeWidth={2} />
         </View>
       ) : (
         <Image
@@ -95,18 +96,29 @@ function LoginScreenComponent({ onLogin }) {
 }
 export default function RootLayout() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [fontsLoaded] = useFonts({
+      'Exo2': require('../assets/fonts/Exo2-Regular.ttf'),
+      'Exo2-Bold': require('../assets/fonts/Exo2-Bold.ttf'),
+      'Exo2-SemiBold': require('../assets/fonts/Exo2-SemiBold.ttf'),
+      'Exo2-Italic': require('../assets/fonts/Exo2-Italic.ttf'),
+    });
+
+    if (!fontsLoaded) {
+      return null;
+    }
+
 
   const handleLogin = () => {
     console.log("Login attempt successful (dummy)");
     setIsAuthenticated(true);
   };
 
-  if (!isAuthenticated) {
-    return <LoginScreenComponent onLogin={handleLogin} />;
-  }
+  // if (!isAuthenticated) {
+  //   return <LoginScreenComponent onLogin={handleLogin} />;
+  // }
 
   return (
-    <View className="flex-1 bg-night">
+    <View className="flex-1 bg-night font-exo2">
       <Stack>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen name="meal/[id]" options={{ headerShown: false }} />
