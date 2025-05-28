@@ -1,7 +1,7 @@
 import React from 'react'
 import { Text, View } from 'react-native'
 
-const Camera = () => {
+const Index = () => {
   return (
     <View>
       <Text>Camera</Text>
@@ -9,4 +9,4 @@ const Camera = () => {
   )
 }
 
-export default Camera
+export default Index

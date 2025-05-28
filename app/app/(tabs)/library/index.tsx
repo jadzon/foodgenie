@@ -4,9 +4,21 @@ import React from 'react';
 import { FlatList, Image, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from 'react-native-safe-area-context';
 import foodImages from '../../../assets/food_images/foodImages';
-import { DISHES_DATA, Dish } from '../../../data/dishes';
+import { Dish, DISHES_DATA, Ingredient } from '../../../data/dishes';
 
 const DishItem = ({ item }: { item: Dish }) => {
+
+  const calculateTotalCalories = (ingredients: Ingredient[]): number => {
+    return ingredients.reduce((total, ingredient) => {
+      if (ingredient.calories) {
+        const calValue = parseInt(String(ingredient.calories).replace(/[^0-9]/g, ''), 10);
+        if (!isNaN(calValue)) {
+          return total + calValue;
+        }
+      }
+      return total;
+    }, 0);
+  };
   const sortedIngredients = [...item.ingredients].sort(
     (a,b)=> b.calories-a.calories
   )
@@ -15,7 +27,7 @@ const DishItem = ({ item }: { item: Dish }) => {
   return(
   <Link href={`/library/${item.id}`} asChild>
     <TouchableOpacity
-      className="flex items-center bg-transparent  p-4 rounded-2xl mb-4 border-b-[1px] border-onyx active:bg-slate-800/10 transition-all"
+      className="flex items-center bg-transparent  p-4 rounded-2xl mb-4 border-b-[1px] border-onyx active:bg-onyx/10 transition-all"
     >
       <View className='flex-row items-center'>
         <Image
@@ -30,6 +42,12 @@ const DishItem = ({ item }: { item: Dish }) => {
           <Text className="font-exo2 text-gray-400 text-sm" key={index}>{ingredient.name}</Text>
         ))}
 
+      </View>
+      <View className='flex align-top items-start'>
+        <Text className='font-exo2-semibold text-gray-400'>2 dni temu</Text>
+        <Text className='font-exo2-semibold text-brand-pink'>
+          {calculateTotalCalories(item.ingredients)} kcal
+        </Text>
       </View>
       </View>
     </TouchableOpacity>

@@ -39,7 +39,7 @@ export const DISHES_DATA: Dish[] = [
   },
   {
     id: '2',
-    name: 'Kurczak z Ryżem i Warzywami',
+    name: 'Kurczak z Ryżem',
     mainImageKey: 'food.chicken',
     ingredients: [
       { name: 'Pierś z kurczaka', amount: '150g', imageKey: 'food.chickenBreast', calories: 250 },

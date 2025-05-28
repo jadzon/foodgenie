@@ -36,9 +36,7 @@ const IngredientItem = ({ item }: { item: Ingredient }) => (
       <Text className="text-lg text-slate-50 font-exo2-semibold tracking-tight">{item.name}</Text>
       <View className="flex-row items-baseline mt-1.5">
         <Text className="text-sm text-slate-400 font-exo2">{item.amount}</Text>
-
-          <View className="flex-row items-center ml-3">
-            <Zap size={14} color="#f7438d" strokeWidth={2} />
+          <View className="flex-row ml-3">
             <Text className="text-sm text-brand-pink font-exo2-semibold ml-1 ">
               {String(item.calories).replace(/[^0-9]/g, '')} kcal
             </Text>
