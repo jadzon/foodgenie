@@ -1,36 +1,41 @@
 import { Link } from 'expo-router';
-import { ChevronRight, SearchX, Utensils } from 'lucide-react-native';
+import { SearchX } from 'lucide-react-native';
 import React from 'react';
 import { FlatList, Image, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from 'react-native-safe-area-context';
 import foodImages from '../../../assets/food_images/foodImages';
 import { DISHES_DATA, Dish } from '../../../data/dishes';
 
-const DishItem = ({ item }: { item: Dish }) => (
+const DishItem = ({ item }: { item: Dish }) => {
+  const sortedIngredients = [...item.ingredients].sort(
+    (a,b)=> b.calories-a.calories
+  )
+  const topIngredients = sortedIngredients.slice(0, 2);
+  const remainingCount = sortedIngredients.length - 2;
+  return(
   <Link href={`/library/${item.id}`} asChild>
     <TouchableOpacity
-      className="flex-row items-center bg-raisin-black p-4 rounded-2xl mb-3.5 border border-transparent active:border-brand-pink/60 active:bg-slate-800/30 transition-all"
+      className="flex items-center bg-transparent  p-4 rounded-2xl mb-4 border-b-[1px] border-onyx active:bg-slate-800/10 transition-all"
     >
-      {item.mainImageKey && foodImages[item.mainImageKey] ? (
+      <View className='flex-row items-center'>
         <Image
           source={foodImages[item.mainImageKey]}
           className="w-20 h-20 rounded-xl mr-4"
           resizeMode="cover"
         />
-      ) : (
-        <View className="w-20 h-20 rounded-xl mr-4 bg-raisin-black border border-slate-700 justify-center items-center">
-          <Utensils size={30} color="#f7438d" strokeWidth={1.5} />
-        </View>
-      )}
 
       <View className="flex-1">
-        <Text className="text-xl text-white font-bold tracking-tight mb-1">{item.name}</Text>
+        <Text className="text-xl text-white font-exo2-semibold tracking-tight mb-1">{item.name}</Text>
+        {topIngredients.map((ingredient, index) => (
+          <Text className="font-exo2 text-gray-400 text-sm" key={index}>{ingredient.name}</Text>
+        ))}
+
       </View>
-      <ChevronRight size={26} color="#f7438d" strokeWidth={2.5} className="opacity-70" />
+      </View>
     </TouchableOpacity>
   </Link>
 );
-
+}
 export default function LibraryListScreen() {
   const renderDish = ({ item }: { item: Dish }) => (<DishItem item={item} />);
 

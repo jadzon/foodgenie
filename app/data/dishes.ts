@@ -19,15 +19,15 @@ export const DISHES_DATA: Dish[] = [
     name: 'Spaghetti Bolognese',
     mainImageKey: 'food.pasta', // Przykładowy klucz dla głównego zdjęcia (możesz użyć innego)
     ingredients: [
-      { name: 'Makaron spaghetti', amount: '100g (suchy)', imageKey: 'food.pasta', calories: '350 kcal' },
-      { name: 'Mięso mielone wołowe', amount: '150g', imageKey: 'food.beef', calories: '300 kcal' },
-      { name: 'Passata pomidorowa', amount: '200g', imageKey: 'food.tomato', calories: '60 kcal' },
-      { name: 'Cebula', amount: '1/2 sztuki', imageKey: 'food.onion', calories: '20 kcal' },
-      { name: 'Czosnek', amount: '1 ząbek', imageKey: 'food.garlic', calories: '5 kcal' },
-      { name: 'Marchewka', amount: '1/2 sztuki', imageKey: 'food.carrot', calories: '20 kcal' },
-      { name: 'Oliwa z oliwek', amount: '1 łyżka', imageKey: 'food.oliveOil', calories: '120 kcal' },
-      { name: 'Sól', amount: 'do smaku', imageKey: null, calories: '0 kcal' },
-      { name: 'Czarny pieprz', amount: 'do smaku', imageKey: 'food.spice', calories: '1 kcal' },
+      { name: 'Makaron spaghetti', amount: '100g (suchy)', imageKey: 'food.pasta', calories: 350 },
+      { name: 'Mięso mielone wołowe', amount: '150g', imageKey: 'food.beef', calories: 300 },
+      { name: 'Passata pomidorowa', amount: '200g', imageKey: 'food.tomato', calories: 60 },
+      { name: 'Cebula', amount: '1/2 sztuki', imageKey: 'food.onion', calories: 20 },
+      { name: 'Czosnek', amount: '1 ząbek', imageKey: 'food.garlic', calories: 5 },
+      { name: 'Marchewka', amount: '1/2 sztuki', imageKey: 'food.carrot', calories: 20 },
+      { name: 'Oliwa z oliwek', amount: '1 łyżka', imageKey: 'food.oliveOil', calories: 120 },
+      { name: 'Sól', amount: 'do smaku', imageKey: null, calories: 0 },
+      { name: 'Czarny pieprz', amount: 'do smaku', imageKey: 'food.spice', calories: 1 },
     ],
     preparation:
       '1. Makaron ugotuj al dente zgodnie z instrukcją na opakowaniu.\n' +
@@ -42,14 +42,14 @@ export const DISHES_DATA: Dish[] = [
     name: 'Kurczak z Ryżem i Warzywami',
     mainImageKey: 'food.chicken',
     ingredients: [
-      { name: 'Pierś z kurczaka', amount: '150g', imageKey: 'food.chickenBreast', calories: '250 kcal' },
-      { name: 'Ryż biały', amount: '75g (suchy)', imageKey: 'food.rice', calories: '270 kcal' },
-      { name: 'Brokuły (różyczki)', amount: '100g', imageKey: 'food.brocoli', calories: '35 kcal' },
-      { name: 'Papryka czerwona', amount: '1/2 sztuki', imageKey: 'food.pepper', calories: '20 kcal' },
-      { name: 'Cebula', amount: '1/4 sztuki', imageKey: 'food.onion', calories: '10 kcal' },
-      { name: 'Sos sojowy', amount: '1 łyżka', imageKey: null, calories: '10 kcal' },
-      { name: 'Olej sezamowy', amount: '1/2 łyżeczki', imageKey: 'food.cookingOil', calories: '45 kcal' },
-      { name: 'Imbir (starty)', amount: '1/2 łyżeczki', imageKey: 'food.spice', calories: '2 kcal' },
+      { name: 'Pierś z kurczaka', amount: '150g', imageKey: 'food.chickenBreast', calories: 250 },
+      { name: 'Ryż biały', amount: '75g (suchy)', imageKey: 'food.rice', calories: 270 },
+      { name: 'Brokuły (różyczki)', amount: '100g', imageKey: 'food.brocoli', calories: 35 },
+      { name: 'Papryka czerwona', amount: '1/2 sztuki', imageKey: 'food.pepper', calories: 20 },
+      { name: 'Cebula', amount: '1/4 sztuki', imageKey: 'food.onion', calories: 10 },
+      { name: 'Sos sojowy', amount: '1 łyżka', imageKey: null, calories: 10 },
+      { name: 'Olej sezamowy', amount: '1/2 łyżeczki', imageKey: 'food.cookingOil', calories: 45 },
+      { name: 'Imbir (starty)', amount: '1/2 łyżeczki', imageKey: 'food.spice', calories: 2 },
     ],
     preparation:
       '1. Ryż ugotuj zgodnie z instrukcją na opakowaniu.\n' +
@@ -65,10 +65,10 @@ export const DISHES_DATA: Dish[] = [
     name: 'Jajecznica na maśle',
     mainImageKey: 'food.chicken',
     ingredients: [
-      { name: 'Jajka', amount: '3 sztuki', imageKey: 'food.egg',calories: '250 kcal' },
-      { name: 'Masło', amount: '1 łyżeczka', imageKey: 'food.butter',calories: '50 kcal' },
-      { name: 'Sól', amount: 'szczypta', imageKey: null,calories: '0 kcal' },
-      { name: 'Szczypiorek (opcjonalnie)', amount: '1 łyżka', imageKey: 'food.onion',calories: '0 kcal' }
+      { name: 'Jajka', amount: '3 sztuki', imageKey: 'food.egg',calories: 250 },
+      { name: 'Masło', amount: '1 łyżeczka', imageKey: 'food.butter',calories: 50 },
+      { name: 'Sól', amount: 'szczypta', imageKey: null,calories: 0 },
+      { name: 'Szczypiorek (opcjonalnie)', amount: '1 łyżka', imageKey: 'food.onion',calories: 0 }
     ],
     preparation:
       '1. Na małej patelni rozpuść masło na średnim ogniu.\n' +
