@@ -31,7 +31,7 @@ type MealDetailResponseDTO struct {
 	ID            uuid.UUID                   `json:"id"`
 	Name          string                      `json:"name"`
 	Ingredients   []RecipeIngredientDetailDTO `json:"ingredients"`
-	TotalWeight   float64                     `json:"totalWeight"`
+	TotalWeight   uint                        `json:"totalWeight"`
 	TotalCalories uint                        `json:"totalCalories"`
 	CreatedAt     time.Time                   `json:"createdAt,omitempty"`
 	UpdatedAt     time.Time                   `json:"updatedAt,omitempty"`
@@ -78,4 +78,9 @@ type CreateRecipeRequestDTO struct {
 type CreateIngredientRequestDTO struct {
 	Name            string
 	CaloriesPerGram float64
+}
+type CreateMealRequestDTO struct {
+	Name   string    `json:"name" validate:"required,min=3"`
+	Weight uint      `json:"weight" validate:"required,min=1"`
+	UserID uuid.UUID `json:"-"`
 }

@@ -27,14 +27,12 @@ func InitDatabase(cfg config.DBConfig) (*gorm.DB, error) {
 	}
 	log.Println("Database connected successfully")
 
-	// --- CORRECTED MIGRATION ---
-	// Add all your model structs here. GORM will create the tables in the correct order.
 	err = db.AutoMigrate(
 		&models.User{},
 		&models.Ingredient{},
 		&models.Recipe{},
 		&models.RecipeIngredientUsage{},
-		&models.LoggedMeal{},
+		&models.Meal{},
 	)
 
 	if err != nil {

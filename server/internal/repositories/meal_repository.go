@@ -13,20 +13,20 @@ type mealRepository struct {
 	db *gorm.DB
 }
 
-func (r *mealRepository) GetMealsForUser(userID uuid.UUID, page int) ([]*models.LoggedMeal, error) {
-	var loggedMeals []*models.LoggedMeal
+func (r *mealRepository) GetMealsForUser(userID uuid.UUID, page int) ([]*models.Meal, error) {
+	var loggedMeals []*models.Meal
 	var pageSize int = 10
 	if page < 1 {
 		page = 1
 	}
 	offset := (page - 1) * pageSize
-	tx := r.db.Model(&models.LoggedMeal{}).Where("user_id = ?", userID).Order("created_at DESC").Limit(pageSize).Offset(offset).Preload("Recipe").Find(&loggedMeals)
+	tx := r.db.Model(&models.Meal{}).Where("user_id = ?", userID).Order("created_at DESC").Limit(pageSize).Offset(offset).Preload("Recipe").Find(&loggedMeals)
 	if tx.Error != nil {
 		return nil, tx.Error
 	}
 	return loggedMeals, nil
 }
-func (r *mealRepository) CreateLoggedMeal(loggedMeal *models.LoggedMeal) (*models.LoggedMeal, error) {
+func (r *mealRepository) CreateMeal(loggedMeal *models.Meal) (*models.Meal, error) {
 	tx := r.db.Create(loggedMeal)
 	if tx.Error != nil {
 		return nil, tx.Error
@@ -77,8 +77,8 @@ func (r *mealRepository) GetIngredientsByNames(ctx context.Context, names []stri
 }
 
 type MealRepository interface {
-	GetMealsForUser(userID uuid.UUID, page int) ([]*models.LoggedMeal, error)
-	CreateLoggedMeal(loggedMeal *models.LoggedMeal) (*models.LoggedMeal, error)
+	GetMealsForUser(userID uuid.UUID, page int) ([]*models.Meal, error)
+	CreateMeal(loggedMeal *models.Meal) (*models.Meal, error)
 	GetRecipeByName(ctx context.Context, name string) (*models.Recipe, error)
 	CreateRecipe(recipe *models.Recipe) (*models.Recipe, error)
 	CreateIngredient(ingredient *models.Ingredient) (*models.Ingredient, error)

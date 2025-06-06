@@ -33,7 +33,7 @@ type Recipe struct {
 	Calories         uint                    `gorm:"not null;default:0"`
 }
 
-type LoggedMeal struct {
+type Meal struct {
 	BaseModel
 	UserID   uuid.UUID `gorm:"type:uuid;not null;index"`
 	RecipeID uuid.UUID `gorm:"type:uuid;not null;index"`
