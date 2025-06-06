@@ -20,9 +20,10 @@ type Ingredient struct {
 }
 type RecipeIngredientUsage struct {
 	BaseModel
-	RecipeID     uuid.UUID `gorm:"type:uuid;not null;uniqueIndex:idx_recipe_ingredient_usage"`
-	IngredientID uuid.UUID `gorm:"type:uuid;not null;uniqueIndex:idx_recipe_ingredient_usage"`
-	Weight       uint      `gorm:"not null"`
+	RecipeID     uuid.UUID  `gorm:"type:uuid;not null;uniqueIndex:idx_recipe_ingredient_usage"`
+	IngredientID uuid.UUID  `gorm:"type:uuid;not null;uniqueIndex:idx_recipe_ingredient_usage"`
+	Weight       uint       `gorm:"not null"`
+	Ingredient   Ingredient `gorm:"foreignKey:IngredientID"`
 }
 type Recipe struct {
 	BaseModel

@@ -34,9 +34,9 @@ func (r *mealRepository) CreateLoggedMeal(loggedMeal *models.LoggedMeal) (*model
 	return loggedMeal, nil
 
 }
-func (r *mealRepository) GetRecipeByName(name string) (*models.Recipe, error) {
+func (r *mealRepository) GetRecipeByName(ctx context.Context, name string) (*models.Recipe, error) {
 	var recipe *models.Recipe
-	tx := r.db.Model(&models.Recipe{}).Where("name = ?", name).First(&recipe)
+	tx := r.db.WithContext(ctx).Model(&models.Recipe{}).Preload("IngredientUsages.Ingredient").Where("name = ?", name).First(&recipe)
 	if tx.Error != nil {
 		return nil, tx.Error
 	}
@@ -79,7 +79,7 @@ func (r *mealRepository) GetIngredientsByNames(ctx context.Context, names []stri
 type MealRepository interface {
 	GetMealsForUser(userID uuid.UUID, page int) ([]*models.LoggedMeal, error)
 	CreateLoggedMeal(loggedMeal *models.LoggedMeal) (*models.LoggedMeal, error)
-	GetRecipeByName(name string) (*models.Recipe, error)
+	GetRecipeByName(ctx context.Context, name string) (*models.Recipe, error)
 	CreateRecipe(recipe *models.Recipe) (*models.Recipe, error)
 	CreateIngredient(ingredient *models.Ingredient) (*models.Ingredient, error)
 	GetIngredientByName(ctx context.Context, name string) (*models.Ingredient, error)

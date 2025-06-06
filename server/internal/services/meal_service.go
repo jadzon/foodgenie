@@ -31,7 +31,7 @@ func (s *mealService) CreateIngredient(ctx context.Context, req dto.CreateIngred
 }
 
 // Creates recipe from CreateRecipeRequestDTO
-func (s *mealService) CreateNewRecipe(ctx context.Context, req *dto.CreateRecipeRequestDTO) (*dto.RecipeDetailResponseDTO, error) {
+func (s *mealService) CreateRecipe(ctx context.Context, req *dto.CreateRecipeRequestDTO) (*dto.RecipeDetailResponseDTO, error) {
 	if req.Name == "" || len(req.Ingredients) == 0 {
 		return nil, errors.New("recipe name and at least one ingredient are required")
 	}
@@ -43,7 +43,15 @@ func (s *mealService) CreateNewRecipe(ctx context.Context, req *dto.CreateRecipe
 	if err != nil {
 		return nil, errors.New("failed to create recipe " + err.Error())
 	}
-	recipeDTO := mapRecipeToResponseDTO(createdRecipe, ingModels)
+	ingMap := make(map[uuid.UUID]*models.Ingredient)
+	for _, ing := range ingModels {
+		ingMap[ing.ID] = ing
+	}
+	//hydrate Recipe with Ingredients
+	for _, usage := range createdRecipe.IngredientUsages {
+		usage.Ingredient = *ingMap[usage.IngredientID]
+	}
+	recipeDTO := mapRecipeToDTO(createdRecipe)
 	return recipeDTO, nil
 }
 
@@ -54,6 +62,7 @@ func (s *mealService) buildRecipeFromDTO(ctx context.Context, req *dto.CreateRec
 	var ingUsages []models.RecipeIngredientUsage
 	var ingNames []string
 	for _, recipeIng := range req.Ingredients {
+		fmt.Println("Ingredient name: ", recipeIng.Name)
 		if recipeIng.Name == "" {
 			return nil, nil, fmt.Errorf("empty ingredient name")
 		}
@@ -84,19 +93,16 @@ func (s *mealService) buildRecipeFromDTO(ctx context.Context, req *dto.CreateRec
 	}
 	return &recipeToCreate, ingredientModels, nil
 }
-func mapRecipeToResponseDTO(recipe *models.Recipe, ingredients []*models.Ingredient) *dto.RecipeDetailResponseDTO {
+
+// mapRecipeToResponseDTO maps Recipe to RecipeDetailResponseDTO
+func mapRecipeToDTO(recipe *models.Recipe) *dto.RecipeDetailResponseDTO {
 
 	var ingredientsDTOS []dto.RecipeIngredientDetailDTO
-	ingredientModelsMap := make(map[uuid.UUID]*models.Ingredient)
-	for _, ing := range ingredients {
-		ingredientModelsMap[ing.ID] = ing
-	}
 	for _, usage := range recipe.IngredientUsages {
-		ing := ingredientModelsMap[usage.IngredientID]
-		calories := uint(ing.CaloriesPerGram * float64(usage.Weight))
+		calories := uint(usage.Ingredient.CaloriesPerGram * float64(usage.Weight))
 		ingredientDTO := dto.RecipeIngredientDetailDTO{
-			ID:       ing.ID,
-			Name:     ing.Name,
+			ID:       usage.Ingredient.ID,
+			Name:     usage.Ingredient.Name,
 			Weight:   usage.Weight,
 			Calories: calories,
 		}
@@ -113,9 +119,19 @@ func mapRecipeToResponseDTO(recipe *models.Recipe, ingredients []*models.Ingredi
 	return recipeDTO
 }
 
+func (s *mealService) GetRecipeByName(ctx context.Context, name string) (*dto.RecipeDetailResponseDTO, error) {
+	recipeModel, err := s.mealRepo.GetRecipeByName(ctx, name)
+	if err != nil {
+		return nil, fmt.Errorf("error fetching recipe %w", err)
+	}
+	recipeDTO := mapRecipeToDTO(recipeModel)
+	return recipeDTO, nil
+}
+
 type MealService interface {
 	CreateIngredient(ctx context.Context, req dto.CreateIngredientRequestDTO) (*models.Ingredient, error)
-	CreateNewRecipe(ctx context.Context, req *dto.CreateRecipeRequestDTO) (*dto.RecipeDetailResponseDTO, error)
+	CreateRecipe(ctx context.Context, req *dto.CreateRecipeRequestDTO) (*dto.RecipeDetailResponseDTO, error)
+	GetRecipeByName(ctx context.Context, name string) (*dto.RecipeDetailResponseDTO, error)
 }
 
 func NewMealService(mealRepo repositories.MealRepository) MealService {
