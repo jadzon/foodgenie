@@ -6,8 +6,9 @@ import (
 	"foodgenie/internal/config"
 	"foodgenie/internal/database"
 	"foodgenie/internal/handlers"
-	"github.com/gin-gonic/gin"
 	"log"
+
+	"github.com/gin-gonic/gin"
 )
 
 func main() {
@@ -23,11 +24,9 @@ func main() {
 	router := gin.Default()
 	router.Use(logRequestMiddleware())
 	handler := handlers.NewHandler(application)
-	mediaHandler := handlers.NewMediaHandler(application)
 	router.POST("/api/user/register", handler.Register)
 	router.POST("/api/user/login", handler.Login)
 	authorized := router.Group("/api", handler.AuthCheck())
-	authorized.POST("/image", mediaHandler.UploadImage)
 	authorized.GET("/user/get-data", handler.GetUserData)
 	router.GET("")
 	err = router.Run("localhost:8080")

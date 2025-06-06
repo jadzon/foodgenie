@@ -3,10 +3,11 @@ package handlers
 import (
 	"foodgenie/internal/app"
 	"foodgenie/internal/models"
-	"github.com/gin-gonic/gin"
-	"github.com/google/uuid"
 	"net/http"
 	"strings"
+
+	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 )
 
 type Handler struct {
