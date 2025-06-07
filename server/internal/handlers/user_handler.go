@@ -51,6 +51,7 @@ func (h *Handler) Login(c *gin.Context) {
 	})
 
 }
+
 func (h *Handler) Register(c *gin.Context) {
 	var user dto.RegisterUserRequestDTO
 	err := c.ShouldBindJSON(&user)
@@ -65,6 +66,7 @@ func (h *Handler) Register(c *gin.Context) {
 	}
 	c.JSON(http.StatusCreated, userDTO)
 }
+
 func (h *Handler) AuthCheck() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		authHeader := c.GetHeader("Authorization")

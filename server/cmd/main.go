@@ -7,8 +7,12 @@ import (
 	"foodgenie/internal/database"
 	"foodgenie/internal/handlers"
 	"log"
+	"reflect"
+	"strings"
 
 	"github.com/gin-gonic/gin"
+	"github.com/gin-gonic/gin/binding"
+	"github.com/go-playground/validator/v10"
 )
 
 func main() {
@@ -22,6 +26,24 @@ func main() {
 	}
 	application := app.Init(db, &cfg.App)
 	router := gin.Default()
+
+	//chat gpt ----->
+	//TODO: ogarnac o co tu chodzi
+	if v, ok := binding.Validator.Engine().(*validator.Validate); ok {
+		// TA LINIA JEST KLUCZOWA - MÓWI WALIDATOROWI, ABY SZUKAŁ TAGU "validate"
+		v.SetTagName("validate")
+
+		// Ta część, którą już mieliśmy, jest do formatowania nazw pól w komunikatach o błędach
+		v.RegisterTagNameFunc(func(fld reflect.StructField) string {
+			name := strings.SplitN(fld.Tag.Get("json"), ",", 2)[0]
+			if name == "-" {
+				return ""
+			}
+			return name
+		})
+		log.Println("Validator configured successfully to use 'validate' tag.")
+	}
+	// <----- koniec gpt
 	router.Use(logRequestMiddleware())
 	handler := handlers.NewHandler(application)
 	mealHandler := handlers.NewMealHandler(application)

@@ -37,7 +37,7 @@ func (us *userService) CreateUser(ctx context.Context, req *dto.RegisterUserRequ
 		return nil, fmt.Errorf("failed to generate hash from password: %w", err)
 	}
 	req.Password = hashedPassword
-	//build user model from register user request
+	//build user model from request dto
 	userToCreate := buildUserFromDTO(req)
 	//create user
 	createdUser, err := us.userRepo.CreateUser(userToCreate)
@@ -45,7 +45,7 @@ func (us *userService) CreateUser(ctx context.Context, req *dto.RegisterUserRequ
 		return nil, fmt.Errorf("failed to create user %w", err)
 	}
 	userDTO := mapUserToDTO(createdUser)
-	//map user model to
+	//map user model to dto
 	return userDTO, err
 }
 func buildUserFromDTO(req *dto.RegisterUserRequestDTO) *models.User {
