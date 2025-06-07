@@ -142,6 +142,8 @@ func (s *mealService) CreateMealForUser(ctx context.Context, req *dto.CreateMeal
 	if err != nil {
 		return nil, fmt.Errorf("failed to create meal %w", err)
 	}
+	mealDetailDTO := mapMealToDetailDTO(createdMeal)
+	return mealDetailDTO, nil
 
 }
 func mapMealToDetailDTO(meal *models.Meal) *dto.MealDetailResponseDTO {

@@ -1,15 +1,18 @@
 package services
 
 import (
+	"context"
 	"fmt"
+	"foodgenie/dto"
 	"foodgenie/internal/models"
 	"foodgenie/internal/repositories"
+	"time"
 
 	"github.com/google/uuid"
 )
 
 type UserService interface {
-	CreateUser(user *models.User) error
+	CreateUser(ctx context.Context, req *dto.RegisterUserRequestDTO) (*dto.UserResponseDTO, error)
 	ValidateUser(user *models.User) error
 	GetUserByEmail(email string) (models.User, error)
 	GetUserByUsername(username string) (models.User, error)
@@ -27,15 +30,47 @@ func NewUserService(userRepo repositories.UserRepository, securityService Securi
 	}
 }
 
-func (us *userService) CreateUser(user *models.User) error {
-	hashedPassword, err := us.securityService.GenerateHashFromPassword(user.Password)
+func (us *userService) CreateUser(ctx context.Context, req *dto.RegisterUserRequestDTO) (*dto.UserResponseDTO, error) {
+	//hash password
+	hashedPassword, err := us.securityService.GenerateHashFromPassword(req.Password)
 	if err != nil {
-		fmt.Println("Failed to generate hash from password")
-		return err
+		return nil, fmt.Errorf("failed to generate hash from password: %w", err)
 	}
-	user.Password = hashedPassword
-	err = us.userRepo.CreateUser(user)
-	return err
+	req.Password = hashedPassword
+	//build user model from register user request
+	userToCreate := buildUserFromDTO(req)
+	//create user
+	createdUser, err := us.userRepo.CreateUser(userToCreate)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create user %w", err)
+	}
+	userDTO := mapUserToDTO(createdUser)
+	//map user model to
+	return userDTO, err
+}
+func buildUserFromDTO(req *dto.RegisterUserRequestDTO) *models.User {
+	userModel := &models.User{
+		Username:    req.Username,
+		Email:       req.Email,
+		Password:    req.Password,
+		FirstName:   req.FirstName,
+		LastName:    req.LastName,
+		DateOfBirth: req.DateOfBirth,
+	}
+	return userModel
+}
+func mapUserToDTO(user *models.User) *dto.UserResponseDTO {
+	createdAtString := user.CreatedAt.Format(time.RFC3339)
+	userDTO := &dto.UserResponseDTO{
+		ID:          user.ID,
+		Username:    user.Username,
+		Email:       user.Email,
+		FirstName:   user.FirstName,
+		LastName:    user.LastName,
+		DateOfBirth: createdAtString,
+		CreatedAt:   user.CreatedAt,
+	}
+	return userDTO
 }
 func (us *userService) ValidateUser(user *models.User) error {
 	userInDb, err := us.userRepo.GetUserByUsername(user.Username)

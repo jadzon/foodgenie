@@ -2,12 +2,13 @@ package repositories
 
 import (
 	"foodgenie/internal/models"
+
 	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
 
 type UserRepository interface {
-	CreateUser(user *models.User) error
+	CreateUser(user *models.User) (*models.User, error)
 	DeleteUser(user *models.User) error
 	GetUserByUsername(username string) (models.User, error)
 	GetUserByEmail(email string) (models.User, error)
@@ -23,11 +24,11 @@ func NewUserRepository(db *gorm.DB) UserRepository {
 	}
 }
 
-func (ur *userRepository) CreateUser(user *models.User) error {
+func (ur *userRepository) CreateUser(user *models.User) (*models.User, error) {
 	if err := ur.db.Create(user).Error; err != nil {
-		return err
+		return nil, err
 	}
-	return nil
+	return user, nil
 }
 func (ur *userRepository) DeleteUser(user *models.User) error {
 	if err := ur.db.Delete(user).Error; err != nil {

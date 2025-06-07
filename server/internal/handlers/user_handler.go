@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"foodgenie/dto"
 	"foodgenie/internal/app"
 	"foodgenie/internal/models"
 	"net/http"
@@ -51,28 +52,18 @@ func (h *Handler) Login(c *gin.Context) {
 
 }
 func (h *Handler) Register(c *gin.Context) {
-	var user models.User
+	var user dto.RegisterUserRequestDTO
 	err := c.ShouldBindJSON(&user)
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": "bad request"})
 		return
 	}
-	_, err = h.App.UserService.GetUserByEmail(user.Email)
-	if err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": "user with that email already exists"})
-		return
-	}
-	_, err = h.App.UserService.GetUserByUsername(user.Username)
-	if err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": "user with that email already exists"})
-		return
-	}
-	err = h.App.UserService.CreateUser(&user)
+	userDTO, err := h.App.UserService.CreateUser(c.Request.Context(), &user)
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"message": "could not create the user"})
 		return
 	}
-	c.JSON(http.StatusCreated, gin.H{"message": "user created"})
+	c.JSON(http.StatusCreated, userDTO)
 }
 func (h *Handler) AuthCheck() gin.HandlerFunc {
 	return func(c *gin.Context) {

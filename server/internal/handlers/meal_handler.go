@@ -62,3 +62,6 @@ func (h *MealHandler) GetRecipeByName(c *gin.Context) {
 
 	c.JSON(http.StatusOK, recipeDTO)
 }
+func (h *MealHandler) LogMeal(c *gin.Context) {
+
+}
