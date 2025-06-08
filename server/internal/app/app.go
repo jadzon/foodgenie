@@ -1,6 +1,7 @@
 package app
 
 import (
+	"foodgenie/internal/ai"
 	"foodgenie/internal/config"
 	"foodgenie/internal/repositories"
 	"foodgenie/internal/services"
@@ -25,7 +26,8 @@ func Init(db *gorm.DB, cfg *config.AppConfig) *App {
 	recipeRepository := repositories.NewRecipeRepository(db)
 	recipeService := services.NewRecipeService(recipeRepository, ingredientRepository)
 	mealRepository := repositories.NewMealRepository(db)
-	mealService := services.NewMealService(mealRepository, recipeRepository)
+	aiService := ai.NewMockAIService()
+	mealService := services.NewMealService(mealRepository, recipeRepository, aiService)
 	return &App{
 		UserService:       userService,
 		SecurityService:   securityService,

@@ -51,3 +51,39 @@ func (h *MealHandler) CreateMeal(c *gin.Context) {
 	}
 	c.JSON(http.StatusCreated, createdMealDTO)
 }
+func (h *MealHandler) LogMealFromImage(c *gin.Context) {
+	userIDUntyped, exists := c.Get("userID")
+	if !exists {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "unauthorized"})
+		return
+	}
+	userID, ok := userIDUntyped.(uuid.UUID)
+	if !ok {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "invalid user ID format in context"})
+		return
+	}
+	file, err := c.FormFile("image")
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "no image"})
+		return
+	}
+	openedFile, err := file.Open()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to open uploaded file"})
+		return
+	}
+	defer openedFile.Close()
+
+	loggedMealDTO, err := h.App.MealService.ProcessAndLogMealFromImage(c.Request.Context(), userID, openedFile)
+
+	if err != nil {
+		//chat gpt error handling TODO: learn what it's doing
+		if errors.Is(err, gorm.ErrRecordNotFound) || strings.Contains(err.Error(), "not found") {
+			c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
+			return
+		}
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to process and log meal: " + err.Error()})
+		return
+	}
+	c.JSON(http.StatusCreated, loggedMealDTO)
+}

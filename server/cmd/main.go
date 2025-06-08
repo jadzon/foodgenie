@@ -56,7 +56,7 @@ func main() {
 	router.GET("/api/recipe/:name", recipeHandler.GetRecipeByName)
 	authorized := router.Group("/api", userHandler.AuthCheck())
 	authorized.GET("/users/me", userHandler.GetMe)
-	authorized.POST("/meal", mealHandler.CreateMeal)
+	authorized.POST("/meal/image", mealHandler.LogMealFromImage)
 	router.POST("/api/auth/refresh", userHandler.RefreshToken)
 	// router.GET("")
 	err = router.Run("localhost:8080")

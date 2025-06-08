@@ -4,13 +4,18 @@ import (
 	"context"
 	"fmt"
 	"foodgenie/dto"
+	"foodgenie/internal/ai"
 	"foodgenie/internal/models"
 	"foodgenie/internal/repositories"
+	"io"
+
+	"github.com/google/uuid"
 )
 
 type mealService struct {
 	mealRepo   repositories.MealRepository
 	recipeRepo repositories.RecipeRepository
+	aiService  ai.AIService
 }
 
 // creates meal for user
@@ -31,6 +36,29 @@ func (s *mealService) CreateMealForUser(ctx context.Context, req *dto.CreateMeal
 	mealDetailDTO := mapMealToDetailDTO(createdMeal)
 	return mealDetailDTO, nil
 
+}
+func (s *mealService) ProcessAndLogMealFromImage(ctx context.Context, userID uuid.UUID, image io.Reader) (*dto.MealDetailResponseDTO, error) {
+	// sending image to ai for analysis
+	aiAnalysis, err := s.aiService.AnalyzeMealImage(ctx, image)
+	if err != nil {
+		return nil, fmt.Errorf("failed to analyze meal image %w", err)
+	}
+	// fetching recipe with matching name
+	recipeModel, err := s.recipeRepo.GetRecipeByName(ctx, aiAnalysis.Name)
+	if err != nil {
+		return nil, fmt.Errorf("invalid recipe name %w", err)
+	}
+	mealToLog := &models.Meal{
+		UserID:   userID,
+		RecipeID: recipeModel.ID,
+		Weight:   aiAnalysis.Weight,
+		Recipe:   *recipeModel,
+	}
+	loggedMeal, err := s.mealRepo.CreateMeal(mealToLog)
+	if err != nil {
+		return nil, fmt.Errorf("failed to log meal %w", err)
+	}
+	return mapMealToDetailDTO(loggedMeal), nil
 }
 func mapMealToDetailDTO(meal *models.Meal) *dto.MealDetailResponseDTO {
 	ratio := float64(meal.Weight) / float64(meal.Recipe.Weight)
@@ -75,11 +103,13 @@ func (s *mealService) buildMealFromDTO(ctx context.Context, mealDTO *dto.CreateM
 
 type MealService interface {
 	CreateMealForUser(ctx context.Context, req *dto.CreateMealRequestDTO) (*dto.MealDetailResponseDTO, error)
+	ProcessAndLogMealFromImage(ctx context.Context, userID uuid.UUID, image io.Reader) (*dto.MealDetailResponseDTO, error)
 }
 
-func NewMealService(mealRepo repositories.MealRepository, recipeRepo repositories.RecipeRepository) MealService {
+func NewMealService(mealRepo repositories.MealRepository, recipeRepo repositories.RecipeRepository, aiService ai.AIService) MealService {
 	return &mealService{
 		mealRepo:   mealRepo,
 		recipeRepo: recipeRepo,
+		aiService:  aiService,
 	}
 }
