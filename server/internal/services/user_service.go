@@ -13,7 +13,7 @@ import (
 
 type UserService interface {
 	CreateUser(ctx context.Context, req *dto.RegisterUserRequestDTO) (*dto.UserResponseDTO, error)
-	ValidateUser(user *models.User) error
+	Authenticate(ctx context.Context, username string, password string) (*models.User, error)
 	GetUserByEmail(email string) (models.User, error)
 	GetUserByUsername(username string) (models.User, error)
 	GetUserById(id uuid.UUID) (models.User, error)
@@ -72,14 +72,18 @@ func mapUserToDTO(user *models.User) *dto.UserResponseDTO {
 	}
 	return userDTO
 }
-func (us *userService) ValidateUser(user *models.User) error {
-	userInDb, err := us.userRepo.GetUserByUsername(user.Username)
-	fmt.Println("USERNAME: ", user.Username)
+func (us *userService) Authenticate(ctx context.Context, username string, password string) (*models.User, error) {
+	// get user model
+	userModel, err := us.userRepo.GetUserByUsername(username)
 	if err != nil {
-		return err
+		return nil, fmt.Errorf("failed to fetch user %w", err)
 	}
-	err = us.securityService.ComparePasswordAndHash(user.Password, userInDb.Password)
-	return err
+	// compare password with hash
+	err = us.securityService.ComparePasswordAndHash(password, userModel.Password)
+	if err != nil {
+		return nil, fmt.Errorf("invalid password")
+	}
+	return &userModel, nil
 }
 func (us *userService) GetUserByEmail(email string) (models.User, error) {
 	return us.userRepo.GetUserByEmail(email)

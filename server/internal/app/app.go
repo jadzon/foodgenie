@@ -9,9 +9,11 @@ import (
 )
 
 type App struct {
-	UserService     services.UserService
-	SecurityService services.SecurityService
-	MealService     services.MealService
+	UserService       services.UserService
+	SecurityService   services.SecurityService
+	IngredientService services.IngredientService
+	RecipeService     services.RecipeService
+	MealService       services.MealService
 }
 
 func Init(db *gorm.DB, cfg *config.AppConfig) *App {
@@ -20,9 +22,15 @@ func Init(db *gorm.DB, cfg *config.AppConfig) *App {
 	userService := services.NewUserService(userRepository, securityService)
 	mealRepository := repositories.NewMealRepository(db)
 	mealService := services.NewMealService(mealRepository)
+	ingredientRepository := repositories.NewIngredientRepository(db)
+	ingredientService := services.NewIngredientService(ingredientRepository)
+	recipeRepository := repositories.NewRecipeRepository(db)
+	recipeService := services.NewRecipeService(recipeRepository, ingredientRepository)
 	return &App{
-		UserService:     userService,
-		SecurityService: securityService,
-		MealService:     mealService,
+		UserService:       userService,
+		SecurityService:   securityService,
+		IngredientService: ingredientService,
+		RecipeService:     recipeService,
+		MealService:       mealService,
 	}
 }

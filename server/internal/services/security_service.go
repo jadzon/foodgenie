@@ -4,10 +4,11 @@ import (
 	"errors"
 	"foodgenie/internal/config"
 	"foodgenie/internal/models"
+	"time"
+
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
-	"time"
 )
 
 type securityService struct {
@@ -16,8 +17,8 @@ type securityService struct {
 type SecurityService interface {
 	ComparePasswordAndHash(password, hashedPassword string) error
 	GenerateHashFromPassword(password string) (string, error)
-	GenerateAccessToken(user models.User) (string, error)
-	GenerateRefreshToken(user models.User) (string, error)
+	GenerateAccessToken(user *models.User) (string, error)
+	GenerateRefreshToken(user *models.User) (string, error)
 	ExtractUserIDfromAccessToken(tokenString string) (uuid.UUID, error)
 	ExtractUserIDfromRefreshToken(tokenString string) (uuid.UUID, error)
 }
@@ -45,7 +46,7 @@ type CustomClaims struct {
 	jwt.RegisteredClaims
 }
 
-func (s *securityService) GenerateAccessToken(user models.User) (string, error) {
+func (s *securityService) GenerateAccessToken(user *models.User) (string, error) {
 	accessTokenExpiry := time.Now().Add(15 * time.Minute).Unix()
 
 	accessClaims := &CustomClaims{
@@ -67,7 +68,7 @@ func (s *securityService) GenerateAccessToken(user models.User) (string, error) 
 
 	return at, nil
 }
-func (s *securityService) GenerateRefreshToken(user models.User) (string, error) {
+func (s *securityService) GenerateRefreshToken(user *models.User) (string, error) {
 	refreshTokenExpiry := time.Now().Add(1 * time.Hour).Unix()
 
 	refreshClaims := &CustomClaims{

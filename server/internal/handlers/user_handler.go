@@ -3,7 +3,6 @@ package handlers
 import (
 	"foodgenie/dto"
 	"foodgenie/internal/app"
-	"foodgenie/internal/models"
 	"net/http"
 	"strings"
 
@@ -11,48 +10,47 @@ import (
 	"github.com/google/uuid"
 )
 
-type Handler struct {
+type UserHandler struct {
 	App *app.App
 }
 
-func NewHandler(app *app.App) *Handler {
-	return &Handler{
+func NewUserHandler(app *app.App) *UserHandler {
+	return &UserHandler{
 		App: app,
 	}
 }
-func (h *Handler) Login(c *gin.Context) {
-	var user models.User
-	err := c.ShouldBindJSON(&user)
+func (h *UserHandler) Login(c *gin.Context) {
+
+	var req dto.LoginRequestDTO
+	err := c.ShouldBindJSON(&req)
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": "bad request"})
 		return
 	}
-	err = h.App.UserService.ValidateUser(&user)
+	userModel, err := h.App.UserService.Authenticate(c.Request.Context(), req.Username, req.Password)
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"message": "incorrect credentials"})
 		return
 	}
-	user, _ = h.App.UserService.GetUserByUsername(user.Username)
-	ac, err := h.App.SecurityService.GenerateAccessToken(user)
+	at, err := h.App.SecurityService.GenerateAccessToken(userModel)
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"message": "failed generating access token"})
 		return
 	}
-	rt, err := h.App.SecurityService.GenerateRefreshToken(user)
+	rt, err := h.App.SecurityService.GenerateRefreshToken(userModel)
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"message": "failed generating refresh token"})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{
-		"data": gin.H{
-			"access_token":  ac,
-			"refresh_token": rt,
-		},
-	})
+	response := dto.LoginResponseDTO{
+		AccessToken:  at,
+		RefreshToken: rt,
+	}
+	c.JSON(http.StatusOK, response)
 
 }
 
-func (h *Handler) Register(c *gin.Context) {
+func (h *UserHandler) Register(c *gin.Context) {
 	var user dto.RegisterUserRequestDTO
 	err := c.ShouldBindJSON(&user)
 	if err != nil {
@@ -67,7 +65,7 @@ func (h *Handler) Register(c *gin.Context) {
 	c.JSON(http.StatusCreated, userDTO)
 }
 
-func (h *Handler) AuthCheck() gin.HandlerFunc {
+func (h *UserHandler) AuthCheck() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		authHeader := c.GetHeader("Authorization")
 		if authHeader == "" {
@@ -94,7 +92,7 @@ func (h *Handler) AuthCheck() gin.HandlerFunc {
 		c.Next()
 	}
 }
-func (h *Handler) GetUserData(c *gin.Context) {
+func (h *UserHandler) GetUserData(c *gin.Context) {
 	userID, exists := c.Get("userID")
 	if !exists {
 		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"message": "User not authenticated"})
