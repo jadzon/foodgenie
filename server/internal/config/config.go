@@ -1,9 +1,11 @@
 package config
 
 import (
-	"github.com/joho/godotenv"
 	"log"
 	"os"
+	"time"
+
+	"github.com/joho/godotenv"
 )
 
 type DBConfig struct {
@@ -16,8 +18,10 @@ type DBConfig struct {
 }
 
 type JWTConfig struct {
-	AccessTokenSecret  string
-	RefreshTokenSecret string
+	AccessTokenSecret    string
+	AccessTokenDuration  time.Duration
+	RefreshTokenSecret   string
+	RefreshTokenDuration time.Duration
 }
 type AppConfig struct {
 	JWT JWTConfig
@@ -34,7 +38,19 @@ func LoadConfig() (*Config, error) {
 		log.Printf("Error loading .env file: %v", err)
 		return nil, err
 	}
+	atDurationString := os.Getenv("ACCESS_TOKEN_DURATION")
+	atDuration, err := time.ParseDuration(atDurationString)
+	if err != nil {
+		log.Println("Warning: ACCESS_TOKEN_DURATION not set or invalid. Using default 15m.")
+		atDuration = 15 * time.Minute
+	}
 
+	rtDurationString := os.Getenv("REFRESH_TOKEN_DURATION")
+	rtDuration, err := time.ParseDuration(rtDurationString)
+	if err != nil {
+		log.Println("Warning: REFRESH_TOKEN_DURATION not set or invalid. Using default 168h (7 days).")
+		rtDuration = 168 * time.Hour
+	}
 	// Populate the configuration
 	cfg := &Config{
 		DB: DBConfig{
@@ -48,8 +64,10 @@ func LoadConfig() (*Config, error) {
 
 		App: AppConfig{
 			JWT: JWTConfig{
-				AccessTokenSecret:  os.Getenv("ACCESS_TOKEN_SECRET"),
-				RefreshTokenSecret: os.Getenv("REFRESH_TOKEN_SECRET"),
+				AccessTokenSecret:    os.Getenv("ACCESS_TOKEN_SECRET"),
+				AccessTokenDuration:  atDuration,
+				RefreshTokenSecret:   os.Getenv("REFRESH_TOKEN_SECRET"),
+				RefreshTokenDuration: rtDuration,
 			},
 		},
 	}

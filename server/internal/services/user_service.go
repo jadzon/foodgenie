@@ -15,8 +15,9 @@ type UserService interface {
 	CreateUser(ctx context.Context, req *dto.RegisterUserRequestDTO) (*dto.UserResponseDTO, error)
 	Authenticate(ctx context.Context, username string, password string) (*models.User, error)
 	GetUserByEmail(email string) (models.User, error)
-	GetUserByUsername(username string) (models.User, error)
-	GetUserById(id uuid.UUID) (models.User, error)
+	GetUserByUsername(username string) (*dto.UserResponseDTO, error)
+	GetUserById(id uuid.UUID) (*dto.UserResponseDTO, error)
+	RefreshToken(ctx context.Context, req *dto.RefreshTokenRequestDTO) (*dto.LoginResponseDTO, error)
 }
 type userService struct {
 	userRepo        repositories.UserRepository
@@ -72,25 +73,61 @@ func mapUserToDTO(user *models.User) *dto.UserResponseDTO {
 	}
 	return userDTO
 }
-func (us *userService) Authenticate(ctx context.Context, username string, password string) (*models.User, error) {
+func (s *userService) Authenticate(ctx context.Context, username string, password string) (*models.User, error) {
 	// get user model
-	userModel, err := us.userRepo.GetUserByUsername(username)
+	userModel, err := s.userRepo.GetUserByUsername(username)
 	if err != nil {
 		return nil, fmt.Errorf("failed to fetch user %w", err)
 	}
 	// compare password with hash
-	err = us.securityService.ComparePasswordAndHash(password, userModel.Password)
+	err = s.securityService.ComparePasswordAndHash(password, userModel.Password)
 	if err != nil {
 		return nil, fmt.Errorf("invalid password")
 	}
-	return &userModel, nil
+	return userModel, nil
 }
-func (us *userService) GetUserByEmail(email string) (models.User, error) {
-	return us.userRepo.GetUserByEmail(email)
+func (s *userService) GetUserByEmail(email string) (models.User, error) {
+	return s.userRepo.GetUserByEmail(email)
 }
-func (us *userService) GetUserByUsername(username string) (models.User, error) {
-	return us.userRepo.GetUserByUsername(username)
+func (s *userService) GetUserByUsername(username string) (*dto.UserResponseDTO, error) {
+	userModel, err := s.userRepo.GetUserByUsername(username)
+	if err != nil {
+		return nil, err
+	}
+	return mapUserToDTO(userModel), err
 }
-func (us *userService) GetUserById(id uuid.UUID) (models.User, error) {
-	return us.userRepo.GetUserById(id)
+func (s *userService) GetUserById(id uuid.UUID) (*dto.UserResponseDTO, error) {
+	userModel, err := s.userRepo.GetUserById(id)
+	if err != nil {
+		return nil, err
+	}
+	return mapUserToDTO(userModel), err
+}
+
+func (s *userService) RefreshToken(ctx context.Context, req *dto.RefreshTokenRequestDTO) (*dto.LoginResponseDTO, error) {
+	claims, err := s.securityService.ValidateRefreshToken(req.RefreshToken)
+	if err != nil {
+		return nil, fmt.Errorf("invalid token %w", err)
+	}
+	userID, err := uuid.Parse(claims.UserID)
+	if err != nil {
+		return nil, fmt.Errorf("invalid token %w", err)
+	}
+	user, err := s.userRepo.GetUserById(userID)
+	if err != nil {
+		return nil, fmt.Errorf("failed to fetch user %w", err)
+	}
+	at, err := s.securityService.GenerateAccessToken(user)
+	if err != nil {
+		return nil, fmt.Errorf("failed to generate access token %w", err)
+	}
+	rt, err := s.securityService.GenerateRefreshToken(user)
+	if err != nil {
+		return nil, fmt.Errorf("failed to generate refresh token %w", err)
+	}
+	response := &dto.LoginResponseDTO{
+		AccessToken:  at,
+		RefreshToken: rt,
+	}
+	return response, nil
 }

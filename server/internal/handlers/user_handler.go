@@ -82,9 +82,16 @@ func (h *UserHandler) AuthCheck() gin.HandlerFunc {
 
 		accessToken := parts[1]
 
-		userID, err := h.App.SecurityService.ExtractUserIDfromAccessToken(accessToken)
+		claims, err := h.App.SecurityService.ValidateAccessToken(accessToken)
 		if err != nil {
-			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"message": "Invalid access token"})
+			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
+			return
+		}
+
+		// Parse the UserID from the valid claims
+		userID, err := uuid.Parse(claims.UserID)
+		if err != nil {
+			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "invalid user ID in token"})
 			return
 		}
 
@@ -92,7 +99,8 @@ func (h *UserHandler) AuthCheck() gin.HandlerFunc {
 		c.Next()
 	}
 }
-func (h *UserHandler) GetUserData(c *gin.Context) {
+func (h *UserHandler) GetMe(c *gin.Context) {
+
 	userID, exists := c.Get("userID")
 	if !exists {
 		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"message": "User not authenticated"})
@@ -105,17 +113,25 @@ func (h *UserHandler) GetUserData(c *gin.Context) {
 		return
 	}
 
-	user, err := h.App.UserService.GetUserById(userUUID)
+	userDTO, err := h.App.UserService.GetUserById(userUUID)
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"message": "Failed to retrieve user data"})
 		return
 	}
+	c.JSON(http.StatusOK, userDTO)
 
-	c.JSON(http.StatusOK, gin.H{
-		"username":      user.Username,
-		"email":         user.Email,
-		"first_name":    user.FirstName,
-		"last_name":     user.LastName,
-		"date_of_birth": user.DateOfBirth.Format("2006-01-02"),
-	})
+}
+func (h *UserHandler) RefreshToken(c *gin.Context) {
+	var req dto.RefreshTokenRequestDTO
+	err := c.ShouldBindJSON(&req)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request: refresh token is required"})
+		return
+	}
+	response, err := h.App.UserService.RefreshToken(c.Request.Context(), &req)
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, response)
 }

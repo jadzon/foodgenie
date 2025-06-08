@@ -1,6 +1,7 @@
 package repositories
 
 import (
+	"fmt"
 	"foodgenie/internal/models"
 
 	"github.com/google/uuid"
@@ -10,9 +11,9 @@ import (
 type UserRepository interface {
 	CreateUser(user *models.User) (*models.User, error)
 	DeleteUser(user *models.User) error
-	GetUserByUsername(username string) (models.User, error)
+	GetUserByUsername(username string) (*models.User, error)
 	GetUserByEmail(email string) (models.User, error)
-	GetUserById(id uuid.UUID) (models.User, error)
+	GetUserById(id uuid.UUID) (*models.User, error)
 }
 type userRepository struct {
 	db *gorm.DB
@@ -36,15 +37,15 @@ func (ur *userRepository) DeleteUser(user *models.User) error {
 	}
 	return nil
 }
-func (ur *userRepository) GetUserByUsername(username string) (models.User, error) {
+func (ur *userRepository) GetUserByUsername(username string) (*models.User, error) {
 	var user models.User
 	if err := ur.db.Where("username = ?", username).First(&user).Error; err != nil {
 		if err == gorm.ErrRecordNotFound {
-			return models.User{}, nil
+			return nil, fmt.Errorf("user not found %w", err)
 		}
-		return models.User{}, err
+		return nil, err
 	}
-	return user, nil
+	return &user, nil
 }
 
 func (ur *userRepository) GetUserByEmail(email string) (models.User, error) {
@@ -57,13 +58,13 @@ func (ur *userRepository) GetUserByEmail(email string) (models.User, error) {
 	}
 	return user, nil
 }
-func (ur *userRepository) GetUserById(id uuid.UUID) (models.User, error) {
+func (ur *userRepository) GetUserById(id uuid.UUID) (*models.User, error) {
 	var user models.User
 	if err := ur.db.Where("id = ?", id).First(&user).Error; err != nil {
 		if err == gorm.ErrRecordNotFound {
-			return models.User{}, nil
+			return nil, fmt.Errorf("user not found %w", err)
 		}
-		return models.User{}, err
+		return nil, err
 	}
-	return user, nil
+	return &user, nil
 }
