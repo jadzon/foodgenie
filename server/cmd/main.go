@@ -46,7 +46,7 @@ func main() {
 	// <----- koniec gpt
 	router.Use(logRequestMiddleware())
 	handler := handlers.NewUserHandler(application)
-	// mealHandler := handlers.NewMealHandler(application)
+	mealHandler := handlers.NewMealHandler(application)
 	ingredientHandler := handlers.NewIngredientHandler(application)
 	recipeHandler := handlers.NewRecipeHandler(application)
 	router.POST("/api/user/register", handler.Register)
@@ -56,6 +56,7 @@ func main() {
 	router.GET("/api/recipe/:name", recipeHandler.GetRecipeByName)
 	authorized := router.Group("/api", handler.AuthCheck())
 	authorized.GET("/user/get-data", handler.GetUserData)
+	authorized.POST("/meal", mealHandler.CreateMeal)
 	// router.GET("")
 	err = router.Run("localhost:8080")
 	if err != nil {

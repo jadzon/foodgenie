@@ -20,12 +20,12 @@ func Init(db *gorm.DB, cfg *config.AppConfig) *App {
 	userRepository := repositories.NewUserRepository(db)
 	securityService := services.NewSecurityService(cfg.JWT)
 	userService := services.NewUserService(userRepository, securityService)
-	mealRepository := repositories.NewMealRepository(db)
-	mealService := services.NewMealService(mealRepository)
 	ingredientRepository := repositories.NewIngredientRepository(db)
 	ingredientService := services.NewIngredientService(ingredientRepository)
 	recipeRepository := repositories.NewRecipeRepository(db)
 	recipeService := services.NewRecipeService(recipeRepository, ingredientRepository)
+	mealRepository := repositories.NewMealRepository(db)
+	mealService := services.NewMealService(mealRepository, recipeRepository)
 	return &App{
 		UserService:       userService,
 		SecurityService:   securityService,

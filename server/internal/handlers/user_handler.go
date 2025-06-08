@@ -116,6 +116,6 @@ func (h *UserHandler) GetUserData(c *gin.Context) {
 		"email":         user.Email,
 		"first_name":    user.FirstName,
 		"last_name":     user.LastName,
-		"date_of_birth": user.DateOfBirth.Format("2006-01-02"), // Formatowanie daty
+		"date_of_birth": user.DateOfBirth.Format("2006-01-02"),
 	})
 }
