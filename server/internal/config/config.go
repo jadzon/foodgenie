@@ -23,12 +23,17 @@ type JWTConfig struct {
 	RefreshTokenSecret   string
 	RefreshTokenDuration time.Duration
 }
+type ServerConfig struct {
+	Port string
+	Host string
+}
 type AppConfig struct {
 	JWT JWTConfig
 }
 type Config struct {
-	DB  DBConfig
-	App AppConfig
+	DB     DBConfig
+	App    AppConfig
+	Server ServerConfig
 }
 
 func LoadConfig() (*Config, error) {
@@ -69,6 +74,10 @@ func LoadConfig() (*Config, error) {
 				RefreshTokenSecret:   os.Getenv("REFRESH_TOKEN_SECRET"),
 				RefreshTokenDuration: rtDuration,
 			},
+		},
+		Server: ServerConfig{
+			Port: os.Getenv("SERVER_PORT"),
+			Host: os.Getenv("SERVER_HOST"),
 		},
 	}
 

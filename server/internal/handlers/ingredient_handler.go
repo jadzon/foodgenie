@@ -1,8 +1,8 @@
 package handlers
 
 import (
-	"foodgenie/dto"
 	"foodgenie/internal/app"
+	"foodgenie/internal/dto"
 	"net/http"
 
 	"github.com/gin-gonic/gin"

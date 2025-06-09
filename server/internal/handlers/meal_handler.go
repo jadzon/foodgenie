@@ -2,8 +2,8 @@ package handlers
 
 import (
 	"errors"
-	"foodgenie/dto"
 	"foodgenie/internal/app"
+	"foodgenie/internal/dto"
 	"net/http"
 	"strings"
 

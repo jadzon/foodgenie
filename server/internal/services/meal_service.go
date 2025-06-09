@@ -3,8 +3,8 @@ package services
 import (
 	"context"
 	"fmt"
-	"foodgenie/dto"
 	"foodgenie/internal/ai"
+	"foodgenie/internal/dto"
 	"foodgenie/internal/models"
 	"foodgenie/internal/repositories"
 	"io"

@@ -59,7 +59,8 @@ func main() {
 	authorized.POST("/meal/image", mealHandler.LogMealFromImage)
 	router.POST("/api/auth/refresh", userHandler.RefreshToken)
 	// router.GET("")
-	err = router.Run("localhost:8080")
+	address := cfg.Server.Host + ":" + cfg.Server.Port
+	err = router.Run(address)
 	if err != nil {
 		log.Fatal("failed to initialize server")
 	}

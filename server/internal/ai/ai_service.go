@@ -2,7 +2,7 @@ package ai
 
 import (
 	"context"
-	"foodgenie/dto"
+	"foodgenie/internal/dto"
 	"io"
 )
 

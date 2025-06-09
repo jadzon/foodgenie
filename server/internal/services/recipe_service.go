@@ -4,7 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"foodgenie/dto"
+	"foodgenie/internal/dto"
 	"foodgenie/internal/models"
 	"foodgenie/internal/repositories"
 

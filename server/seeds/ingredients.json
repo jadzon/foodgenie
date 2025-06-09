@@ -1,0 +1,13 @@
+[
+  {"name": "Black Pepper", "caloriesPerGram": 2.51},
+  {"name": "Chicken", "caloriesPerGram": 1.65},
+  {"name": "Rice", "caloriesPerGram": 1.30},
+  {"name": "Pepper", "caloriesPerGram": 0.20},
+  {"name": "Onion", "caloriesPerGram": 0.40},
+  {"name": "Garlic", "caloriesPerGram": 1.49},
+  {"name": "Oil", "caloriesPerGram": 8.84},
+  {"name": "Salt", "caloriesPerGram": 0.00},
+  {"name": "Soy Sauce", "caloriesPerGram": 0.60},
+  {"name": "Egg", "caloriesPerGram": 1.55},
+  {"name": "Green Onion", "caloriesPerGram": 0.32}
+]
