@@ -1,6 +1,7 @@
 package repositories
 
 import (
+	"context"
 	"foodgenie/internal/models"
 
 	"github.com/google/uuid"
@@ -11,14 +12,14 @@ type mealRepository struct {
 	db *gorm.DB
 }
 
-func (r *mealRepository) GetMealsForUser(userID uuid.UUID, page int) ([]*models.Meal, error) {
+func (r *mealRepository) GetMealsForUser(ctx context.Context, userID uuid.UUID, page int) ([]*models.Meal, error) {
 	var loggedMeals []*models.Meal
 	var pageSize int = 10
 	if page < 1 {
 		page = 1
 	}
 	offset := (page - 1) * pageSize
-	tx := r.db.Model(&models.Meal{}).Where("user_id = ?", userID).Order("created_at DESC").Limit(pageSize).Offset(offset).Preload("Recipe").Find(&loggedMeals)
+	tx := r.db.WithContext(ctx).Model(&models.Meal{}).Where("user_id = ?", userID).Order("created_at DESC").Limit(pageSize).Offset(offset).Preload("Recipe").Find(&loggedMeals)
 	if tx.Error != nil {
 		return nil, tx.Error
 	}
@@ -34,7 +35,7 @@ func (r *mealRepository) CreateMeal(meal *models.Meal) (*models.Meal, error) {
 }
 
 type MealRepository interface {
-	GetMealsForUser(userID uuid.UUID, page int) ([]*models.Meal, error)
+	GetMealsForUser(ctx context.Context, userID uuid.UUID, page int) ([]*models.Meal, error)
 	CreateMeal(loggedMeal *models.Meal) (*models.Meal, error)
 }
 

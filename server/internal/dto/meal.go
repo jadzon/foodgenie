@@ -84,3 +84,11 @@ type CreateMealRequestDTO struct {
 	Weight uint      `json:"weight" validate:"required,min=1"`
 	UserID uuid.UUID `json:"-"`
 }
+type MealResponseDTO struct {
+	ID            uuid.UUID `json:"id"`
+	Name          string    `json:"name"`
+	TotalWeight   uint      `json:"totalWeight"`
+	TotalCalories uint      `json:"totalCalories"`
+	CreatedAt     time.Time `json:"createdAt,omitempty"`
+	UpdatedAt     time.Time `json:"updatedAt,omitempty"`
+}

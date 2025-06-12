@@ -6,6 +6,7 @@ import (
 	"foodgenie/internal/config"
 	"foodgenie/internal/database"
 	"foodgenie/internal/handlers"
+	"foodgenie/seeds"
 	"log"
 	"reflect"
 	"strings"
@@ -25,6 +26,7 @@ func main() {
 		panic("Failed to initialize database")
 	}
 	application := app.Init(db, &cfg.App)
+	seeds.Seed(application)
 	router := gin.Default()
 
 	//chat gpt ----->

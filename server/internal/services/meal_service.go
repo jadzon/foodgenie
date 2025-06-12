@@ -100,6 +100,14 @@ func (s *mealService) buildMealFromDTO(ctx context.Context, mealDTO *dto.CreateM
 	}
 	return mealModel, nil
 }
+func (s *mealService) GetMealsForUser(ctx context.Context, userID uuid.UUID, page int) ([]*dto.MealResponseDTO, error) {
+	mealModels, err := s.mealRepo.GetMealsForUser(ctx, userID, page)
+	if err != nil {
+		return nil, fmt.Errorf("failed to fetch meals %w", err)
+	}
+	_ = mealModels
+	return nil, nil
+}
 
 type MealService interface {
 	CreateMealForUser(ctx context.Context, req *dto.CreateMealRequestDTO) (*dto.MealDetailResponseDTO, error)

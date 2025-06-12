@@ -1,29 +1,16 @@
-package main
+package seeds
 
 import (
 	"context"
 	"encoding/json"
 	"fmt"
 	"foodgenie/internal/app"
-	"foodgenie/internal/config"
-	"foodgenie/internal/database"
 	"foodgenie/internal/dto"
 	"log"
 	"os"
 )
 
-func main() {
-	cfg, err := config.LoadConfig()
-	if err != nil {
-		log.Fatalf("Failed to load config: %v", err)
-	}
-
-	db, err := database.InitDatabase(cfg.DB)
-	if err != nil {
-		panic("Failed to initialize database")
-	}
-
-	application := app.Init(db, &cfg.App)
+func Seed(application *app.App) {
 	seeder := NewSeeder(application)
 
 	ingredients, err := loadIngredients()
@@ -46,7 +33,7 @@ func main() {
 		log.Fatalf("Failed to seed recipes: %v", err)
 	}
 
-	log.Println("✓ All seeding completed successfully!")
+	log.Println("All seeding completed successfully!")
 }
 func loadIngredients() ([]*dto.CreateIngredientRequestDTO, error) {
 	data, err := os.ReadFile("seeds/ingredients.json")
