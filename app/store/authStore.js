@@ -82,7 +82,6 @@ const api = {
     
     return await response.json();
   },
-
   // Upload meal image
   uploadMealImage: async (imageUri, accessToken) => {
     const formData = new FormData();
@@ -104,6 +103,42 @@ const api = {
     if (!response.ok) {
       const error = await response.json();
       throw new Error(error.message || 'Failed to upload meal image');
+    }
+    
+    return await response.json();
+  },
+
+  // Get meals list for user
+  getMeals: async (accessToken, page = 1) => {
+    const response = await fetch(`${API_BASE_URL}/meals?page=${page}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${accessToken}`,
+      },
+    });
+    
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.message || 'Failed to get meals');
+    }
+    
+    return await response.json();
+  },
+
+  // Get meal details by ID
+  getMealDetails: async (accessToken, mealId) => {
+    const response = await fetch(`${API_BASE_URL}/meals/${mealId}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${accessToken}`,
+      },
+    });
+    
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.message || 'Failed to get meal details');
     }
     
     return await response.json();
@@ -311,7 +346,6 @@ const useAuthStore = create((set, get) => ({
 
     return response;
   },
-
   // Upload meal image
   uploadMealImage: async (imageUri) => {
     set({ isLoading: true, error: null });
@@ -322,6 +356,42 @@ const useAuthStore = create((set, get) => ({
       return result;
     } catch (error) {
       console.error("Meal image upload failed:", error);
+      set({ isLoading: false, error: error.message });
+      throw error;
+    }
+  },
+
+  // Get meals list
+  getMeals: async (page = 1) => {
+    set({ isLoading: true, error: null });
+    try {
+      const { accessToken } = get();
+      if (!accessToken) {
+        throw new Error('No access token available');
+      }
+      const result = await api.getMeals(accessToken, page);
+      set({ isLoading: false });
+      return result;
+    } catch (error) {
+      console.error("Get meals failed:", error);
+      set({ isLoading: false, error: error.message });
+      throw error;
+    }
+  },
+
+  // Get meal details
+  getMealDetails: async (mealId) => {
+    set({ isLoading: true, error: null });
+    try {
+      const { accessToken } = get();
+      if (!accessToken) {
+        throw new Error('No access token available');
+      }
+      const result = await api.getMealDetails(accessToken, mealId);
+      set({ isLoading: false });
+      return result;
+    } catch (error) {
+      console.error("Get meal details failed:", error);
       set({ isLoading: false, error: error.message });
       throw error;
     }

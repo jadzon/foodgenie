@@ -21,12 +21,13 @@ func main() {
 	if err != nil {
 		log.Fatalf("Failed to load config: %v", err)
 	}
-	db, err := database.InitDatabase(cfg.DB)
+		db, err := database.InitDatabase(cfg.DB)
 	if err != nil {
 		panic("Failed to initialize database")
 	}
+	
 	application := app.Init(db, &cfg.App)
-	seeds.Seed(application)
+	seeds.Seed(application) // Re-enabled with graceful duplicate handling
 	router := gin.Default()
 
 	//chat gpt ----->
@@ -53,13 +54,13 @@ func main() {
 	recipeHandler := handlers.NewRecipeHandler(application)
 	router.POST("/api/auth/register", userHandler.Register)
 	router.POST("/api/auth/login", userHandler.Login)
+	router.POST("/api/auth/refresh", userHandler.RefreshToken)
 	router.POST("/api/ingredient", ingredientHandler.CreateIngredient)
 	router.POST("/api/recipe", recipeHandler.CreateRecipe)
 	router.GET("/api/recipe/:name", recipeHandler.GetRecipeByName)
 	authorized := router.Group("/api", userHandler.AuthCheck())
 	authorized.GET("/users/me", userHandler.GetMe)
 	authorized.POST("/meal/image", mealHandler.LogMealFromImage)
-	router.POST("/api/auth/refresh", userHandler.RefreshToken)
 	authorized.GET("/meals", mealHandler.GetMealsForUser)
 	authorized.GET("/meals/:id", mealHandler.GetMealDetails)
 	// router.GET("")

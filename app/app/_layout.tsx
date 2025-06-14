@@ -82,13 +82,11 @@ export default function RootLayout() {
       </View>
     );
   }
-
   // Show main app if authenticated
   return (
     <View className="flex-1 bg-night font-exo2">
       <Stack>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="meals" options={{ headerShown: false }} />
         <Stack.Screen
           name="profile"
           options={{

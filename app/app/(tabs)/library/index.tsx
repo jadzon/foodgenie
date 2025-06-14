@@ -7,46 +7,65 @@ import foodImages from '../../../assets/food_images/foodImages';
 import { Dish, DISHES_DATA, Ingredient } from '../../../data/dishes';
 
 const DishItem = ({ item }: { item: Dish }) => {
+  if (!item || !item.id) return null;
 
   const calculateTotalCalories = (ingredients: Ingredient[]): number => {
-    return ingredients.reduce((total, ingredient) => {
-      if (ingredient.calories) {
-        const calValue = parseInt(String(ingredient.calories).replace(/[^0-9]/g, ''), 10);
-        if (!isNaN(calValue)) {
-          return total + calValue;
+    if (!ingredients || !Array.isArray(ingredients)) return 0;
+    
+    try {
+      return ingredients.reduce((total, ingredient) => {
+        if (ingredient && ingredient.calories) {
+          const calValue = parseInt(String(ingredient.calories).replace(/[^0-9]/g, ''), 10);
+          if (!isNaN(calValue) && calValue > 0) {
+            return total + calValue;
+          }
         }
-      }
-      return total;
-    }, 0);
+        return total;
+      }, 0);
+    } catch (error) {
+      console.error('Error calculating calories:', error);
+      return 0;
+    }
   };
-  const sortedIngredients = [...item.ingredients].sort(
-    (a,b)=> b.calories-a.calories
-  )
-  const topIngredients = sortedIngredients.slice(0, 2);
-  const remainingCount = sortedIngredients.length - 2;
+
+  const sortedIngredients = [...(item.ingredients || [])].sort(
+    (a, b) => {
+      const aCalories = typeof a?.calories === 'number' ? a.calories : (typeof a?.calories === 'string' ? parseInt(a.calories) || 0 : 0);
+      const bCalories = typeof b?.calories === 'number' ? b.calories : (typeof b?.calories === 'string' ? parseInt(b.calories) || 0 : 0);
+      return bCalories - aCalories;
+    }
+  );
+  const topIngredients = sortedIngredients.slice(0, 2).filter(ingredient => 
+    ingredient && 
+    typeof ingredient === 'object' && 
+    ingredient.name && 
+    typeof ingredient.name === 'string'
+  );
   return(
   <Link href={`/library/${item.id}`} asChild>
     <TouchableOpacity
       className="flex items-center bg-transparent  p-4 rounded-2xl mb-4 border-b-[1px] border-onyx active:bg-onyx/10 transition-all"
-    >
-      <View className='flex-row items-center'>
+    >      <View className='flex-row items-center'>
+        {item.mainImageKey && (foodImages as any)[item.mainImageKey] && (
         <Image
-          source={foodImages[item.mainImageKey]}
+          source={(foodImages as any)[item.mainImageKey]}
           className="w-20 h-20 rounded-xl mr-4"
           resizeMode="cover"
         />
+        )}
 
-      <View className="flex-1">
-        <Text className="text-xl text-white font-exo2-semibold tracking-tight mb-1">{item.name}</Text>
-        {topIngredients.map((ingredient, index) => (
-          <Text className="font-exo2 text-gray-400 text-sm" key={index}>{ingredient.name}</Text>
+      <View className="flex-1">        <Text className="text-xl text-white font-exo2-semibold tracking-tight mb-1">
+          {item?.name || 'Nieznane danie'}
+        </Text>{topIngredients.map((ingredient, index) => (
+          <Text className="font-exo2 text-gray-400 text-sm" key={`ingredient-${index}-${ingredient?.name || 'unknown'}`}>
+            {ingredient?.name || ''}
+          </Text>
         ))}
 
       </View>
       <View className='flex align-top items-start'>
-        <Text className='font-exo2-semibold text-gray-400'>2 dni temu</Text>
-        <Text className='font-exo2-semibold text-brand-pink'>
-          {calculateTotalCalories(item.ingredients)} kcal
+        <Text className='font-exo2-semibold text-gray-400'>2 dni temu</Text>        <Text className='font-exo2-semibold text-brand-pink'>
+          {Math.max(0, calculateTotalCalories(item?.ingredients || []))} kcal
         </Text>
       </View>
       </View>
@@ -55,18 +74,25 @@ const DishItem = ({ item }: { item: Dish }) => {
 );
 }
 export default function LibraryListScreen() {
-  const renderDish = ({ item }: { item: Dish }) => (<DishItem item={item} />);
+  const renderDish = ({ item }: { item: Dish }) => {
+    if (!item || !item.id) return null;
+    return <DishItem item={item} />;
+  };
+
+  const validDishes = (DISHES_DATA || []).filter((item): item is Dish => 
+    item != null && 
+    typeof item === 'object' && 
+    item.id != null
+  );
 
   return (
     <SafeAreaView edges={['top', 'left', 'right']} className="flex-1 bg-night">
       <View className="p-4 flex-1">
-        <Text className="text-3xl text-white font-exo2-bold mb-6 mt-2 tracking-tighter px-1">Twoje Dania</Text>
-
-        {DISHES_DATA.length > 0 ? (
+        <Text className="text-3xl text-white font-exo2-bold mb-6 mt-2 tracking-tighter px-1">Twoje Dania</Text>        {validDishes && validDishes.length > 0 ? (
           <FlatList
-            data={DISHES_DATA as Dish[]}
+            data={validDishes}
             renderItem={renderDish}
-            keyExtractor={item => item.id}
+            keyExtractor={item => String(item?.id || Math.random())}
             className="w-full"
             showsVerticalScrollIndicator={false}
             contentContainerStyle={{ paddingBottom: 20 }}

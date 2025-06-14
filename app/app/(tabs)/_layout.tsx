@@ -9,7 +9,7 @@ const INACTIVE_ICON_COLOR_HEX = '#9CA3AF'
 
 const ICON_SIZE_STANDARD = 24;
 
-const StandardTabIcon = ({ focused, IconComponent, label }) => {
+const StandardTabIcon = ({ focused, IconComponent, label }: { focused: boolean; IconComponent: any; label: string }) => {
   if (focused) {
     return (
       <View className="items-center justify-center h-11 w-20">
@@ -43,14 +43,11 @@ const TabLayout = () => {
         headerShown: false,
         tabBarShowLabel: false,
         tabBarActiveBackgroundColor: 'transparent', 
-        tabBarInactiveBackgroundColor: 'transparent', 
-        tabBarItemStyle:{
-            width: '100%',
+        tabBarInactiveBackgroundColor: 'transparent',        tabBarItemStyle:{
+            flex: 1,
             height: '100%',
             justifyContent: 'center',
             alignItems: 'center'
-
-
         },
         tabBarStyle:{
             backgroundColor: '#2A2A2A',
@@ -60,8 +57,7 @@ const TabLayout = () => {
             borderTopWidth:0,
         },
       }}
-    >
-      <Tabs.Screen
+    >      <Tabs.Screen
         name="library"
         options={{
           title: "Library", 

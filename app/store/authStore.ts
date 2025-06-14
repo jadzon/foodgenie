@@ -3,6 +3,40 @@ import { router } from 'expo-router';
 import * as SecureStore from 'expo-secure-store';
 import * as SplashScreen from 'expo-splash-screen';
 import { create } from 'zustand';
+import { Platform } from 'react-native';
+
+// Web-compatible secure storage
+const secureStorage = {
+  getItemAsync: async (key: string) => {
+    if (Platform.OS === 'web') {
+      if (typeof window !== 'undefined' && window.localStorage) {
+        return localStorage.getItem(key);
+      }
+      return null;
+    }
+    return await SecureStore.getItemAsync(key);
+  },
+  
+  setItemAsync: async (key: string, value: string) => {
+    if (Platform.OS === 'web') {
+      if (typeof window !== 'undefined' && window.localStorage) {
+        localStorage.setItem(key, value);
+      }
+      return;
+    }
+    return await SecureStore.setItemAsync(key, value);
+  },
+  
+  deleteItemAsync: async (key: string) => {
+    if (Platform.OS === 'web') {
+      if (typeof window !== 'undefined' && window.localStorage) {
+        localStorage.removeItem(key);
+      }
+      return;
+    }
+    return await SecureStore.deleteItemAsync(key);
+  }
+};
 
 // TypeScript interfaces
 interface User {
@@ -51,6 +85,8 @@ interface AuthStore {
   attemptRefreshToken: (tokenToRefresh?: string) => Promise<boolean>;
   makeAuthenticatedRequest: (url: string, options?: RequestInit) => Promise<Response>;
   uploadMealImage: (imageUri: string) => Promise<any>;
+  getMeals: (page?: number) => Promise<any>;
+  getMealDetails: (mealId: string) => Promise<any>;
 }
 
 // Key names for secure storage
@@ -133,9 +169,10 @@ const api = {
     }
     
     return await response.json();
-  },
-  // Upload meal image
+  },  // Upload meal image
   uploadMealImage: async (imageUri: string, accessToken: string) => {
+    console.log('Starting upload for:', imageUri);
+    
     const formData = new FormData();
     // For React Native, we need to handle image upload differently
     formData.append('image', {
@@ -144,18 +181,67 @@ const api = {
       name: 'meal.jpg',
     } as any);
 
+    console.log('Making request to:', `${API_BASE_URL}/meal/image`);
+
     const response = await fetch(`${API_BASE_URL}/meal/image`, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
-        'Content-Type': 'multipart/form-data',
+        // Don't set Content-Type for multipart/form-data - let the browser/fetch set it
       },
       body: formData,
     });
     
+    console.log('Response status:', response.status);
+    
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('Upload error response:', errorText);
+      
+      try {
+        const error = JSON.parse(errorText);
+        throw new Error(error.message || 'Failed to upload meal image');
+      } catch {
+        throw new Error(`Upload failed with status ${response.status}: ${errorText}`);
+      }
+    }
+    
+    const result = await response.json();
+    console.log('Upload success:', result);
+    return result;
+  },
+
+  // Get meals list for user
+  getMeals: async (accessToken: string, page = 1) => {
+    const response = await fetch(`${API_BASE_URL}/meals?page=${page}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${accessToken}`,
+      },
+    });
+    
     if (!response.ok) {
       const error = await response.json();
-      throw new Error(error.message || 'Failed to upload meal image');
+      throw new Error(error.message || 'Failed to get meals');
+    }
+    
+    return await response.json();
+  },
+
+  // Get meal details by ID
+  getMealDetails: async (accessToken: string, mealId: string) => {
+    const response = await fetch(`${API_BASE_URL}/meals/${mealId}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${accessToken}`,
+      },
+    });
+    
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.message || 'Failed to get meal details');
     }
     
     return await response.json();
@@ -173,23 +259,22 @@ const useAuthStore = create<AuthStore>((set: any, get: any) => ({
 
   // Helper to set tokens in state and secure storage
   _setTokens: async ({ accessToken, refreshToken, user }) => {
-    try {
-      if (accessToken) {
-        await SecureStore.setItemAsync(ACCESS_TOKEN_KEY, accessToken);
+    try {      if (accessToken) {
+        await secureStorage.setItemAsync(ACCESS_TOKEN_KEY, accessToken);
       } else {
-        await SecureStore.deleteItemAsync(ACCESS_TOKEN_KEY);
+        await secureStorage.deleteItemAsync(ACCESS_TOKEN_KEY);
       }
 
       if (refreshToken) {
-        await SecureStore.setItemAsync(REFRESH_TOKEN_KEY, refreshToken);
+        await secureStorage.setItemAsync(REFRESH_TOKEN_KEY, refreshToken);
       } else {
-        await SecureStore.deleteItemAsync(REFRESH_TOKEN_KEY);
+        await secureStorage.deleteItemAsync(REFRESH_TOKEN_KEY);
       }
 
       if (user) {
-        await SecureStore.setItemAsync(USER_DATA_KEY, JSON.stringify(user));
+        await secureStorage.setItemAsync(USER_DATA_KEY, JSON.stringify(user));
       } else {
-        await SecureStore.deleteItemAsync(USER_DATA_KEY);
+        await secureStorage.deleteItemAsync(USER_DATA_KEY);
       }
 
       set({ 
@@ -208,13 +293,12 @@ const useAuthStore = create<AuthStore>((set: any, get: any) => ({
 
   // Clear any error messages
   clearError: () => set({ error: null }),
-
   checkAuthStatus: async () => {
     set({ isLoading: true, error: null });
     try {
-      const storedAccessToken = await SecureStore.getItemAsync(ACCESS_TOKEN_KEY);
-      const storedRefreshToken = await SecureStore.getItemAsync(REFRESH_TOKEN_KEY);
-      const storedUser = await SecureStore.getItemAsync(USER_DATA_KEY);
+      const storedAccessToken = await secureStorage.getItemAsync(ACCESS_TOKEN_KEY);
+      const storedRefreshToken = await secureStorage.getItemAsync(REFRESH_TOKEN_KEY);
+      const storedUser = await secureStorage.getItemAsync(USER_DATA_KEY);
 
       if (storedAccessToken && storedUser) {
         // Try to get fresh user data to verify token is still valid
@@ -361,7 +445,6 @@ const useAuthStore = create<AuthStore>((set: any, get: any) => ({
 
     return response;
   },
-
   // Upload meal image
   uploadMealImage: async (imageUri: string) => {
     set({ isLoading: true, error: null });
@@ -371,6 +454,42 @@ const useAuthStore = create<AuthStore>((set: any, get: any) => ({
       set({ isLoading: false });
       return result;    } catch (error: any) {
       console.error("Meal image upload failed:", error);
+      set({ isLoading: false, error: error.message });
+      throw error;
+    }
+  },
+
+  // Get meals list
+  getMeals: async (page = 1) => {
+    set({ isLoading: true, error: null });
+    try {
+      const { accessToken } = get();
+      if (!accessToken) {
+        throw new Error('No access token available');
+      }
+      const result = await api.getMeals(accessToken, page);
+      set({ isLoading: false });
+      return result;
+    } catch (error: any) {
+      console.error("Get meals failed:", error);
+      set({ isLoading: false, error: error.message });
+      throw error;
+    }
+  },
+
+  // Get meal details
+  getMealDetails: async (mealId: string) => {
+    set({ isLoading: true, error: null });
+    try {
+      const { accessToken } = get();
+      if (!accessToken) {
+        throw new Error('No access token available');
+      }
+      const result = await api.getMealDetails(accessToken, mealId);
+      set({ isLoading: false });
+      return result;
+    } catch (error: any) {
+      console.error("Get meal details failed:", error);
       set({ isLoading: false, error: error.message });
       throw error;
     }

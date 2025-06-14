@@ -59,16 +59,15 @@ export const DISHES_DATA: Dish[] = [
       '5. Dodaj różyczki brokułów. Smaż jeszcze chwilę, aż brokuły lekko zmiękną, ale pozostaną chrupiące.\n' +
       '6. Wlej sos sojowy, wymieszaj. Duś przez minutę.\n' +
       '7. Podawaj kurczaka z warzywami na ugotowanym ryżu.',
-  },
-  {
+  },  {
     id: '3',
     name: 'Jajecznica na maśle',
     mainImageKey: 'food.chicken',
     ingredients: [
-      { name: 'Jajka', amount: '3 sztuki', imageKey: 'food.egg',calories: 250 },
-      { name: 'Masło', amount: '1 łyżeczka', imageKey: 'food.butter',calories: 50 },
-      { name: 'Sól', amount: 'szczypta', imageKey: null,calories: 0 },
-      { name: 'Szczypiorek (opcjonalnie)', amount: '1 łyżka', imageKey: 'food.onion',calories: 0 }
+      { name: 'Jajka', amount: '3 sztuki', imageKey: 'food.egg', calories: 250 },
+      { name: 'Masło', amount: '1 łyżeczka', imageKey: 'food.butter', calories: 50 },
+      { name: 'Sól', amount: 'szczypta', imageKey: null, calories: 0 },
+      { name: 'Szczypiorek (opcjonalnie)', amount: '1 łyżka', imageKey: 'food.onion', calories: 0 }
     ],
     preparation:
       '1. Na małej patelni rozpuść masło na średnim ogniu.\n' +

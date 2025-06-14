@@ -21,9 +21,9 @@ const calculateTotalCalories = (ingredients: Ingredient[]): number => {
 
 const IngredientItem = ({ item }: { item: Ingredient }) => (
   <View className="flex-row items-center p-4 border-b-[1] border-solid border-white bg-transparent">
-    {item.imageKey && foodImages[item.imageKey] ? (
+    {item.imageKey && (foodImages as any)[item.imageKey] ? (
       <Image
-        source={foodImages[item.imageKey]}
+        source={(foodImages as any)[item.imageKey]}
         className="w-16 h-16 rounded-lg mr-4"
         resizeMode="contain"
       />
@@ -69,10 +69,9 @@ export default function DishDetailScreen() {
       </View>
     );
   }
-
   const totalCalories = calculateTotalCalories(dish.ingredients);
-  const mainDishImageSource = dish.mainImageKey && foodImages[dish.mainImageKey]
-    ? foodImages[dish.mainImageKey]
+  const mainDishImageSource = dish.mainImageKey && (foodImages as any)[dish.mainImageKey]
+    ? (foodImages as any)[dish.mainImageKey]
     : null;
 
   return (
@@ -107,8 +106,8 @@ export default function DishDetailScreen() {
           entering={FadeIn.duration(700)}
           className="w-full items-center justify-end relative"
           style={{ paddingTop: insets.top + 60, minHeight: 320 }}
-        >
-            <View className='p-6 rounded-full overflow-hidden bg-white w-80 h-80 mb-8 flex items-center align-center'>
+        >            <View className='p-6 rounded-full overflow-hidden bg-white w-80 h-80 mb-8 flex items-center align-center'>
+            {mainDishImageSource && (
             <Image
               source={mainDishImageSource}
               className="w-60 h-60 md:w-64 md:h-64 mb-6"
@@ -120,6 +119,7 @@ export default function DishDetailScreen() {
                 shadowRadius: 3.84,
               }}
             />
+            )}
             </View>
         </Animated.View>
 
