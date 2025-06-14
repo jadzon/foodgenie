@@ -1,15 +1,67 @@
-// store/authStore.js
+// store/authStore.ts
 import { router } from 'expo-router';
 import * as SecureStore from 'expo-secure-store';
 import * as SplashScreen from 'expo-splash-screen';
 import { create } from 'zustand';
+
+// TypeScript interfaces
+interface User {
+  id: string;
+  username: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  dateOfBirth: string;
+  createdAt: string;
+}
+
+interface RegisterData {
+  username: string;
+  email: string;
+  password: string;
+  firstName: string;
+  lastName: string;
+  dateOfBirth: string;
+}
+
+interface LoginCredentials {
+  username: string;
+  password: string;
+}
+
+interface LoginResponse {
+  accessToken: string;
+  refreshToken: string;
+}
+
+interface AuthStore {
+  accessToken: string | null;
+  refreshToken: string | null;
+  user: User | null;
+  isAuthenticated: boolean | null;
+  isLoading: boolean;
+  error: string | null;
+  
+  _setTokens: (data: { accessToken: string | null; refreshToken: string | null; user: User | null }) => Promise<void>;
+  clearError: () => void;
+  checkAuthStatus: () => Promise<void>;
+  register: (userData: RegisterData) => Promise<any>;
+  login: (credentials: LoginCredentials) => Promise<void>;
+  logout: () => Promise<void>;
+  attemptRefreshToken: (tokenToRefresh?: string) => Promise<boolean>;
+  makeAuthenticatedRequest: (url: string, options?: RequestInit) => Promise<Response>;
+  uploadMealImage: (imageUri: string) => Promise<any>;
+}
 
 // Key names for secure storage
 const ACCESS_TOKEN_KEY = 'accessToken';
 const REFRESH_TOKEN_KEY = 'refreshToken';
 const USER_DATA_KEY = 'userData';
 
-// API base URL - Use 10.0.2.2 for Android emulator instead of localhost
+// API base URL - change this to your server URL
+// For Android Emulator use 10.0.2.2 instead of localhost
+// For iOS Simulator use localhost  
+// For physical device use your computer's IP address
 const API_BASE_URL = 'http://10.0.2.2:8080/api';
 
 // Keep splash screen visible initially
@@ -18,7 +70,7 @@ SplashScreen.preventAutoHideAsync();
 // API interaction functions
 const api = {
   // Register new user
-  register: async (userData) => {
+  register: async (userData: RegisterData) => {
     const response = await fetch(`${API_BASE_URL}/auth/register`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -34,7 +86,7 @@ const api = {
   },
 
   // Login user
-  login: async (credentials) => {
+  login: async (credentials: LoginCredentials) => {
     const response = await fetch(`${API_BASE_URL}/auth/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -50,7 +102,7 @@ const api = {
   },
 
   // Refresh access token
-  refreshToken: async (refreshToken) => {
+  refreshToken: async (refreshToken: string) => {
     const response = await fetch(`${API_BASE_URL}/auth/refresh`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -66,7 +118,7 @@ const api = {
   },
 
   // Get current user data
-  getMe: async (accessToken) => {
+  getMe: async (accessToken: string) => {
     const response = await fetch(`${API_BASE_URL}/users/me`, {
       method: 'GET',
       headers: { 
@@ -82,15 +134,15 @@ const api = {
     
     return await response.json();
   },
-
   // Upload meal image
-  uploadMealImage: async (imageUri, accessToken) => {
+  uploadMealImage: async (imageUri: string, accessToken: string) => {
     const formData = new FormData();
+    // For React Native, we need to handle image upload differently
     formData.append('image', {
       uri: imageUri,
       type: 'image/jpeg',
       name: 'meal.jpg',
-    });
+    } as any);
 
     const response = await fetch(`${API_BASE_URL}/meal/image`, {
       method: 'POST',
@@ -111,7 +163,7 @@ const api = {
 };
 
 
-const useAuthStore = create((set, get) => ({
+const useAuthStore = create<AuthStore>((set: any, get: any) => ({
   accessToken: null,
   refreshToken: null,
   user: null,
@@ -203,21 +255,20 @@ const useAuthStore = create((set, get) => ({
     }
   },
 
-  register: async (userData) => {
+  register: async (userData: RegisterData) => {
     set({ isLoading: true, error: null });
     try {
       const response = await api.register(userData);
       // Registration successful, but user still needs to login
       set({ isLoading: false });
-      return response;
-    } catch (error) {
+      return response;    } catch (error: any) {
       console.error("Registration failed:", error);
       set({ isLoading: false, error: error.message });
       throw error;
     }
   },
 
-  login: async (credentials) => {
+  login: async (credentials: LoginCredentials) => {
     set({ isLoading: true, error: null });
     try {
       const { accessToken, refreshToken } = await api.login(credentials);
@@ -228,8 +279,7 @@ const useAuthStore = create((set, get) => ({
       await get()._setTokens({ accessToken, refreshToken, user: userData });
       
       // Navigate to main app
-      router.replace('/(tabs)');
-    } catch (error) {
+      router.replace('/(tabs)');    } catch (error: any) {
       console.error("Login failed:", error);
       set({ isLoading: false, error: error.message });
       throw error;
@@ -247,7 +297,7 @@ const useAuthStore = create((set, get) => ({
     }
   },
 
-  attemptRefreshToken: async (tokenToRefresh) => {
+  attemptRefreshToken: async (tokenToRefresh?: string) => {
     const refreshTokenToUse = tokenToRefresh || get().refreshToken;
     if (!refreshTokenToUse) {
       // No refresh token available, treat as logout
@@ -278,7 +328,7 @@ const useAuthStore = create((set, get) => ({
   },
 
   // Helper function to make authenticated API calls
-  makeAuthenticatedRequest: async (url, options = {}) => {
+  makeAuthenticatedRequest: async (url: string, options: RequestInit = {}) => {
     const { accessToken } = get();
     
     if (!accessToken) {
@@ -313,14 +363,13 @@ const useAuthStore = create((set, get) => ({
   },
 
   // Upload meal image
-  uploadMealImage: async (imageUri) => {
+  uploadMealImage: async (imageUri: string) => {
     set({ isLoading: true, error: null });
     try {
       const { accessToken } = get();
       const result = await api.uploadMealImage(imageUri, accessToken);
       set({ isLoading: false });
-      return result;
-    } catch (error) {
+      return result;    } catch (error: any) {
       console.error("Meal image upload failed:", error);
       set({ isLoading: false, error: error.message });
       throw error;

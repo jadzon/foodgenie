@@ -1,10 +1,11 @@
 import { useFonts } from 'expo-font';
 import { Stack, router, usePathname } from 'expo-router';
 import { X as CloseIcon } from 'lucide-react-native';
-import React, { useState } from 'react';
-import { Image, Text, TextInput, TouchableOpacity, View } from 'react-native'; // StyleSheet removed
+import React, { useEffect, useState } from 'react';
+import { Image, Text, TextInput, TouchableOpacity, View, ActivityIndicator } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Logo from "../assets/images/icon.png";
+import useAuthStore from '../store/authStore';
 import './globals.css';
 
 function ProfileOverlayIcon() {
@@ -45,57 +46,9 @@ function ProfileOverlayIcon() {
     </TouchableOpacity>
   );
 }
-function LoginScreenComponent({ onLogin }) {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
 
-  return (
-    <View className="flex-1 justify-center items-center pb-5 bg-raisin-black">
-      <Image source={Logo} className="w-[200px] h-[200px] mb-5" resizeMode="contain" />
-      <Text className="text-[38px] font-bold mb-2 text-brand-pink">FoodGenie</Text>
-      <Text className="text-base mb-10 text-gray-400">Zaloguj się</Text>
-
-      <View className="w-full px-8">
-        <TextInput
-          className="w-full h-14 bg-night text-white px-4 rounded-lg mb-5 border border-gray-700 text-base"
-          placeholder="Email"
-          value={email}
-          onChangeText={setEmail}
-          placeholderTextColor="#9CA3AF"
-          keyboardType="email-address"
-          autoCapitalize="none"
-          autoCorrect={false}
-        />
-        <TextInput
-          className="w-full h-14 bg-night text-white px-4 rounded-lg mb-8 border border-gray-700 text-base"
-          placeholder="Hasło"
-          value={password}
-          onChangeText={setPassword}
-          secureTextEntry
-          placeholderTextColor="#9CA3AF"
-        />
-        <TouchableOpacity
-          className="bg-brand-pink w-full py-4 rounded-lg items-center shadow-lg active:opacity-80"
-          onPress={() => onLogin(email, password)}
-        >
-          <Text className="text-white font-bold text-lg">Zaloguj się</Text>
-        </TouchableOpacity>
-      </View>
-
-      <TouchableOpacity className="mt-8">
-        <Text className="text-brand-pink text-sm">Zapomniałeś hasła?</Text>
-      </TouchableOpacity>
-      <View className="flex-row mt-4">
-        <Text className="text-gray-400 text-sm">Nie masz konta? </Text>
-        <TouchableOpacity>
-            <Text className="text-brand-pink text-sm font-semibold">Zarejestruj się</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
-  );
-}
 export default function RootLayout() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const { isAuthenticated, isLoading, checkAuthStatus } = useAuthStore();
   const [fontsLoaded] = useFonts({
       'Exo2': require('../assets/fonts/Exo2-Regular.ttf'),
       'Exo2-Bold': require('../assets/fonts/Exo2-Bold.ttf'),
@@ -103,31 +56,46 @@ export default function RootLayout() {
       'Exo2-Italic': require('../assets/fonts/Exo2-Italic.ttf'),
     });
 
-    if (!fontsLoaded) {
-      return null;
-    }
+  useEffect(() => {
+    // Check authentication status when app starts
+    checkAuthStatus();
+  }, []);
 
+  // Show loading screen while checking auth status or loading fonts
+  if (!fontsLoaded || isLoading) {
+    return (
+      <View className="flex-1 bg-raisin-black items-center justify-center">
+        <Image source={Logo} className="w-[200px] h-[200px] mb-8" resizeMode="contain" />
+        <ActivityIndicator size="large" color="#FF6B9D" />
+        <Text className="text-white mt-4">Ładowanie...</Text>
+      </View>
+    );
+  }
 
-  const handleLogin = () => {
-    console.log("Login attempt successful (dummy)");
-    setIsAuthenticated(true);
-  };
+  // Show auth screens if not authenticated
+  if (isAuthenticated === false) {
+    return (
+      <View className="flex-1 bg-night font-exo2">
+        <Stack>
+          <Stack.Screen name="auth" options={{ headerShown: false }} />
+        </Stack>
+      </View>
+    );
+  }
 
-  // if (!isAuthenticated) {
-  //   return <LoginScreenComponent onLogin={handleLogin} />;
-  // }
-
+  // Show main app if authenticated
   return (
     <View className="flex-1 bg-night font-exo2">
       <Stack>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="meal/[id]" options={{ headerShown: false }} />
+        <Stack.Screen name="meals" options={{ headerShown: false }} />
         <Stack.Screen
           name="profile"
           options={{
             headerShown: false,
           }}
         />
+        <Stack.Screen name="auth" options={{ headerShown: false }} />
       </Stack>
       <ProfileOverlayIcon />
     </View>
