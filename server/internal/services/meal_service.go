@@ -112,6 +112,7 @@ func (s *mealService) GetMealsForUser(ctx context.Context, userID uuid.UUID, pag
 type MealService interface {
 	CreateMealForUser(ctx context.Context, req *dto.CreateMealRequestDTO) (*dto.MealDetailResponseDTO, error)
 	ProcessAndLogMealFromImage(ctx context.Context, userID uuid.UUID, image io.Reader) (*dto.MealDetailResponseDTO, error)
+	GetMealsForUser(ctx context.Context, userID uuid.UUID, page int) ([]*dto.MealResponseDTO, error)
 }
 
 func NewMealService(mealRepo repositories.MealRepository, recipeRepo repositories.RecipeRepository, aiService ai.AIService) MealService {

@@ -5,6 +5,7 @@ import (
 	"foodgenie/internal/app"
 	"foodgenie/internal/dto"
 	"net/http"
+	"strconv"
 	"strings"
 
 	"github.com/gin-gonic/gin"
@@ -86,4 +87,32 @@ func (h *MealHandler) LogMealFromImage(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusCreated, loggedMealDTO)
+}
+func (h *MealHandler) GetMealsForUser(c *gin.Context) {
+	userIDUntyped, exists := c.Get("userID")
+	if !exists {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "unauthorized"})
+		return
+	}
+
+	userID, ok := userIDUntyped.(uuid.UUID)
+	if !ok {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "invalid user ID format in context"})
+		return
+	}
+
+	page := 1
+	if pageStr := c.Query("page"); pageStr != "" {
+		if parsedPage, err := strconv.Atoi(pageStr); err == nil && parsedPage > 0 {
+			page = parsedPage
+		}
+	}
+
+	meals, err := h.App.MealService.GetMealsForUser(c.Request.Context(), userID, page)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to retrieve meals"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"meals": meals, "page": page})
 }
