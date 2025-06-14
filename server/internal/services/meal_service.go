@@ -122,11 +122,20 @@ func (s *mealService) GetMealsForUser(ctx context.Context, userID uuid.UUID, pag
 
 	return meals, nil
 }
+func (s *mealService) GetMealDetails(ctx context.Context, userID uuid.UUID, mealID uuid.UUID) (*dto.MealDetailResponseDTO, error) {
+	mealModel, err := s.mealRepo.GetMealByID(ctx, userID, mealID)
+	if err != nil {
+		return nil, fmt.Errorf("failed to fetch meal: %w", err)
+	}
+	mealDetailDTO := mapMealToDetailDTO(mealModel)
+	return mealDetailDTO, nil
+}
 
 type MealService interface {
 	CreateMealForUser(ctx context.Context, req *dto.CreateMealRequestDTO) (*dto.MealDetailResponseDTO, error)
 	ProcessAndLogMealFromImage(ctx context.Context, userID uuid.UUID, image io.Reader) (*dto.MealDetailResponseDTO, error)
 	GetMealsForUser(ctx context.Context, userID uuid.UUID, page int) ([]*dto.MealResponseDTO, error)
+	GetMealDetails(ctx context.Context, userID uuid.UUID, mealID uuid.UUID) (*dto.MealDetailResponseDTO, error)
 }
 
 func NewMealService(mealRepo repositories.MealRepository, recipeRepo repositories.RecipeRepository, aiService ai.AIService) MealService {

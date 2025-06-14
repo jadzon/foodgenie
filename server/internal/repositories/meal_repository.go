@@ -2,6 +2,8 @@ package repositories
 
 import (
 	"context"
+	"errors"
+	"fmt"
 	"foodgenie/internal/models"
 
 	"github.com/google/uuid"
@@ -33,10 +35,27 @@ func (r *mealRepository) CreateMeal(meal *models.Meal) (*models.Meal, error) {
 	return meal, nil
 
 }
+func (r *mealRepository) GetMealByID(ctx context.Context, userID uuid.UUID, mealID uuid.UUID) (*models.Meal, error) {
+	var meal *models.Meal
+	tx := r.db.WithContext(ctx).Model(&models.Meal{}).
+		Where("id = ? AND user_id = ?", mealID, userID).
+		Preload("Recipe.IngredientUsages.Ingredient").
+		First(&meal)
+
+	if tx.Error != nil {
+		if errors.Is(tx.Error, gorm.ErrRecordNotFound) {
+			return nil, fmt.Errorf("meal not found")
+		}
+		return nil, tx.Error
+	}
+
+	return meal, nil
+}
 
 type MealRepository interface {
 	GetMealsForUser(ctx context.Context, userID uuid.UUID, page int) ([]*models.Meal, error)
 	CreateMeal(loggedMeal *models.Meal) (*models.Meal, error)
+	GetMealByID(ctx context.Context, userID uuid.UUID, mealID uuid.UUID) (*models.Meal, error)
 }
 
 func NewMealRepository(db *gorm.DB) MealRepository {
