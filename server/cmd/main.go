@@ -60,7 +60,7 @@ func main() {
 	authorized.GET("/users/me", userHandler.GetMe)
 	authorized.POST("/meal/image", mealHandler.LogMealFromImage)
 	router.POST("/api/auth/refresh", userHandler.RefreshToken)
-	authorized.GET("/api/meals", mealHandler.GetMealsForUser)
+	authorized.GET("/meals", mealHandler.GetMealsForUser)
 	// router.GET("")
 	address := cfg.Server.Host + ":" + cfg.Server.Port
 	err = router.Run(address)
