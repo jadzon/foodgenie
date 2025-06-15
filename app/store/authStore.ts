@@ -1,9 +1,9 @@
-// store/authStore.ts
 import { router } from 'expo-router';
 import * as SecureStore from 'expo-secure-store';
 import * as SplashScreen from 'expo-splash-screen';
 import { create } from 'zustand';
 import { Platform } from 'react-native';
+import { API_BASE_URL } from '../config/config';
 
 // Web-compatible secure storage
 const secureStorage = {
@@ -98,7 +98,7 @@ const USER_DATA_KEY = 'userData';
 // For Android Emulator use 10.0.2.2 instead of localhost
 // For iOS Simulator use localhost  
 // For physical device use your computer's IP address
-const API_BASE_URL = 'http://10.0.2.2:8080/api';
+// const API_BASE_URL = 'http://192.168.0.157:8080/api'; // Moved to config file
 
 // Keep splash screen visible initially
 SplashScreen.preventAutoHideAsync();

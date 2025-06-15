@@ -2,11 +2,10 @@ import * as ImagePicker from 'expo-image-picker';
 import { Platform } from 'react-native';
 
 export const pickImage = async () => {
-  try {
-    // For web, use the HTML input file picker
+  try {    // For web, use the HTML input file picker
     if (Platform.OS === 'web') {
       const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        mediaTypes: ['images'],
         allowsEditing: true,
         aspect: [4, 3],
         quality: 0.7,
@@ -24,11 +23,9 @@ export const pickImage = async () => {
     if (status !== 'granted') {
       alert('Sorry, we need camera roll permissions to make this work!');
       return null;
-    }
-
-    // Launch image picker
+    }    // Launch image picker
     const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      mediaTypes: ['images'],
       allowsEditing: true,
       aspect: [4, 3],
       quality: 0.7,
@@ -66,11 +63,9 @@ export const takePhoto = async () => {
     if (status !== 'granted') {
       alert('Sorry, we need camera permissions to take photos!');
       return null;
-    }
-
-    // Launch camera
+    }    // Launch camera
     const result = await ImagePicker.launchCameraAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      mediaTypes: ['images'],
       allowsEditing: true,
       aspect: [4, 3],
       quality: 0.7,

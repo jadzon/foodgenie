@@ -41,9 +41,9 @@ const TabLayout = () => {
     <Tabs
       screenOptions={{
         headerShown: false,
-        tabBarShowLabel: false,
-        tabBarActiveBackgroundColor: 'transparent', 
-        tabBarInactiveBackgroundColor: 'transparent',        tabBarItemStyle:{
+        tabBarShowLabel: false,        tabBarActiveBackgroundColor: 'transparent', 
+        tabBarInactiveBackgroundColor: 'transparent',
+        tabBarItemStyle:{
             flex: 1,
             height: '100%',
             justifyContent: 'center',
@@ -57,7 +57,8 @@ const TabLayout = () => {
             borderTopWidth:0,
         },
       }}
-    >      <Tabs.Screen
+    >
+      <Tabs.Screen
         name="library"
         options={{
           title: "Library", 
