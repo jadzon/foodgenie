@@ -21,11 +21,11 @@ func main() {
 	if err != nil {
 		log.Fatalf("Failed to load config: %v", err)
 	}
-		db, err := database.InitDatabase(cfg.DB)
+	db, err := database.InitDatabase(cfg.DB)
 	if err != nil {
 		panic("Failed to initialize database")
 	}
-	
+
 	application := app.Init(db, &cfg.App)
 	seeds.Seed(application) // Re-enabled with graceful duplicate handling
 	router := gin.Default()

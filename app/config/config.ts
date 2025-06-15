@@ -3,7 +3,7 @@
 
 export const CONFIG = {
   // Adres serwera - zmień tutaj aby połączyć się z innym serwerem
-  SERVER_ADDRESS: '192.168.0.157:8080',
+  SERVER_ADDRESS: '172.20.10.10:8080',
   
   // Pełny URL API
   get API_BASE_URL() {
