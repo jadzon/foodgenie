@@ -1,0 +1,13 @@
+version: "3.8"
+
+services:
+  volume-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: food_volume_estimation
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./assets:/assets
+    command: ["uvicorn", "funkcja:app", "--host", "0.0.0.0", "--port", "8000"]
