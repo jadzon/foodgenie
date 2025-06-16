@@ -25,6 +25,7 @@ type RecipeDetailResponseDTO struct {
 	Ingredients   []RecipeIngredientDetailDTO
 	TotalWeight   uint
 	TotalCalories uint
+	Volume        float64
 }
 
 type MealDetailResponseDTO struct {
@@ -74,6 +75,7 @@ type RecipeIngredientUsageRequestDTO struct {
 type CreateRecipeRequestDTO struct {
 	Name        string                            `json:"name" validate:"required,min=3"`
 	Ingredients []RecipeIngredientUsageRequestDTO `json:"ingredients" validate:"required,min=1,dive"`
+	Volume      float64                           `json:"volume"`
 }
 type CreateIngredientRequestDTO struct {
 	Name            string

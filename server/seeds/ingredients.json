@@ -1,13 +1,262 @@
 [
-  {"name": "Black Pepper", "caloriesPerGram": 2.51},
-  {"name": "Chicken", "caloriesPerGram": 1.65},
-  {"name": "Rice", "caloriesPerGram": 1.30},
-  {"name": "Pepper", "caloriesPerGram": 0.20},
-  {"name": "Onion", "caloriesPerGram": 0.40},
-  {"name": "Garlic", "caloriesPerGram": 1.49},
-  {"name": "Oil", "caloriesPerGram": 8.84},
-  {"name": "Salt", "caloriesPerGram": 0.00},
-  {"name": "Soy Sauce", "caloriesPerGram": 0.60},
-  {"name": "Egg", "caloriesPerGram": 1.55},
-  {"name": "Green Onion", "caloriesPerGram": 0.32}
+  {
+    "name": "apple",
+    "caloriesPerGram": 0.52
+  },
+  {
+    "name": "flour",
+    "caloriesPerGram": 3.64
+  },
+  {
+    "name": "sugar",
+    "caloriesPerGram": 4.0
+  },
+  {
+    "name": "butter",
+    "caloriesPerGram": 7.17
+  },
+  {
+    "name": "egg",
+    "caloriesPerGram": 1.43
+  },
+  {
+    "name": "salt",
+    "caloriesPerGram": 0.0
+  },
+  {
+    "name": "chickpeas",
+    "caloriesPerGram": 1.64
+  },
+  {
+    "name": "tahini",
+    "caloriesPerGram": 5.95
+  },
+  {
+    "name": "oil",
+    "caloriesPerGram": 9.0
+  },
+  {
+    "name": "lemon",
+    "caloriesPerGram": 0.29
+  },
+  {
+    "name": "garlic",
+    "caloriesPerGram": 1.49
+  },
+  {
+    "name": "cumin",
+    "caloriesPerGram": 3.55
+  },
+  {
+    "name": "ribs",
+    "caloriesPerGram": 2.5
+  },
+  {
+    "name": "pepper",
+    "caloriesPerGram": 2.55
+  },
+  {
+    "name": "sauce",
+    "caloriesPerGram": 1.5
+  },
+  {
+    "name": "phyllo",
+    "caloriesPerGram": 2.7
+  },
+  {
+    "name": "nuts",
+    "caloriesPerGram": 6.0
+  },
+  {
+    "name": "syrup",
+    "caloriesPerGram": 2.6
+  },
+  {
+    "name": "beef",
+    "caloriesPerGram": 2.5
+  },
+  {
+    "name": "rice",
+    "caloriesPerGram": 1.3
+  },
+  {
+    "name": "vegetable",
+    "caloriesPerGram": 0.5
+  },
+  {
+    "name": "meat",
+    "caloriesPerGram": 2.5
+  },
+  {
+    "name": "bread",
+    "caloriesPerGram": 2.5
+  },
+  {
+    "name": "tortilla",
+    "caloriesPerGram": 2.8
+  },
+  {
+    "name": "cheese",
+    "caloriesPerGram": 4.0
+  },
+  {
+    "name": "crouton",
+    "caloriesPerGram": 2.5
+  },
+  {
+    "name": "dressing",
+    "caloriesPerGram": 5.0
+  },
+  {
+    "name": "shell",
+    "caloriesPerGram": 2.0
+  },
+  {
+    "name": "basil",
+    "caloriesPerGram": 2.3
+  },
+  {
+    "name": "carrot",
+    "caloriesPerGram": 0.41
+  },
+  {
+    "name": "fish",
+    "caloriesPerGram": 2.0
+  },
+  {
+    "name": "lime",
+    "caloriesPerGram": 0.3
+  },
+  {
+    "name": "onion",
+    "caloriesPerGram": 0.4
+  },
+  {
+    "name": "capers",
+    "caloriesPerGram": 0.24
+  },
+  {
+    "name": "milk",
+    "caloriesPerGram": 0.64
+  },
+  {
+    "name": "cream",
+    "caloriesPerGram": 3.5
+  },
+  {
+    "name": "avocado",
+    "caloriesPerGram": 1.6
+  },
+  {
+    "name": "cucumber",
+    "caloriesPerGram": 0.16
+  },
+  {
+    "name": "olive",
+    "caloriesPerGram": 1.15
+  },
+  {
+    "name": "wrapper",
+    "caloriesPerGram": 2.7
+  },
+  {
+    "name": "grit",
+    "caloriesPerGram": 1.2
+  },
+  {
+    "name": "sausage",
+    "caloriesPerGram": 3.0
+  },
+  {
+    "name": "snail",
+    "caloriesPerGram": 1.5
+  },
+  {
+    "name": "spice",
+    "caloriesPerGram": 2.5
+  },
+  {
+    "name": "squid",
+    "caloriesPerGram": 1.5
+  },
+  {
+    "name": "potato",
+    "caloriesPerGram": 0.77
+  },
+  {
+    "name": "clam",
+    "caloriesPerGram": 0.8
+  },
+  {
+    "name": "shrimp",
+    "caloriesPerGram": 0.99
+  },
+  {
+    "name": "pork",
+    "caloriesPerGram": 2.5
+  },
+  {
+    "name": "duck",
+    "caloriesPerGram": 2.8
+  },
+  {
+    "name": "noodle",
+    "caloriesPerGram": 1.5
+  },
+  {
+    "name": "seaweed",
+    "caloriesPerGram": 0.45
+  },
+  {
+    "name": "tofu",
+    "caloriesPerGram": 0.76
+  },
+  {
+    "name": "miso",
+    "caloriesPerGram": 1.5
+  },
+  {
+    "name": "yogurt",
+    "caloriesPerGram": 0.59
+  },
+  {
+    "name": "chip",
+    "caloriesPerGram": 5.0
+  },
+  {
+    "name": "octopus",
+    "caloriesPerGram": 1.5
+  },
+  {
+    "name": "coffee",
+    "caloriesPerGram": 0.02
+  },
+  {
+    "name": "almond",
+    "caloriesPerGram": 5.76
+  },
+  {
+    "name": "mustard",
+    "caloriesPerGram": 0.66
+  },
+  {
+    "name": "mayo",
+    "caloriesPerGram": 6.7
+  },
+  {
+    "name": "bacon",
+    "caloriesPerGram": 5.4
+  },
+  {
+    "name": "gravy",
+    "caloriesPerGram": 1.0
+  },
+  {
+    "name": "broth",
+    "caloriesPerGram": 0.5
+  },
+  {
+    "name": "gelatin",
+    "caloriesPerGram": 0.0
+  }
 ]

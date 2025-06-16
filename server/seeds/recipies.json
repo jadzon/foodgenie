@@ -1,0 +1,959 @@
+[
+  {
+    "name": "Apple Pie",
+    "volume": 0.5,
+    "ingredients": [
+      { "name": "apple",   "weight": 300 },
+      { "name": "flour",   "weight": 200 },
+      { "name": "sugar",   "weight": 100 },
+      { "name": "butter",  "weight": 100 },
+      { "name": "egg",     "weight": 50  },
+      { "name": "salt",    "weight": 5   }
+    ]
+  },
+  {
+    "name": "Baby Back Ribs",
+    "volume": 0.6,
+    "ingredients": [
+      { "name": "ribs",    "weight": 800 },
+      { "name": "salt",    "weight": 10  },
+      { "name": "pepper",  "weight": 5   },
+      { "name": "sauce",   "weight": 100 }
+    ]
+  },
+  {
+    "name": "Baklava",
+    "volume": 0.4,
+    "ingredients": [
+      { "name": "phyllo",  "weight": 150 },
+      { "name": "nuts",    "weight": 100 },
+      { "name": "butter",  "weight": 100 },
+      { "name": "syrup",   "weight": 100 }
+    ]
+  },
+  {
+    "name": "Beef Carpaccio",
+    "volume": 0.2,
+    "ingredients": [
+      { "name": "beef",    "weight": 200 },
+      { "name": "oil",     "weight": 20  },
+      { "name": "lemon",   "weight": 10  },
+      { "name": "salt",    "weight": 5   },
+      { "name": "pepper",  "weight": 2   }
+    ]
+  },
+  {
+    "name": "Beef Tartare",
+    "volume": 0.25,
+    "ingredients": [
+      { "name": "beef",    "weight": 200 },
+      { "name": "egg",     "weight": 50  },
+      { "name": "onion",   "weight": 30  },
+      { "name": "capers",  "weight": 10  },
+      { "name": "salt",    "weight": 5   },
+      { "name": "pepper",  "weight": 2   }
+    ]
+  },
+  {
+    "name": "Beet Salad",
+    "volume": 0.3,
+    "ingredients": [
+      { "name": "beet",    "weight": 200 },
+      { "name": "oil",     "weight": 20  },
+      { "name": "vinegar", "weight": 10  },
+      { "name": "salt",    "weight": 5   }
+    ]
+  },
+  {
+    "name": "Beignets",
+    "volume": 0.35,
+    "ingredients": [
+      { "name": "flour",   "weight": 200 },
+      { "name": "egg",     "weight": 50  },
+      { "name": "milk",    "weight": 100 },
+      { "name": "sugar",   "weight": 50  },
+      { "name": "oil",     "weight": 100 }
+    ]
+  },
+  {
+    "name": "Bibimbap",
+    "volume": 0.5,
+    "ingredients": [
+      { "name": "rice",    "weight": 200 },
+      { "name": "vegetable","weight": 150 },
+      { "name": "egg",     "weight": 50  },
+      { "name": "meat",    "weight": 100 },
+      { "name": "sauce",   "weight": 30  }
+    ]
+  },
+  {
+    "name": "Bread Pudding",
+    "volume": 0.4,
+    "ingredients": [
+      { "name": "bread",   "weight": 200 },
+      { "name": "milk",    "weight": 150 },
+      { "name": "egg",     "weight": 100 },
+      { "name": "sugar",   "weight": 50  }
+    ]
+  },
+  {
+    "name": "Breakfast Burrito",
+    "volume": 0.3,
+    "ingredients": [
+      { "name": "tortilla","weight": 100 },
+      { "name": "egg",     "weight": 100 },
+      { "name": "cheese",  "weight": 50  },
+      { "name": "sauce",   "weight": 30  }
+    ]
+  },
+  {
+    "name": "Bruschetta",
+    "volume": 0.25,
+    "ingredients": [
+      { "name": "bread",   "weight": 100 },
+      { "name": "tomato",  "weight": 100 },
+      { "name": "oil",     "weight": 20  },
+      { "name": "garlic",  "weight": 5   },
+      { "name": "salt",    "weight": 2   }
+    ]
+  },
+  {
+    "name": "Caesar Salad",
+    "volume": 0.3,
+    "ingredients": [
+      { "name": "lettuce", "weight": 150 },
+      { "name": "crouton", "weight": 50  },
+      { "name": "cheese",  "weight": 30  },
+      { "name": "dressing","weight": 30  }
+    ]
+  },
+  {
+    "name": "Cannoli",
+    "volume": 0.2,
+    "ingredients": [
+      { "name": "shell",   "weight": 50  },
+      { "name": "cheese",  "weight": 100 },
+      { "name": "sugar",   "weight": 20  }
+    ]
+  },
+  {
+    "name": "Caprese Salad",
+    "volume": 0.25,
+    "ingredients": [
+      { "name": "tomato",  "weight": 100 },
+      { "name": "cheese",  "weight": 100 },
+      { "name": "basil",   "weight": 5   },
+      { "name": "oil",     "weight": 20  }
+    ]
+  },
+  {
+    "name": "Carrot Cake",
+    "volume": 0.4,
+    "ingredients": [
+      { "name": "carrot",  "weight": 150 },
+      { "name": "flour",   "weight": 200 },
+      { "name": "sugar",   "weight": 100 },
+      { "name": "oil",     "weight": 80  },
+      { "name": "egg",     "weight": 50  }
+    ]
+  },
+  {
+    "name": "Ceviche",
+    "volume": 0.3,
+    "ingredients": [
+      { "name": "fish",    "weight": 200 },
+      { "name": "lime",    "weight": 30  },
+      { "name": "onion",   "weight": 30  },
+      { "name": "salt",    "weight": 5   }
+    ]
+  },
+  {
+    "name": "Cheesecake",
+    "volume": 0.5,
+    "ingredients": [
+      { "name": "cheese",  "weight": 300 },
+      { "name": "sugar",   "weight": 100 },
+      { "name": "flour",   "weight": 50  },
+      { "name": "egg",     "weight": 100 },
+      { "name": "butter",  "weight": 50  }
+    ]
+  },
+  {
+    "name": "Cheese Plate",
+    "volume": 0.4,
+    "ingredients": [
+      { "name": "cheese",  "weight": 200 },
+      { "name": "fruit",   "weight": 100 },
+      { "name": "nut",     "weight": 50  }
+    ]
+  },
+  {
+    "name": "Chicken Curry",
+    "volume": 0.5,
+    "ingredients": [
+      { "name": "chicken", "weight": 200 },
+      { "name": "spice",   "weight": 30  },
+      { "name": "milk",    "weight": 150 },
+      { "name": "onion",   "weight": 50  }
+    ]
+  },
+  {
+    "name": "Chicken Quesadilla",
+    "volume": 0.3,
+    "ingredients": [
+      { "name": "tortilla","weight": 100 },
+      { "name": "chicken", "weight": 100 },
+      { "name": "cheese",  "weight": 80  }
+    ]
+  },
+  {
+    "name": "Chicken Wings",
+    "volume": 0.4,
+    "ingredients": [
+      { "name": "wing",    "weight": 300 },
+      { "name": "salt",    "weight": 5   },
+      { "name": "sauce",   "weight": 50  }
+    ]
+  },
+  {
+    "name": "Chocolate Cake",
+    "volume": 0.5,
+    "ingredients": [
+      { "name": "flour",   "weight": 200 },
+      { "name": "sugar",   "weight": 150 },
+      { "name": "cocoa",   "weight": 50  },
+      { "name": "egg",     "weight": 100 },
+      { "name": "butter",  "weight": 100 }
+    ]
+  },
+  {
+    "name": "Chocolate Mousse",
+    "volume": 0.3,
+    "ingredients": [
+      { "name": "chocolate","weight": 100 },
+      { "name": "cream",   "weight": 100 },
+      { "name": "sugar",   "weight": 50  }
+    ]
+  },
+  {
+    "name": "Churros",
+    "volume": 0.3,
+    "ingredients": [
+      { "name": "flour",   "weight": 150 },
+      { "name": "sugar",   "weight": 50  },
+      { "name": "oil",     "weight": 100 }
+    ]
+  },
+  {
+    "name": "Clam Chowder",
+    "volume": 0.5,
+    "ingredients": [
+      { "name": "clam",    "weight": 200 },
+      { "name": "potato",  "weight": 100 },
+      { "name": "cream",   "weight": 150 },
+      { "name": "onion",   "weight": 50  }
+    ]
+  },
+  {
+    "name": "Club Sandwich",
+    "volume": 0.35,
+    "ingredients": [
+      { "name": "bread",   "weight": 150 },
+      { "name": "meat",    "weight": 100 },
+      { "name": "lettuce","weight": 30  },
+      { "name": "tomato",  "weight": 30  }
+    ]
+  },
+  {
+    "name": "Crab Cakes",
+    "volume": 0.3,
+    "ingredients": [
+      { "name": "crab",    "weight": 200 },
+      { "name": "bread",   "weight": 50  },
+      { "name": "egg",     "weight": 30  }
+    ]
+  },
+  {
+    "name": "Creme Brulee",
+    "volume": 0.25,
+    "ingredients": [
+      { "name": "cream",   "weight": 150 },
+      { "name": "egg",     "weight": 100 },
+      { "name": "sugar",   "weight": 50  }
+    ]
+  },
+  {
+    "name": "Croque Madame",
+    "volume": 0.3,
+    "ingredients": [
+      { "name": "bread",   "weight": 100 },
+      { "name": "ham",     "weight": 80  },
+      { "name": "cheese",  "weight": 50  },
+      { "name": "egg",     "weight": 50  }
+    ]
+  },
+  {
+    "name": "Cup Cakes",
+    "volume": 0.3,
+    "ingredients": [
+      { "name": "flour",   "weight": 150 },
+      { "name": "sugar",   "weight": 100 },
+      { "name": "egg",     "weight": 50  },
+      { "name": "butter",  "weight": 50  }
+    ]
+  },
+  {
+    "name": "Deviled Eggs",
+    "volume": 0.2,
+    "ingredients": [
+      { "name": "egg",     "weight": 200 },
+      { "name": "oil",     "weight": 20  },
+      { "name": "mustard","weight": 10  }
+    ]
+  },
+  {
+    "name": "Donuts",
+    "volume": 0.3,
+    "ingredients": [
+      { "name": "flour",   "weight": 200 },
+      { "name": "sugar",   "weight": 50  },
+      { "name": "oil",     "weight": 100 },
+      { "name": "egg",     "weight": 50  }
+    ]
+  },
+  {
+    "name": "Dumplings",
+    "volume": 0.3,
+    "ingredients": [
+      { "name": "flour",   "weight": 200 },
+      { "name": "meat",    "weight": 100 },
+      { "name": "water",   "weight": 50  }
+    ]
+  },
+  {
+    "name": "Edamame",
+    "volume": 0.2,
+    "ingredients": [
+      { "name": "soybean", "weight": 200 },
+      { "name": "salt",    "weight": 5   }
+    ]
+  },
+  {
+    "name": "Eggs Benedict",
+    "volume": 0.3,
+    "ingredients": [
+      { "name": "egg",     "weight": 200 },
+      { "name": "bread",   "weight": 100 },
+      { "name": "ham",     "weight": 50  },
+      { "name": "sauce",   "weight": 30  }
+    ]
+  },
+  {
+    "name": "Escargots",
+    "volume": 0.2,
+    "ingredients": [
+      { "name": "snail",   "weight": 100 },
+      { "name": "butter",  "weight": 50  },
+      { "name": "garlic",  "weight": 5   }
+    ]
+  },
+  {
+    "name": "Falafel",
+    "volume": 0.3,
+    "ingredients": [
+      { "name": "chickpea","weight": 200 },
+      { "name": "spice",   "weight": 20  },
+      { "name": "oil",     "weight": 50  }
+    ]
+  },
+  {
+    "name": "Filet Mignon",
+    "volume": 0.25,
+    "ingredients": [
+      { "name": "beef",    "weight": 200 },
+      { "name": "salt",    "weight": 5   },
+      { "name": "pepper",  "weight": 2   }
+    ]
+  },
+  {
+    "name": "Fish And Chips",
+    "volume": 0.5,
+    "ingredients": [
+      { "name": "fish",    "weight": 200 },
+      { "name": "potato",  "weight": 200 },
+      { "name": "oil",     "weight": 100 },
+      { "name": "salt",    "weight": 5   }
+    ]
+  },
+  {
+    "name": "Foie Gras",
+    "volume": 0.2,
+    "ingredients": [
+      { "name": "liver",   "weight": 150 },
+      { "name": "salt",    "weight": 5   }
+    ]
+  },
+  {
+    "name": "French Fries",
+    "volume": 0.4,
+    "ingredients": [
+      { "name": "potato",  "weight": 300 },
+      { "name": "oil",     "weight": 150 },
+      { "name": "salt",    "weight": 5   }
+    ]
+  },
+  {
+    "name": "French Onion Soup",
+    "volume": 0.4,
+    "ingredients": [
+      { "name": "onion",   "weight": 200 },
+      { "name": "broth",   "weight": 200 },
+      { "name": "bread",   "weight": 50  },
+      { "name": "cheese",  "weight": 50  }
+    ]
+  },
+  {
+    "name": "French Toast",
+    "volume": 0.3,
+    "ingredients": [
+      { "name": "bread",   "weight": 150 },
+      { "name": "egg",     "weight": 100 },
+      { "name": "milk",    "weight": 50  },
+      { "name": "sugar",   "weight": 20  }
+    ]
+  },
+  {
+    "name": "Fried Calamari",
+    "volume": 0.3,
+    "ingredients": [
+      { "name": "squid",   "weight": 200 },
+      { "name": "flour",   "weight": 100 },
+      { "name": "oil",     "weight": 100 },
+      { "name": "salt",    "weight": 5   }
+    ]
+  },
+  {
+    "name": "Fried Rice",
+    "volume": 0.5,
+    "ingredients": [
+      { "name": "rice",    "weight": 200 },
+      { "name": "egg",     "weight": 50  },
+      { "name": "vegetable","weight": 100 },
+      { "name": "oil",     "weight": 50  }
+    ]
+  },
+  {
+    "name": "Frozen Yogurt",
+    "volume": 0.4,
+    "ingredients": [
+      { "name": "yogurt",  "weight": 200 },
+      { "name": "sugar",   "weight": 50  }
+    ]
+  },
+  {
+    "name": "Garlic Bread",
+    "volume": 0.3,
+    "ingredients": [
+      { "name": "bread",   "weight": 150 },
+      { "name": "garlic",  "weight": 10  },
+      { "name": "butter",  "weight": 30  }
+    ]
+  },
+  {
+    "name": "Gnocchi",
+    "volume": 0.3,
+    "ingredients": [
+      { "name": "potato",  "weight": 200 },
+      { "name": "flour",   "weight": 100 }
+    ]
+  },
+  {
+    "name": "Greek Salad",
+    "volume": 0.3,
+    "ingredients": [
+      { "name": "tomato",  "weight": 100 },
+      { "name": "cucumber","weight": 100 },
+      { "name": "cheese",  "weight": 50  },
+      { "name": "olive",   "weight": 20  }
+    ]
+  },
+  {
+    "name": "Grilled Cheese Sandwich",
+    "volume": 0.25,
+    "ingredients": [
+      { "name": "bread",   "weight": 100 },
+      { "name": "cheese",  "weight": 80  },
+      { "name": "butter",  "weight": 20  }
+    ]
+  },
+  {
+    "name": "Grilled Salmon",
+    "volume": 0.3,
+    "ingredients": [
+      { "name": "salmon",  "weight": 200 },
+      { "name": "salt",    "weight": 5   },
+      { "name": "lemon",   "weight": 10  }
+    ]
+  },
+  {
+    "name": "Guacamole",
+    "volume": 0.3,
+    "ingredients": [
+      { "name": "avocado", "weight": 200 },
+      { "name": "onion",   "weight": 30  },
+      { "name": "tomato",  "weight": 30  },
+      { "name": "salt",    "weight": 5   }
+    ]
+  },
+  {
+    "name": "Gyoza",
+    "volume": 0.3,
+    "ingredients": [
+      { "name": "dumpling","weight": 200 },
+      { "name": "meat",    "weight": 100 },
+      { "name": "oil",     "weight": 20  }
+    ]
+  },
+  {
+    "name": "Hamburger",
+    "volume": 0.3,
+    "ingredients": [
+      { "name": "bun",     "weight": 100 },
+      { "name": "beef",    "weight": 150 },
+      { "name": "lettuce","weight": 20  },
+      { "name": "tomato",  "weight": 20  }
+    ]
+  },
+  {
+    "name": "Hot And Sour Soup",
+    "volume": 0.4,
+    "ingredients": [
+      { "name": "broth",   "weight": 200 },
+      { "name": "tofu",    "weight": 100 },
+      { "name": "vinegar","weight": 20  },
+      { "name": "pepper",  "weight": 5   }
+    ]
+  },
+  {
+    "name": "Hot Dog",
+    "volume": 0.25,
+    "ingredients": [
+      { "name": "bun",     "weight": 80  },
+      { "name": "sausage","weight": 100 },
+      { "name": "sauce",   "weight": 20  }
+    ]
+  },
+  {
+    "name": "Huevos Rancheros",
+    "volume": 0.3,
+    "ingredients": [
+      { "name": "tortilla","weight": 100 },
+      { "name": "egg",     "weight": 100 },
+      { "name": "sauce",   "weight": 50  }
+    ]
+  },
+  {
+    "name": "Hummus",
+    "volume": 0.3,
+    "ingredients": [
+      { "name": "chickpeas","weight": 250 },
+      { "name": "tahini",   "weight": 50  },
+      { "name": "oil",      "weight": 30  },
+      { "name": "lemon",    "weight": 30  },
+      { "name": "garlic",   "weight": 8   },
+      { "name": "salt",     "weight": 5   },
+      { "name": "cumin",    "weight": 2   }
+    ]
+  },
+  {
+    "name": "Ice Cream",
+    "volume": 0.3,
+    "ingredients": [
+      { "name": "milk",    "weight": 200 },
+      { "name": "sugar",   "weight": 50  },
+      { "name": "cream",   "weight": 50  }
+    ]
+  },
+  {
+    "name": "Lasagna",
+    "volume": 0.5,
+    "ingredients": [
+      { "name": "pasta",   "weight": 200 },
+      { "name": "meat",    "weight": 150 },
+      { "name": "cheese",  "weight": 100 },
+      { "name": "sauce",   "weight": 150 }
+    ]
+  },
+  {
+    "name": "Lobster Bisque",
+    "volume": 0.4,
+    "ingredients": [
+      { "name": "lobster", "weight": 200 },
+      { "name": "cream",   "weight": 150 },
+      { "name": "broth",   "weight": 100 }
+    ]
+  },
+  {
+    "name": "Lobster Roll Sandwich",
+    "volume": 0.35,
+    "ingredients": [
+      { "name": "bun",     "weight": 100 },
+      { "name": "lobster", "weight": 150 },
+      { "name": "mayo",    "weight": 30  }
+    ]
+  },
+  {
+    "name": "Macaroni And Cheese",
+    "volume": 0.4,
+    "ingredients": [
+      { "name": "pasta",   "weight": 200 },
+      { "name": "cheese",  "weight": 150 },
+      { "name": "milk",    "weight": 100 }
+    ]
+  },
+  {
+    "name": "Macarons",
+    "volume": 0.2,
+    "ingredients": [
+      { "name": "egg",     "weight": 100 },
+      { "name": "sugar",   "weight": 100 },
+      { "name": "almond",  "weight": 100 }
+    ]
+  },
+  {
+    "name": "Miso Soup",
+    "volume": 0.3,
+    "ingredients": [
+      { "name": "miso",    "weight": 30  },
+      { "name": "tofu",    "weight": 50  },
+      { "name": "broth",   "weight": 200 }
+    ]
+  },
+  {
+    "name": "Mussels",
+    "volume": 0.3,
+    "ingredients": [
+      { "name": "mussel",  "weight": 200 },
+      { "name": "wine",    "weight": 50  },
+      { "name": "garlic",  "weight": 10  }
+    ]
+  },
+  {
+    "name": "Nachos",
+    "volume": 0.4,
+    "ingredients": [
+      { "name": "chip",    "weight": 200 },
+      { "name": "cheese",  "weight": 100 },
+      { "name": "sauce",   "weight": 50  }
+    ]
+  },
+  {
+    "name": "Omelette",
+    "volume": 0.25,
+    "ingredients": [
+      { "name": "egg",     "weight": 150 },
+      { "name": "cheese",  "weight": 50  },
+      { "name": "oil",     "weight": 10  }
+    ]
+  },
+  {
+    "name": "Onion Rings",
+    "volume": 0.3,
+    "ingredients": [
+      { "name": "onion",   "weight": 150 },
+      { "name": "flour",   "weight": 100 },
+      { "name": "oil",     "weight": 100 }
+    ]
+  },
+  {
+    "name": "Oysters",
+    "volume": 0.2,
+    "ingredients": [
+      { "name": "oyster",  "weight": 200 },
+      { "name": "lemon",   "weight": 10  }
+    ]
+  },
+  {
+    "name": "Pad Thai",
+    "volume": 0.4,
+    "ingredients": [
+      { "name": "noodle",  "weight": 200 },
+      { "name": "egg",     "weight": 50  },
+      { "name": "sauce",   "weight": 50  },
+      { "name": "vegetable","weight": 50  }
+    ]
+  },
+  {
+    "name": "Paella",
+    "volume": 0.5,
+    "ingredients": [
+      { "name": "rice",    "weight": 300 },
+      { "name": "seafood", "weight": 150 },
+      { "name": "broth",   "weight": 100 }
+    ]
+  },
+  {
+    "name": "Pancakes",
+    "volume": 0.3,
+    "ingredients": [
+      { "name": "flour",   "weight": 150 },
+      { "name": "milk",    "weight": 100 },
+      { "name": "egg",     "weight": 50  },
+      { "name": "sugar",   "weight": 20  }
+    ]
+  },
+  {
+    "name": "Panna Cotta",
+    "volume": 0.25,
+    "ingredients": [
+      { "name": "cream",   "weight": 150 },
+      { "name": "sugar",   "weight": 50  },
+      { "name": "gelatin", "weight": 5   }
+    ]
+  },
+  {
+    "name": "Peking Duck",
+    "volume": 0.6,
+    "ingredients": [
+      { "name": "duck",    "weight": 600 },
+      { "name": "sauce",   "weight": 50  }
+    ]
+  },
+  {
+    "name": "Pho",
+    "volume": 0.5,
+    "ingredients": [
+      { "name": "noodle",  "weight": 200 },
+      { "name": "broth",   "weight": 300 },
+      { "name": "meat",    "weight": 100 }
+    ]
+  },
+  {
+    "name": "Pizza",
+    "volume": 0.6,
+    "ingredients": [
+      { "name": "dough",   "weight": 300 },
+      { "name": "cheese",  "weight": 150 },
+      { "name": "sauce",   "weight": 100 }
+    ]
+  },
+  {
+    "name": "Pork Chop",
+    "volume": 0.3,
+    "ingredients": [
+      { "name": "pork",    "weight": 200 },
+      { "name": "salt",    "weight": 5   },
+      { "name": "pepper",  "weight": 2   }
+    ]
+  },
+  {
+    "name": "Poutine",
+    "volume": 0.4,
+    "ingredients": [
+      { "name": "potato",  "weight": 300 },
+      { "name": "cheese",  "weight": 100 },
+      { "name": "gravy",   "weight": 100 }
+    ]
+  },
+  {
+    "name": "Prime Rib",
+    "volume": 0.6,
+    "ingredients": [
+      { "name": "beef",    "weight": 600 },
+      { "name": "salt",    "weight": 5   },
+      { "name": "pepper",  "weight": 2   }
+    ]
+  },
+  {
+    "name": "Pulled Pork Sandwich",
+    "volume": 0.4,
+    "ingredients": [
+      { "name": "bun",     "weight": 100 },
+      { "name": "pork",    "weight": 200 },
+      { "name": "sauce",   "weight": 50  }
+    ]
+  },
+  {
+    "name": "Ramen",
+    "volume": 0.5,
+    "ingredients": [
+      { "name": "noodle",  "weight": 200 },
+      { "name": "broth",   "weight": 300 },
+      { "name": "egg",     "weight": 50  },
+      { "name": "meat",    "weight": 100 }
+    ]
+  },
+  {
+    "name": "Ravioli",
+    "volume": 0.3,
+    "ingredients": [
+      { "name": "pasta",   "weight": 200 },
+      { "name": "cheese",  "weight": 100 }
+    ]
+  },
+  {
+    "name": "Red Velvet Cake",
+    "volume": 0.5,
+    "ingredients": [
+      { "name": "flour",   "weight": 200 },
+      { "name": "sugar",   "weight": 150 },
+      { "name": "cocoa",   "weight": 30  },
+      { "name": "egg",     "weight": 100 },
+      { "name": "butter",  "weight": 100 }
+    ]
+  },
+  {
+    "name": "Risotto",
+    "volume": 0.4,
+    "ingredients": [
+      { "name": "rice",    "weight": 200 },
+      { "name": "broth",   "weight": 200 },
+      { "name": "cheese",  "weight": 50  }
+    ]
+  },
+  {
+    "name": "Samosa",
+    "volume": 0.3,
+    "ingredients": [
+      { "name": "flour",   "weight": 150 },
+      { "name": "potato",  "weight": 100 },
+      { "name": "spice",   "weight": 20  }
+    ]
+  },
+  {
+    "name": "Sashimi",
+    "volume": 0.2,
+    "ingredients": [
+      { "name": "fish",    "weight": 200 },
+      { "name": "soy",     "weight": 20  }
+    ]
+  },
+  {
+    "name": "Scallops",
+    "volume": 0.3,
+    "ingredients": [
+      { "name": "scallop", "weight": 200 },
+      { "name": "butter",  "weight": 20  }
+    ]
+  },
+  {
+    "name": "Seaweed Salad",
+    "volume": 0.25,
+    "ingredients": [
+      { "name": "seaweed", "weight": 100 },
+      { "name": "vinegar","weight": 20  },
+      { "name": "oil",     "weight": 10  }
+    ]
+  },
+  {
+    "name": "Shrimp And Grits",
+    "volume": 0.4,
+    "ingredients": [
+      { "name": "shrimp",  "weight": 150 },
+      { "name": "grit",    "weight": 150 },
+      { "name": "butter",  "weight": 20  }
+    ]
+  },
+  {
+    "name": "Spaghetti Bolognese",
+    "volume": 0.5,
+    "ingredients": [
+      { "name": "pasta",   "weight": 200 },
+      { "name": "meat",    "weight": 150 },
+      { "name": "sauce",   "weight": 150 }
+    ]
+  },
+  {
+    "name": "Spaghetti Carbonara",
+    "volume": 0.5,
+    "ingredients": [
+      { "name": "pasta",   "weight": 200 },
+      { "name": "egg",     "weight": 100 },
+      { "name": "cheese",  "weight": 50  },
+      { "name": "bacon",   "weight": 50  }
+    ]
+  },
+  {
+    "name": "Spring Rolls",
+    "volume": 0.3,
+    "ingredients": [
+      { "name": "wrapper", "weight": 100 },
+      { "name": "vegetable","weight": 100 },
+      { "name": "oil",     "weight": 50  }
+    ]
+  },
+  {
+    "name": "Steak",
+    "volume": 0.3,
+    "ingredients": [
+      { "name": "beef",    "weight": 300 },
+      { "name": "salt",    "weight": 5   },
+      { "name": "pepper",  "weight": 2   }
+    ]
+  },
+  {
+    "name": "Strawberry Shortcake",
+    "volume": 0.4,
+    "ingredients": [
+      { "name": "strawberry","weight": 100 },
+      { "name": "flour",   "weight": 150 },
+      { "name": "sugar",   "weight": 50  },
+      { "name": "cream",   "weight": 50  }
+    ]
+  },
+  {
+    "name": "Sushi",
+    "volume": 0.3,
+    "ingredients": [
+      { "name": "rice",    "weight": 150 },
+      { "name": "fish",    "weight": 100 },
+      { "name": "seaweed", "weight": 10  }
+    ]
+  },
+  {
+    "name": "Tacos",
+    "volume": 0.3,
+    "ingredients": [
+      { "name": "tortilla","weight": 100 },
+      { "name": "meat",    "weight": 100 },
+      { "name": "sauce",   "weight": 30  }
+    ]
+  },
+  {
+    "name": "Takoyaki",
+    "volume": 0.3,
+    "ingredients": [
+      { "name": "flour",   "weight": 150 },
+      { "name": "octopus", "weight": 100 },
+      { "name": "sauce",   "weight": 30  }
+    ]
+  },
+  {
+    "name": "Tiramisu",
+    "volume": 0.4,
+    "ingredients": [
+      { "name": "cheese",  "weight": 200 },
+      { "name": "sugar",   "weight": 100 },
+      { "name": "coffee",  "weight": 50  },
+      { "name": "egg",     "weight": 50  }
+    ]
+  },
+  {
+    "name": "Tuna Tartare",
+    "volume": 0.3,
+    "ingredients": [
+      { "name": "tuna",    "weight": 200 },
+      { "name": "oil",     "weight": 20  },
+      { "name": "salt",    "weight": 5   }
+    ]
+  },
+  {
+    "name": "Waffles",
+    "volume": 0.3,
+    "ingredients": [
+      { "name": "flour",   "weight": 150 },
+      { "name": "milk",    "weight": 100 },
+      { "name": "egg",     "weight": 50  }
+    ]
+  }
+]

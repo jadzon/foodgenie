@@ -1,3 +1,4 @@
+# Dockerfile
 FROM python:3.6
 
 WORKDIR /app
@@ -10,7 +11,7 @@ RUN pip install --no-cache-dir -r requirements.txt \
 # 2) Copy & install your package
 COPY setup.py .
 COPY food_volume_estimation/ food_volume_estimation/
-COPY funkcja.py .
+COPY server.py .
 RUN python setup.py install
 
 # 3) Place model files where volume_estimator expects them
@@ -18,13 +19,11 @@ COPY models/fine_tune_food_videos/monovideo_fine_tune_food_videos.json /models/d
 COPY models/fine_tune_food_videos/monovideo_fine_tune_food_videos.h5       /models/depth_weights.h5
 COPY models/segmentation/mask_rcnn_food_segmentation.h5                    /models/segmentation_weights.h5
 
-# 4) Copy entrypoint script
-COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
+# 4) Create assets directory
+RUN mkdir -p /app/assets
 
-# 5) Default workdir for assets
-VOLUME ["/assets"]
-WORKDIR /assets
+# 5) Expose port
+EXPOSE 8000
 
-# 6) Entrypoint picks up first image in /assets
-ENTRYPOINT ["/entrypoint.sh"]
+# 6) Run FastAPI server
+CMD ["python", "server.py"]

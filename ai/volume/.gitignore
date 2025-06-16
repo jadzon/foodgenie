@@ -11,10 +11,7 @@ build/*
 dist/*
 *.egg-info
 
-# Filetypes to ignore
-*.pyc
-*.h5
-*.hdf5
+
 
 # Files to NOT ignore
 !datasets/EPIC_KITCHENS_2018/

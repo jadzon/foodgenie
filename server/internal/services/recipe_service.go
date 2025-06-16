@@ -87,6 +87,7 @@ func (s *recipeService) buildRecipeFromDTO(ctx context.Context, req *dto.CreateR
 		IngredientUsages: ingUsages,
 		Weight:           totalWeight,
 		Calories:         totalCalories,
+		Volume:           req.Volume,
 	}
 	return &recipeToCreate, ingredientModels, nil
 }
@@ -112,6 +113,7 @@ func mapRecipeToDTO(recipe *models.Recipe) *dto.RecipeDetailResponseDTO {
 		Ingredients:   ingredientsDTOS,
 		TotalWeight:   recipe.Weight,
 		TotalCalories: recipe.Calories,
+		Volume:        recipe.Volume,
 	}
 	return recipeDTO
 }

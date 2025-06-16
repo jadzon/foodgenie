@@ -13,11 +13,11 @@ func NewMockAIService() AIService {
 }
 
 func (s *mockAIService) AnalyzeMealImage(ctx context.Context, image io.Reader) (*dto.AIAnalysisResponseDTO, error) {
-	mockMealName := "Chicken with rice and pepper"
-	var mockMealWeight uint = 1500
+	mockMealName := "Apple Pie"
+	var mockMealVolume float64 = 0.7
 	analysisResult := &dto.AIAnalysisResponseDTO{
 		Name:   mockMealName,
-		Weight: mockMealWeight,
+		Volume: mockMealVolume,
 	}
 	return analysisResult, nil
 }

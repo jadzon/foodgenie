@@ -48,10 +48,11 @@ func (s *mealService) ProcessAndLogMealFromImage(ctx context.Context, userID uui
 	if err != nil {
 		return nil, fmt.Errorf("invalid recipe name %w", err)
 	}
+	weight := (aiAnalysis.Volume / recipeModel.Volume) * float64(recipeModel.Weight)
 	mealToLog := &models.Meal{
 		UserID:   userID,
 		RecipeID: recipeModel.ID,
-		Weight:   aiAnalysis.Weight,
+		Weight:   uint(weight),
 		Recipe:   *recipeModel,
 	}
 	loggedMeal, err := s.mealRepo.CreateMeal(mealToLog)

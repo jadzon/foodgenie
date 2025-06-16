@@ -8,6 +8,7 @@ type Recipe struct {
 	IngredientUsages []RecipeIngredientUsage `gorm:"foreignKey:RecipeID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 	Weight           uint                    `gorm:"not null;default:0"`
 	Calories         uint                    `gorm:"not null;default:0"`
+	Volume           float64                 `gorm:"not null;default:0"`
 }
 type RecipeIngredientUsage struct {
 	BaseModel
