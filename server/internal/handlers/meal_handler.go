@@ -146,3 +146,35 @@ func (h *MealHandler) GetMealDetails(c *gin.Context) {
 
 	c.JSON(http.StatusOK, meal)
 }
+func (h *MealHandler) DeleteMeal(c *gin.Context) {
+	userIDUntyped, exists := c.Get("userID")
+	if !exists {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "unauthorized"})
+		return
+	}
+
+	userID, ok := userIDUntyped.(uuid.UUID)
+	if !ok {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "invalid user ID format in context"})
+		return
+	}
+
+	mealIDStr := c.Param("id")
+	mealID, err := uuid.Parse(mealIDStr)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid meal ID format"})
+		return
+	}
+
+	err = h.App.MealService.DeleteMealByID(c.Request.Context(), userID, mealID)
+	if err != nil {
+		if err.Error() == "meal not found or does not belong to user" {
+			c.JSON(http.StatusNotFound, gin.H{"error": "meal not found"})
+			return
+		}
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to delete meal"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "meal deleted successfully"})
+}

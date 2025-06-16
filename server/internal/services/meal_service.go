@@ -130,12 +130,20 @@ func (s *mealService) GetMealDetails(ctx context.Context, userID uuid.UUID, meal
 	mealDetailDTO := mapMealToDetailDTO(mealModel)
 	return mealDetailDTO, nil
 }
+func (s *mealService) DeleteMealByID(ctx context.Context, userID uuid.UUID, mealID uuid.UUID) error {
+	err := s.mealRepo.DeleteMealByID(ctx, userID, mealID)
+	if err != nil {
+		return err
+	}
+	return nil
+}
 
 type MealService interface {
 	CreateMealForUser(ctx context.Context, req *dto.CreateMealRequestDTO) (*dto.MealDetailResponseDTO, error)
 	ProcessAndLogMealFromImage(ctx context.Context, userID uuid.UUID, image io.Reader) (*dto.MealDetailResponseDTO, error)
 	GetMealsForUser(ctx context.Context, userID uuid.UUID, page int) ([]*dto.MealResponseDTO, error)
 	GetMealDetails(ctx context.Context, userID uuid.UUID, mealID uuid.UUID) (*dto.MealDetailResponseDTO, error)
+	DeleteMealByID(ctx context.Context, userID uuid.UUID, mealID uuid.UUID) error
 }
 
 func NewMealService(mealRepo repositories.MealRepository, recipeRepo repositories.RecipeRepository, aiService ai.AIService) MealService {

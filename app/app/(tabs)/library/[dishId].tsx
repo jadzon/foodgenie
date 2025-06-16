@@ -1,11 +1,12 @@
 import { router, Stack, useLocalSearchParams } from 'expo-router';
-import { ChevronLeft, ImageOff, Zap, Clock } from 'lucide-react-native';
+import { ChevronLeft, ImageOff, Zap, Clock, Trash2 } from 'lucide-react-native';
 import React, { useCallback, useEffect, useState } from 'react';
-import { FlatList, ScrollView, StatusBar, Text, TouchableOpacity, View, ActivityIndicator } from 'react-native';
+import { FlatList, ScrollView, StatusBar, Text, TouchableOpacity, View, ActivityIndicator, Image, Alert, Modal } from 'react-native';
 import Animated, { FadeIn } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import useAuthStore from '../../../store/authStore';
 import { MEALS_URL } from '../../../config/config';
+import foodImages from '../../../assets/food_images/foodImages';
 
 interface ServerMealDetails {
   id: string;
@@ -22,30 +23,133 @@ interface ServerMealDetails {
   }>;
 }
 
-const IngredientItem = ({ item }: { item: any }) => (
-  <View className="flex-row items-center p-4 border-b-[1] border-solid border-white/10 bg-transparent">
-    <View className="w-16 h-16 rounded-lg mr-4 justify-center items-center bg-raisin-black border border-brand-pink/30">
-      <ImageOff size={30} color="#f7438d" strokeWidth={1.5} />
-    </View>
-    <View className="flex-1">
-      <Text className="text-lg text-slate-50 font-exo2-semibold tracking-tight">{item.name}</Text>
-      <View className="flex-row items-baseline mt-1.5">
-        <Text className="text-sm text-slate-400 font-exo2">{item.weight}g</Text>
-        <View className="flex-row ml-3">
-          <Text className="text-sm text-brand-pink font-exo2-semibold ml-1">
-            {item.calories} kcal
-          </Text>
+// Function to get the correct food image key based on ingredient name
+const getFoodImageKey = (ingredientName: string): string | null => {
+  if (!ingredientName) return null;
+  
+  const name = ingredientName.toLowerCase().trim();
+  
+  // Create mapping from ingredient names to foodImages keys
+  const nameToKeyMap: { [key: string]: string } = {
+    // Exact matches first
+    'apple': 'food.apple',
+    'banana': 'food.banana', 
+    'beef': 'food.beef',
+    'blueberry': 'food.blueberry',
+    'bread': 'food.bread',
+    'bun': 'food.bun',
+    'butter': 'food.butter',
+    'carrot': 'food.carrot',
+    'carrots': 'food.carrot',
+    'cereal': 'food.cereal',
+    'cheese': 'food.cheese',
+    'chicken breast': 'food.chickenBreast',
+    'chicken thigh': 'food.chickenThigh', 
+    'chicken wing': 'food.chickenWing',
+    'chicken': 'food.chicken',
+    'chocolate': 'food.chocolate',
+    'coffee': 'food.coffee',
+    'cooking oil': 'food.cookingOil',
+    'oil': 'food.cookingOil',
+    'cottage cheese': 'food.cottageCheese',
+    'cream': 'food.cream',
+    'cucumber': 'food.cucumber',
+    'egg': 'food.egg',
+    'eggs': 'food.egg',
+    'fish': 'food.fish',
+    'flour': 'food.flour',
+    'garlic': 'food.garlic',
+    'honey': 'food.honey',
+    'jam': 'food.jam',
+    'juice': 'food.juice',
+    'ketchup': 'food.ketchup',
+    'lemon': 'food.lemon',
+    'lettuce': 'food.lettuce',
+    'mayonnaise': 'food.mayonnaise',
+    'milk': 'food.milk',
+    'mustard': 'food.mustard',
+    'nuts': 'food.nut',
+    'nut': 'food.nut',
+    'olive oil': 'food.oliveOil',
+    'onion': 'food.onion',
+    'pasta': 'food.pasta',
+    'pepper': 'food.pepper',
+    'pork': 'food.pork',
+    'potato': 'food.potato',
+    'potatoes': 'food.potato',
+    'radish': 'food.radish',
+    'raspberry': 'food.raspberry',
+    'raspberries': 'food.raspberry',
+    'rice': 'food.rice',
+    'sausage': 'food.sausage',
+    'spice': 'food.spice',
+    'strawberry': 'food.strawberry',
+    'strawberries': 'food.strawberry',
+    'sugar': 'food.sugar',
+    'tomato': 'food.tomato',
+    'tomatoes': 'food.tomato',
+    'water': 'food.water',
+    'yogurt': 'food.yoghurt',
+    'yoghurt': 'food.yoghurt',
+    'broccoli': 'food.brocoli',
+    'brocoli': 'food.brocoli',
+  };
+  
+  // Try exact match first
+  if (nameToKeyMap[name]) {
+    return nameToKeyMap[name];
+  }
+  
+  // Try partial matches (if ingredient name contains any of these words)
+  for (const [key, value] of Object.entries(nameToKeyMap)) {
+    if (name.includes(key) || key.includes(name)) {
+      return value;
+    }
+  }
+  
+  return null;
+};
+
+const IngredientItem = ({ item }: { item: any }) => {
+  // Get the correct food image key
+  const foodImageKey = getFoodImageKey(item.name);
+  const foodImage = foodImageKey ? foodImages[foodImageKey] : null;
+
+  return (
+    <View className="flex-row items-center p-4 border-b-[1] border-solid border-white/10 bg-transparent">
+      <View className="w-16 h-16 rounded-lg mr-4 justify-center items-center bg-raisin-black border border-brand-pink/30 overflow-hidden">
+        {foodImage ? (
+          <Image 
+            source={foodImage} 
+            className="w-12 h-12" 
+            resizeMode="contain"
+          />
+        ) : (
+          <ImageOff size={30} color="#f7438d" strokeWidth={1.5} />
+        )}
+      </View>
+      <View className="flex-1">
+        <Text className="text-lg text-slate-50 font-exo2-semibold tracking-tight">{item.name}</Text>
+        <View className="flex-row items-baseline mt-1.5">
+          <Text className="text-sm text-slate-400 font-exo2">{item.weight}g</Text>
+          <View className="flex-row ml-3">
+            <Text className="text-sm text-brand-pink font-exo2-semibold ml-1">
+              {item.calories} kcal
+            </Text>
+          </View>
         </View>
       </View>
     </View>
-  </View>
-);
+  );
+};
 
 export default function DishDetailScreen() {
   const { dishId } = useLocalSearchParams<{ dishId: string }>();
   const [meal, setMeal] = useState<ServerMealDetails | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [deleting, setDeleting] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const insets = useSafeAreaInsets();
 
   const fetchMealDetails = useCallback(async () => {
@@ -82,6 +186,45 @@ export default function DishDetailScreen() {
       setLoading(false);
     }
   }, [dishId]);
+
+  const deleteMeal = useCallback(async () => {
+    if (!dishId) return;
+
+    try {
+      setDeleting(true);
+      
+      const { accessToken } = useAuthStore.getState();
+      
+      if (!accessToken) {
+        throw new Error('Brak autoryzacji');
+      }
+
+      const response = await fetch(`${MEALS_URL}/${dishId}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`Błąd serwera: ${response.status}`);
+      }
+
+      // Successfully deleted, navigate back
+      router.back();
+    } catch (error: any) {
+      console.error('Error deleting meal:', error);
+      Alert.alert('Błąd', 'Nie udało się usunąć posiłku: ' + error.message);
+    } finally {
+      setDeleting(false);
+      setShowDeleteConfirm(false);
+    }
+  }, [dishId]);
+
+  const handleDeletePress = () => {
+    setShowDeleteConfirm(true);
+  };
 
   useEffect(() => {
     fetchMealDetails();
@@ -163,9 +306,67 @@ export default function DishDetailScreen() {
           headerShown: false,
         }}
       />
+      
+      {/* Delete Confirmation Modal */}
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={showDeleteConfirm}
+        onRequestClose={() => setShowDeleteConfirm(false)}
+        statusBarTranslucent={true}
+      >
+        <View className="flex-1 bg-black/70 justify-center items-center px-6">
+          <Animated.View 
+            entering={FadeIn.duration(300)}
+            className="bg-raisin-black border border-red-500/30 rounded-3xl p-6 w-full max-w-sm"
+          >
+            <View className="items-center mb-6">
+              <View className="bg-red-500/20 p-4 rounded-full mb-4">
+                <Trash2 size={32} color="#EF4444" strokeWidth={2} />
+              </View>
+              <Text className="text-white text-xl font-exo2-bold mb-2 text-center">
+                Usuń posiłek
+              </Text>
+              <Text className="text-gray-400 font-exo2 text-center">
+                Czy na pewno chcesz usunąć "{meal?.name}"? Ta akcja jest nieodwracalna.
+              </Text>
+            </View>
+
+            <View className="flex-row space-x-3">
+              <TouchableOpacity
+                onPress={() => setShowDeleteConfirm(false)}
+                disabled={deleting}
+                className="flex-1 bg-gray-600/30 py-3 rounded-2xl items-center"
+              >
+                <Text className="text-gray-300 font-exo2-semibold text-base">
+                  Anuluj
+                </Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                onPress={deleteMeal}
+                disabled={deleting}
+                className={`flex-1 bg-red-500 py-3 rounded-2xl items-center ${
+                  deleting ? 'opacity-70' : ''
+                }`}
+              >
+                {deleting ? (
+                  <ActivityIndicator size="small" color="white" />
+                ) : (
+                  <Text className="text-white font-exo2-bold text-base">
+                    Usuń
+                  </Text>
+                )}
+              </TouchableOpacity>
+            </View>
+          </Animated.View>
+        </View>
+      </Modal>
+
       <ScrollView
         showsVerticalScrollIndicator={false}
         className="flex-1"
+        scrollEnabled={!showDeleteConfirm}
       >
         {/* Sekcja Hero */}
         <Animated.View
@@ -254,13 +455,42 @@ export default function DishDetailScreen() {
           </View>
 
           {/* Additional Info */}
-          <View className="bg-raisin-black/30 rounded-2xl p-4">
+          <View className="bg-raisin-black/30 rounded-2xl p-4 mb-6">
             <Text className="text-gray-400 font-exo2 text-sm text-center mb-2">
               Analiza AI • {formatDate(meal.createdAt)}
             </Text>
             <Text className="text-gray-500 font-exo2 text-xs text-center">
               ID: {meal.id.split('-')[0]}...
             </Text>
+          </View>
+
+          {/* Delete Section */}
+          <View className="mb-6">
+            <TouchableOpacity
+              onPress={handleDeletePress}
+              disabled={deleting}
+              className={`bg-red-500/20 border border-red-500/50 w-full py-4 rounded-2xl items-center ${
+                deleting ? 'opacity-50' : 'active:bg-red-500/30'
+              }`}
+            >
+              <View className="flex-row items-center">
+                {deleting ? (
+                  <>
+                    <ActivityIndicator size={20} color="#EF4444" />
+                    <Text className="text-red-400 font-exo2-bold text-lg ml-2">
+                      Usuwanie...
+                    </Text>
+                  </>
+                ) : (
+                  <>
+                    <Trash2 size={20} color="#EF4444" strokeWidth={2} />
+                    <Text className="text-red-400 font-exo2-bold text-lg ml-2">
+                      Usuń posiłek
+                    </Text>
+                  </>
+                )}
+              </View>
+            </TouchableOpacity>
           </View>
         </View>
       </ScrollView>

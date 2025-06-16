@@ -51,11 +51,22 @@ func (r *mealRepository) GetMealByID(ctx context.Context, userID uuid.UUID, meal
 
 	return meal, nil
 }
+func (r *mealRepository) DeleteMealByID(ctx context.Context, userID uuid.UUID, mealID uuid.UUID) error {
+	result := r.db.WithContext(ctx).Where("id = ? AND user_id = ?", mealID, userID).Delete(&models.Meal{})
+	if result.Error != nil {
+		return result.Error
+	}
+	if result.RowsAffected == 0 {
+		return errors.New("meal not found or does not belong to user")
+	}
+	return nil
+}
 
 type MealRepository interface {
 	GetMealsForUser(ctx context.Context, userID uuid.UUID, page int) ([]*models.Meal, error)
 	CreateMeal(loggedMeal *models.Meal) (*models.Meal, error)
 	GetMealByID(ctx context.Context, userID uuid.UUID, mealID uuid.UUID) (*models.Meal, error)
+	DeleteMealByID(ctx context.Context, userID uuid.UUID, mealID uuid.UUID) error
 }
 
 func NewMealRepository(db *gorm.DB) MealRepository {

@@ -63,6 +63,7 @@ func main() {
 	authorized.POST("/meal/image", mealHandler.LogMealFromImage)
 	authorized.GET("/meals", mealHandler.GetMealsForUser)
 	authorized.GET("/meals/:id", mealHandler.GetMealDetails)
+	authorized.DELETE("/meals/:id", mealHandler.DeleteMeal)
 	// router.GET("")
 	address := cfg.Server.Host + ":" + cfg.Server.Port
 	err = router.Run(address)
