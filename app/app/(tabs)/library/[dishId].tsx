@@ -1,10 +1,9 @@
 import { router, Stack, useLocalSearchParams } from 'expo-router';
-import { ChevronLeft, ImageOff, Zap } from 'lucide-react-native';
+import { ChevronLeft, ImageOff, Zap, Clock } from 'lucide-react-native';
 import React, { useCallback, useEffect, useState } from 'react';
-import { FlatList, Image, ScrollView, StatusBar, Text, TouchableOpacity, View } from 'react-native';
+import { FlatList, ScrollView, StatusBar, Text, TouchableOpacity, View, ActivityIndicator } from 'react-native';
 import Animated, { FadeIn } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import foodImages from '../../../assets/food_images/foodImages';
 import useAuthStore from '../../../store/authStore';
 import { MEALS_URL } from '../../../config/config';
 
@@ -24,7 +23,7 @@ interface ServerMealDetails {
 }
 
 const IngredientItem = ({ item }: { item: any }) => (
-  <View className="flex-row items-center p-4 border-b-[1] border-solid border-white bg-transparent">
+  <View className="flex-row items-center p-4 border-b-[1] border-solid border-white/10 bg-transparent">
     <View className="w-16 h-16 rounded-lg mr-4 justify-center items-center bg-raisin-black border border-brand-pink/30">
       <ImageOff size={30} color="#f7438d" strokeWidth={1.5} />
     </View>
@@ -55,14 +54,13 @@ export default function DishDetailScreen() {
     try {
       setLoading(true);
       setError(null);
-      console.log('Fetching meal details for ID:', dishId);
       
-      // Get access token directly from store
       const { accessToken } = useAuthStore.getState();
       
       if (!accessToken) {
-        throw new Error('No access token available');
-      }      // Make direct API call to get meal details
+        throw new Error('Brak autoryzacji');
+      }
+
       const response = await fetch(`${MEALS_URL}/${dishId}`, {
         method: 'GET',
         headers: {
@@ -72,11 +70,10 @@ export default function DishDetailScreen() {
       });
 
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        throw new Error(`Błąd serwera: ${response.status}`);
       }
 
       const data = await response.json();
-      console.log('Meal details response:', data);
       setMeal(data);
     } catch (error: any) {
       console.error('Error fetching meal details:', error);
@@ -88,7 +85,30 @@ export default function DishDetailScreen() {
 
   useEffect(() => {
     fetchMealDetails();
-  }, [fetchMealDetails]);  if (loading) {
+  }, [fetchMealDetails]);
+
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffTime = Math.abs(now.getTime() - date.getTime());
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    
+    if (diffDays === 1) {
+      return 'Dzisiaj';
+    } else if (diffDays === 2) {
+      return 'Wczoraj';
+    } else if (diffDays <= 7) {
+      return `${diffDays - 1} dni temu`;
+    } else {
+      return date.toLocaleDateString('pl-PL', {
+        day: '2-digit',
+        month: 'long',
+        year: 'numeric'
+      });
+    }
+  };
+
+  if (loading) {
     return (
       <View
         className="flex-1 bg-night justify-center items-center"
@@ -97,12 +117,11 @@ export default function DishDetailScreen() {
         <Stack.Screen
           options={{
             title: 'Ładowanie...',
-            headerTransparent: false,
-            headerStyle: { backgroundColor: '#25242A' },
-            headerTintColor: '#f7438d',
+            headerShown: false,
           }}
         />
-        <Text className="text-white text-xl">Ładowanie dania...</Text>
+        <ActivityIndicator size="large" color="#f7438d" />
+        <Text className="text-white text-lg font-exo2 mt-4">Ładowanie dania...</Text>
       </View>
     );
   }
@@ -110,7 +129,7 @@ export default function DishDetailScreen() {
   if (error || !meal) {
     return (
       <View
-        className="flex-1 bg-night justify-center items-center"
+        className="flex-1 bg-night justify-center items-center px-6"
         style={{ paddingTop: insets.top, paddingBottom: insets.bottom }}
       >
         <Stack.Screen
@@ -121,14 +140,16 @@ export default function DishDetailScreen() {
             headerTintColor: '#f7438d',
           }}
         />
-        <Text className="text-white text-xl">
-          {error || 'Nie znaleziono dania.'}
-        </Text>
+        <View className="bg-red-500/20 p-6 rounded-2xl mb-6 border border-red-500/30">
+          <Text className="text-red-400 text-center font-exo2 text-lg">
+            {error || 'Nie znaleziono dania'}
+          </Text>
+        </View>
         <TouchableOpacity 
           onPress={() => router.back()}
-          className="mt-4 bg-brand-pink px-6 py-3 rounded-lg"
+          className="bg-brand-pink px-8 py-4 rounded-2xl"
         >
-          <Text className="text-white font-exo2-semibold">Wróć</Text>
+          <Text className="text-white font-exo2-bold text-lg">Wróć</Text>
         </TouchableOpacity>
       </View>
     );
@@ -139,22 +160,7 @@ export default function DishDetailScreen() {
       <StatusBar barStyle="light-content" />
       <Stack.Screen
         options={{
-          headerTransparent: true,
-          headerTitle: '',
-          headerLeft: () => (
-            <TouchableOpacity
-              onPress={() => router.back()}
-              style={{
-                position: 'absolute',
-                top: 0,
-                left: 0, 
-                zIndex: 1, 
-              }}
-              className="bg-black/50 p-2 rounded-full active:bg-black/70"
-            >
-              <ChevronLeft size={26} color="#FFFFFF" strokeWidth={2} />
-            </TouchableOpacity>
-          ),
+          headerShown: false,
         }}
       />
       <ScrollView
@@ -167,6 +173,22 @@ export default function DishDetailScreen() {
           className="w-full items-center justify-end relative"
           style={{ paddingTop: insets.top + 60, minHeight: 320 }}
         >
+          {/* Back button - moved here */}
+          <TouchableOpacity
+            onPress={() => router.back()}
+            className="absolute top-12 left-4 bg-black/50 p-3 rounded-full active:bg-black/70 z-10"
+          >
+            <ChevronLeft size={24} color="#FFFFFF" strokeWidth={2} />
+          </TouchableOpacity>
+
+          {/* Date Badge */}
+          <View className="absolute top-16 right-6 bg-black/60 rounded-full px-4 py-2 flex-row items-center">
+            <Clock size={16} color="#FFFFFF" strokeWidth={2} />
+            <Text className="text-white font-exo2-semibold text-sm ml-2">
+              {formatDate(meal.createdAt)}
+            </Text>
+          </View>
+
           <View className='p-6 rounded-full overflow-hidden bg-white w-80 h-80 mb-8 flex items-center align-center'>
             <View className="w-60 h-60 md:w-64 md:h-64 mb-6 justify-center items-center bg-gray-200 rounded-lg">
               <Text className="text-6xl">🍽️</Text>
@@ -179,20 +201,50 @@ export default function DishDetailScreen() {
           <Text className="text-4xl text-white font-exo2-bold text-center tracking-tighter mb-4">
             {meal.name}
           </Text>
-          <View className="flex-row justify-center items-center self-center py-2.5 px-6 mb-10 bg-raisin-black rounded-full border border-brand-pink">
-            <Zap size={18} color="#f7438d" className="mr-2" strokeWidth={2.5} />
-            <Text className="text-xl text-brand-pink font-exo2-bold tracking-tight">{meal.totalCalories}</Text>
-            <Text className="text-base text-brand-pink/90 ml-1.5 font-exo2-bold">kcal</Text>
+          
+          {/* Stats Section - New Design */}
+          <View className="bg-gradient-to-r from-raisin-black to-night rounded-3xl p-6 mb-8 border border-brand-pink/10">
+            {/* Top Row - Main Stats */}
+            <View className="flex-row justify-between mb-6">
+              <View className="items-start">
+                <Text className="text-brand-pink font-exo2-bold text-6xl">{meal.totalCalories}</Text>
+                <Text className="text-white font-exo2-semibold text-base mt-1">KALORIE</Text>
+              </View>
+              <View className="items-end">
+                <Text className="text-green-400 font-exo2-bold text-4xl">{meal.totalWeight}</Text>
+                <Text className="text-white font-exo2-semibold text-base mt-1">GRAM</Text>
+              </View>
+            </View>
+
+            {/* Separator Line */}
+            <View className="h-px bg-brand-pink/20 mb-6" />
+
+            {/* Bottom Row - Additional Info */}
+            <View className="flex-row justify-between">
+              <View className="items-center bg-brand-pink/10 rounded-2xl px-4 py-3">
+                <Text className="text-brand-pink font-exo2-bold text-lg">
+                  {Math.round((meal.totalCalories / meal.totalWeight) * 100) / 100}
+                </Text>
+                <Text className="text-gray-300 font-exo2 text-xs">kcal/100g</Text>
+              </View>
+              
+              <View className="items-center bg-orange-500/10 rounded-2xl px-4 py-3">
+                <Text className="text-orange-400 font-exo2-bold text-lg">{meal.ingredients.length}</Text>
+                <Text className="text-gray-300 font-exo2 text-xs">składników</Text>
+              </View>
+              
+              <View className="items-center bg-blue-500/10 rounded-2xl px-4 py-3">
+                <Text className="text-blue-400 font-exo2-bold text-lg">AI</Text>
+                <Text className="text-gray-300 font-exo2 text-xs">analiza</Text>
+              </View>
+            </View>
           </View>
 
-          {/* Total Weight */}
-          <View className="flex-row justify-center items-center self-center py-2 px-4 mb-6 bg-raisin-black/50 rounded-full">
-            <Text className="text-lg text-white font-exo2-semibold">{meal.totalWeight}g</Text>
-            <Text className="text-sm text-slate-400 ml-2">całkowita waga</Text>
-          </View>
-
+          {/* Ingredients Section */}
           <View className="mb-6">
-            <Text className="text-2xl text-white font-exo2-bold mb-4 tracking-tight">Składniki</Text>
+            <Text className="text-2xl text-white font-exo2-bold mb-4 tracking-tight">
+              Składniki ({meal.ingredients.length})
+            </Text>
             <FlatList
               data={meal.ingredients}
               renderItem={({ item }) => <IngredientItem item={item} />}
@@ -201,10 +253,13 @@ export default function DishDetailScreen() {
             />
           </View>
 
-          {/* Created Date */}
-          <View className="mt-4 p-4 bg-raisin-black/30 rounded-lg">
-            <Text className="text-slate-400 text-center">
-              Utworzono: {new Date(meal.createdAt).toLocaleDateString('pl-PL')}
+          {/* Additional Info */}
+          <View className="bg-raisin-black/30 rounded-2xl p-4">
+            <Text className="text-gray-400 font-exo2 text-sm text-center mb-2">
+              Analiza AI • {formatDate(meal.createdAt)}
+            </Text>
+            <Text className="text-gray-500 font-exo2 text-xs text-center">
+              ID: {meal.id.split('-')[0]}...
             </Text>
           </View>
         </View>
