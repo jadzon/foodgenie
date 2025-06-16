@@ -1,3 +1,5 @@
+// app/store/authStore.ts - Ulepszona wersja z lepszą obsługą 401
+
 import { router } from 'expo-router';
 import * as SecureStore from 'expo-secure-store';
 import * as SplashScreen from 'expo-splash-screen';
@@ -75,6 +77,7 @@ interface AuthStore {
   isAuthenticated: boolean | null;
   isLoading: boolean;
   error: string | null;
+  isRefreshing: boolean; // Nowy flag dla procesu odświeżania
   
   _setTokens: (data: { accessToken: string | null; refreshToken: string | null; user: User | null }) => Promise<void>;
   clearError: () => void;
@@ -94,14 +97,100 @@ const ACCESS_TOKEN_KEY = 'accessToken';
 const REFRESH_TOKEN_KEY = 'refreshToken';
 const USER_DATA_KEY = 'userData';
 
-// API base URL - change this to your server URL
-// For Android Emulator use 10.0.2.2 instead of localhost
-// For iOS Simulator use localhost  
-// For physical device use your computer's IP address
-// const API_BASE_URL = 'http://192.168.0.157:8080/api'; // Moved to config file
-
 // Keep splash screen visible initially
 SplashScreen.preventAutoHideAsync();
+
+// Klasa do obsługi kolejki żądań podczas odświeżania tokenu
+class TokenRefreshManager {
+  private static instance: TokenRefreshManager;
+  private refreshPromise: Promise<boolean> | null = null;
+  private pendingRequests: Array<{
+    resolve: (response: Response) => void;
+    reject: (error: Error) => void;
+    url: string;
+    options: RequestInit;
+  }> = [];
+
+  static getInstance(): TokenRefreshManager {
+    if (!TokenRefreshManager.instance) {
+      TokenRefreshManager.instance = new TokenRefreshManager();
+    }
+    return TokenRefreshManager.instance;
+  }
+
+  async handleTokenRefresh(
+    refreshTokenFn: () => Promise<boolean>,
+    url: string,
+    options: RequestInit
+  ): Promise<Response> {
+    // Jeśli już trwa odświeżanie, dodaj żądanie do kolejki
+    if (this.refreshPromise) {
+      return new Promise((resolve, reject) => {
+        this.pendingRequests.push({ resolve, reject, url, options });
+      });
+    }
+
+    // Rozpocznij odświeżanie tokenu
+    this.refreshPromise = refreshTokenFn();
+
+    try {
+      const success = await this.refreshPromise;
+      
+      if (success) {
+        // Token odświeżony pomyślnie, wykonaj oryginalne żądanie
+        const newAccessToken = useAuthStore.getState().accessToken;
+        const updatedOptions = {
+          ...options,
+          headers: {
+            ...options.headers,
+            'Authorization': `Bearer ${newAccessToken}`,
+          },
+        };
+
+        const response = await fetch(url, updatedOptions);
+
+        // Wykonaj wszystkie oczekujące żądania
+        this.processPendingRequests(newAccessToken);
+
+        return response;
+      } else {
+        // Odświeżanie nie powiodło się
+        const error = new Error('Token refresh failed');
+        this.rejectPendingRequests(error);
+        throw error;
+      }
+    } finally {
+      this.refreshPromise = null;
+    }
+  }
+
+  private async processPendingRequests(accessToken: string | null) {
+    const requests = [...this.pendingRequests];
+    this.pendingRequests = [];
+
+    for (const { resolve, reject, url, options } of requests) {
+      try {
+        const updatedOptions = {
+          ...options,
+          headers: {
+            ...options.headers,
+            'Authorization': `Bearer ${accessToken}`,
+          },
+        };
+        const response = await fetch(url, updatedOptions);
+        resolve(response);
+      } catch (error) {
+        reject(error as Error);
+      }
+    }
+  }
+
+  private rejectPendingRequests(error: Error) {
+    const requests = [...this.pendingRequests];
+    this.pendingRequests = [];
+    requests.forEach(({ reject }) => reject(error));
+  }
+}
 
 // API interaction functions
 const api = {
@@ -137,20 +226,33 @@ const api = {
     return await response.json();
   },
 
-  // Refresh access token
+  // Refresh access token - POPRAWIONA IMPLEMENTACJA
   refreshToken: async (refreshToken: string) => {
+    console.log('Attempting to refresh token...');
+    
     const response = await fetch(`${API_BASE_URL}/auth/refresh`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ refreshToken }),
     });
     
+    console.log('Refresh response status:', response.status);
+    
     if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.error || 'Token refresh failed');
+      const errorText = await response.text();
+      console.error('Refresh token failed:', errorText);
+      
+      try {
+        const error = JSON.parse(errorText);
+        throw new Error(error.error || error.message || 'Token refresh failed');
+      } catch {
+        throw new Error(`Token refresh failed with status ${response.status}: ${errorText}`);
+      }
     }
     
-    return await response.json();
+    const result = await response.json();
+    console.log('Token refresh successful');
+    return result;
   },
 
   // Get current user data
@@ -169,12 +271,13 @@ const api = {
     }
     
     return await response.json();
-  },  // Upload meal image
+  },
+
+  // Upload meal image
   uploadMealImage: async (imageUri: string, accessToken: string) => {
     console.log('Starting upload for:', imageUri);
     
     const formData = new FormData();
-    // For React Native, we need to handle image upload differently
     formData.append('image', {
       uri: imageUri,
       type: 'image/jpeg',
@@ -187,7 +290,6 @@ const api = {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
-        // Don't set Content-Type for multipart/form-data - let the browser/fetch set it
       },
       body: formData,
     });
@@ -248,18 +350,19 @@ const api = {
   }
 };
 
-
 const useAuthStore = create<AuthStore>((set: any, get: any) => ({
   accessToken: null,
   refreshToken: null,
   user: null,
-  isAuthenticated: null, // null: loading, false: not authenticated, true: authenticated
+  isAuthenticated: null,
   isLoading: true,
   error: null,
+  isRefreshing: false, // Nowy flag
 
   // Helper to set tokens in state and secure storage
   _setTokens: async ({ accessToken, refreshToken, user }) => {
-    try {      if (accessToken) {
+    try {
+      if (accessToken) {
         await secureStorage.setItemAsync(ACCESS_TOKEN_KEY, accessToken);
       } else {
         await secureStorage.deleteItemAsync(ACCESS_TOKEN_KEY);
@@ -291,8 +394,8 @@ const useAuthStore = create<AuthStore>((set: any, get: any) => ({
     }
   },
 
-  // Clear any error messages
   clearError: () => set({ error: null }),
+
   checkAuthStatus: async () => {
     set({ isLoading: true, error: null });
     try {
@@ -301,7 +404,6 @@ const useAuthStore = create<AuthStore>((set: any, get: any) => ({
       const storedUser = await secureStorage.getItemAsync(USER_DATA_KEY);
 
       if (storedAccessToken && storedUser) {
-        // Try to get fresh user data to verify token is still valid
         try {
           const userData = await api.getMe(storedAccessToken);
           set({ 
@@ -313,21 +415,17 @@ const useAuthStore = create<AuthStore>((set: any, get: any) => ({
             error: null
           });
         } catch (error) {
-          // Access token might be expired, try refresh
           if (storedRefreshToken) {
             console.log('Access token invalid, attempting refresh...');
             await get().attemptRefreshToken(storedRefreshToken);
           } else {
-            // No refresh token, need to login again
             await get()._setTokens({ accessToken: null, refreshToken: null, user: null });
           }
         }
       } else if (storedRefreshToken) {
-        // No access token, but have a refresh token, try to refresh
         console.log('No access token, attempting refresh...');
         await get().attemptRefreshToken(storedRefreshToken);
       } else {
-        // No tokens found
         set({ isAuthenticated: false, isLoading: false });
       }
     } catch (error) {
@@ -343,9 +441,9 @@ const useAuthStore = create<AuthStore>((set: any, get: any) => ({
     set({ isLoading: true, error: null });
     try {
       const response = await api.register(userData);
-      // Registration successful, but user still needs to login
       set({ isLoading: false });
-      return response;    } catch (error: any) {
+      return response;
+    } catch (error: any) {
       console.error("Registration failed:", error);
       set({ isLoading: false, error: error.message });
       throw error;
@@ -356,14 +454,11 @@ const useAuthStore = create<AuthStore>((set: any, get: any) => ({
     set({ isLoading: true, error: null });
     try {
       const { accessToken, refreshToken } = await api.login(credentials);
-      
-      // Get user data after successful login
       const userData = await api.getMe(accessToken);
       
       await get()._setTokens({ accessToken, refreshToken, user: userData });
-      
-      // Navigate to main app
-      router.replace('/(tabs)');    } catch (error: any) {
+      router.replace('/(tabs)');
+    } catch (error: any) {
       console.error("Login failed:", error);
       set({ isLoading: false, error: error.message });
       throw error;
@@ -381,16 +476,32 @@ const useAuthStore = create<AuthStore>((set: any, get: any) => ({
     }
   },
 
+  // ULEPSZONA IMPLEMENTACJA ODŚWIEŻANIA TOKENU
   attemptRefreshToken: async (tokenToRefresh?: string) => {
     const refreshTokenToUse = tokenToRefresh || get().refreshToken;
     if (!refreshTokenToUse) {
-      // No refresh token available, treat as logout
+      console.log('No refresh token available');
       await get()._setTokens({ accessToken: null, refreshToken: null, user: null });
       return false;
     }
 
-    set({ isLoading: true, error: null });
+    // Sprawdź czy już trwa odświeżanie
+    if (get().isRefreshing) {
+      console.log('Token refresh already in progress, waiting...');
+      
+      // Czekaj na zakończenie odświeżania
+      while (get().isRefreshing) {
+        await new Promise(resolve => setTimeout(resolve, 100));
+      }
+      
+      // Sprawdź czy odświeżanie się powiodło
+      return !!get().accessToken;
+    }
+
+    set({ isRefreshing: true, error: null });
+    
     try {
+      console.log('Starting token refresh process...');
       const { accessToken, refreshToken: newRefreshToken } = await api.refreshToken(refreshTokenToUse);
       
       // Get fresh user data with new token
@@ -401,24 +512,30 @@ const useAuthStore = create<AuthStore>((set: any, get: any) => ({
         refreshToken: newRefreshToken || refreshTokenToUse, 
         user: userData 
       });
+      
+      console.log('Token refresh successful');
       return true;
     } catch (error) {
       console.error("Token refresh failed:", error);
       // If refresh fails, log out the user
-      await get().logout();
+      await get()._setTokens({ accessToken: null, refreshToken: null, user: null });
       set({ error: 'Session expired. Please login again.' });
+      router.replace('/auth/login');
       return false;
+    } finally {
+      set({ isRefreshing: false });
     }
   },
 
-  // Helper function to make authenticated API calls
+  // ULEPSZONA FUNKCJA DO UWIERZYTELNIONYCH ŻĄDAŃ
   makeAuthenticatedRequest: async (url: string, options: RequestInit = {}) => {
-    const { accessToken } = get();
+    const { accessToken, isRefreshing } = get();
     
     if (!accessToken) {
       throw new Error('No access token available');
     }
 
+    // Pierwszy próba z aktualnym tokenem
     const response = await fetch(url, {
       ...options,
       headers: {
@@ -427,76 +544,112 @@ const useAuthStore = create<AuthStore>((set: any, get: any) => ({
       },
     });
 
-    // If token is expired, try to refresh and retry
-    if (response.status === 401) {
-      const refreshSuccess = await get().attemptRefreshToken();
-      if (refreshSuccess) {
-        // Retry the request with new token
-        const newAccessToken = get().accessToken;
-        return fetch(url, {
-          ...options,
-          headers: {
-            ...options.headers,
-            'Authorization': `Bearer ${newAccessToken}`,
-          },
-        });
-      }
+    // Jeśli dostaliśmy 401, spróbuj odświeżyć token
+    if (response.status === 401 && !isRefreshing) {
+      console.log('Got 401, attempting token refresh...');
+      
+      const refreshManager = TokenRefreshManager.getInstance();
+      return refreshManager.handleTokenRefresh(
+        () => get().attemptRefreshToken(),
+        url,
+        options
+      );
     }
 
     return response;
   },
-  // Upload meal image
-  uploadMealImage: async (imageUri: string) => {
-    set({ isLoading: true, error: null });
-    try {
-      const { accessToken } = get();
-      const result = await api.uploadMealImage(imageUri, accessToken);
-      set({ isLoading: false });
-      return result;    } catch (error: any) {
-      console.error("Meal image upload failed:", error);
-      set({ isLoading: false, error: error.message });
-      throw error;
-    }
-  },
 
-  // Get meals list
-  getMeals: async (page = 1) => {
-    set({ isLoading: true, error: null });
+  // Upload meal image z automatycznym odświeżaniem tokenu
+  uploadMealImage: async (imageUri: string) => {
     try {
       const { accessToken } = get();
       if (!accessToken) {
         throw new Error('No access token available');
       }
-      const result = await api.getMeals(accessToken, page);
-      set({ isLoading: false });
-      return result;
+
+      // Pierwszy próba
+      try {
+        const result = await api.uploadMealImage(imageUri, accessToken);
+        return result;
+      } catch (error: any) {
+        // Jeśli błąd może być związany z tokenem, spróbuj odświeżyć
+        if (error.message?.includes('401') || error.message?.includes('Unauthorized')) {
+          console.log('Upload failed with auth error, attempting token refresh...');
+          
+          const refreshSuccess = await get().attemptRefreshToken();
+          if (refreshSuccess) {
+            const newAccessToken = get().accessToken;
+            return await api.uploadMealImage(imageUri, newAccessToken!);
+          }
+        }
+        throw error;
+      }
+    } catch (error: any) {
+      console.error("Meal image upload failed:", error);
+      throw error;
+    }
+  },
+
+  // Get meals list z automatycznym odświeżaniem tokenu
+  getMeals: async (page = 1) => {
+    try {
+      const { accessToken } = get();
+      if (!accessToken) {
+        throw new Error('No access token available');
+      }
+
+      try {
+        const result = await api.getMeals(accessToken, page);
+        return result;
+      } catch (error: any) {
+        if (error.message?.includes('401') || error.message?.includes('Unauthorized')) {
+          console.log('Get meals failed with auth error, attempting token refresh...');
+          
+          const refreshSuccess = await get().attemptRefreshToken();
+          if (refreshSuccess) {
+            const newAccessToken = get().accessToken;
+            return await api.getMeals(newAccessToken!, page);
+          }
+        }
+        throw error;
+      }
     } catch (error: any) {
       console.error("Get meals failed:", error);
-      set({ isLoading: false, error: error.message });
       throw error;
     }
   },
 
-  // Get meal details
+  // Get meal details z automatycznym odświeżaniem tokenu
   getMealDetails: async (mealId: string) => {
-    set({ isLoading: true, error: null });
     try {
       const { accessToken } = get();
       if (!accessToken) {
         throw new Error('No access token available');
       }
-      const result = await api.getMealDetails(accessToken, mealId);
-      set({ isLoading: false });
-      return result;
+
+      try {
+        const result = await api.getMealDetails(accessToken, mealId);
+        return result;
+      } catch (error: any) {
+        if (error.message?.includes('401') || error.message?.includes('Unauthorized')) {
+          console.log('Get meal details failed with auth error, attempting token refresh...');
+          
+          const refreshSuccess = await get().attemptRefreshToken();
+          if (refreshSuccess) {
+            const newAccessToken = get().accessToken;
+            return await api.getMealDetails(newAccessToken!, mealId);
+          }
+        }
+        throw error;
+      }
     } catch (error: any) {
       console.error("Get meal details failed:", error);
-      set({ isLoading: false, error: error.message });
       throw error;
     }
   },
 }));
 
-// IMPORTANT: Call checkAuthStatus once when the store is initialized
+// Initialize auth check
 useAuthStore.getState().checkAuthStatus();
 
 export default useAuthStore;
