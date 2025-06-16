@@ -320,10 +320,6 @@ const CameraScreen = () => {
                   <FlipHorizontal size={28} color="#f7438d" strokeWidth={2} />
                 </TouchableOpacity>
               </View>
-
-              <Text className="text-white/60 font-exo2 text-center mt-4 text-sm">
-                Dotknij różowego przycisku, aby zrobić zdjęcie
-              </Text>
             </Animated.View>
           </CameraView>
         ) : (
