@@ -10,8 +10,8 @@ def recognize_food(image_bytes: bytes) -> str:
 
     image = Image.open(BytesIO(image_bytes)).convert("RGB")
     
-    DETECTION_MODEL_PATH = "object_detection.pt"
-    CLASSIFICATION_MODEL_PATH = "classification.pt"
+    DETECTION_MODEL_PATH = "./models/object_detection.pt"
+    CLASSIFICATION_MODEL_PATH = "./models/classification.pt"
     CLASSES_JSON = "classes.json"
 
     
