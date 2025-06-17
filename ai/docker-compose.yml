@@ -1,0 +1,29 @@
+version: "3.8"
+
+services:
+  food-recognition:
+    build:
+      context: ./FoodRecognition
+      dockerfile: Dockerfile
+    image: food-recognition-service
+    ports:
+      - "8084:8084"  # Only this service is exposed externally
+    depends_on:
+      - volume-service
+    networks:
+      - food-network
+
+  volume-service:
+    build:
+      context: ./volume
+      dockerfile: Dockerfile
+    image: food-volume-estimation
+    # No external ports - only accessible via internal network
+    volumes:
+      - ./volume/assets:/app/assets
+    networks:
+      - food-network
+
+networks:
+  food-network:
+    driver: bridge
