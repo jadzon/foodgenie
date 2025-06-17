@@ -1,6 +1,6 @@
 [
   {
-    "name": "Apple Pie",
+    "name": "apple pie",
     "volume": 0.5,
     "ingredients": [
       { "name": "apple",   "weight": 300 },
@@ -12,7 +12,7 @@
     ]
   },
   {
-    "name": "Baby Back Ribs",
+    "name": "baby back ribs",
     "volume": 0.6,
     "ingredients": [
       { "name": "ribs",    "weight": 800 },
@@ -22,7 +22,7 @@
     ]
   },
   {
-    "name": "Baklava",
+    "name": "baklava",
     "volume": 0.4,
     "ingredients": [
       { "name": "phyllo",  "weight": 150 },
@@ -32,7 +32,7 @@
     ]
   },
   {
-    "name": "Beef Carpaccio",
+    "name": "beef carpaccio",
     "volume": 0.2,
     "ingredients": [
       { "name": "beef",    "weight": 200 },
@@ -43,7 +43,7 @@
     ]
   },
   {
-    "name": "Beef Tartare",
+    "name": "beef tartare",
     "volume": 0.25,
     "ingredients": [
       { "name": "beef",    "weight": 200 },
@@ -55,7 +55,7 @@
     ]
   },
   {
-    "name": "Beet Salad",
+    "name": "beet salad",
     "volume": 0.3,
     "ingredients": [
       { "name": "beet",    "weight": 200 },
@@ -65,7 +65,7 @@
     ]
   },
   {
-    "name": "Beignets",
+    "name": "beignets",
     "volume": 0.35,
     "ingredients": [
       { "name": "flour",   "weight": 200 },
@@ -76,7 +76,7 @@
     ]
   },
   {
-    "name": "Bibimbap",
+    "name": "bibimbap",
     "volume": 0.5,
     "ingredients": [
       { "name": "rice",    "weight": 200 },
@@ -87,7 +87,7 @@
     ]
   },
   {
-    "name": "Bread Pudding",
+    "name": "bread pudding",
     "volume": 0.4,
     "ingredients": [
       { "name": "bread",   "weight": 200 },
@@ -97,7 +97,7 @@
     ]
   },
   {
-    "name": "Breakfast Burrito",
+    "name": "breakfast burrito",
     "volume": 0.3,
     "ingredients": [
       { "name": "tortilla","weight": 100 },
@@ -107,7 +107,7 @@
     ]
   },
   {
-    "name": "Bruschetta",
+    "name": "bruschetta",
     "volume": 0.25,
     "ingredients": [
       { "name": "bread",   "weight": 100 },
@@ -118,7 +118,7 @@
     ]
   },
   {
-    "name": "Caesar Salad",
+    "name": "caesar salad",
     "volume": 0.3,
     "ingredients": [
       { "name": "lettuce", "weight": 150 },
@@ -128,7 +128,7 @@
     ]
   },
   {
-    "name": "Cannoli",
+    "name": "cannoli",
     "volume": 0.2,
     "ingredients": [
       { "name": "shell",   "weight": 50  },
@@ -137,7 +137,7 @@
     ]
   },
   {
-    "name": "Caprese Salad",
+    "name": "caprese salad",
     "volume": 0.25,
     "ingredients": [
       { "name": "tomato",  "weight": 100 },
@@ -147,7 +147,7 @@
     ]
   },
   {
-    "name": "Carrot Cake",
+    "name": "carrot cake",
     "volume": 0.4,
     "ingredients": [
       { "name": "carrot",  "weight": 150 },
@@ -158,7 +158,7 @@
     ]
   },
   {
-    "name": "Ceviche",
+    "name": "ceviche",
     "volume": 0.3,
     "ingredients": [
       { "name": "fish",    "weight": 200 },
@@ -168,7 +168,7 @@
     ]
   },
   {
-    "name": "Cheesecake",
+    "name": "cheesecake",
     "volume": 0.5,
     "ingredients": [
       { "name": "cheese",  "weight": 300 },
@@ -179,7 +179,7 @@
     ]
   },
   {
-    "name": "Cheese Plate",
+    "name": "cheese plate",
     "volume": 0.4,
     "ingredients": [
       { "name": "cheese",  "weight": 200 },
@@ -188,7 +188,7 @@
     ]
   },
   {
-    "name": "Chicken Curry",
+    "name": "chicken curry",
     "volume": 0.5,
     "ingredients": [
       { "name": "chicken", "weight": 200 },
@@ -198,7 +198,7 @@
     ]
   },
   {
-    "name": "Chicken Quesadilla",
+    "name": "chicken quesadilla",
     "volume": 0.3,
     "ingredients": [
       { "name": "tortilla","weight": 100 },
@@ -207,7 +207,7 @@
     ]
   },
   {
-    "name": "Chicken Wings",
+    "name": "chicken wings",
     "volume": 0.4,
     "ingredients": [
       { "name": "wing",    "weight": 300 },
@@ -216,7 +216,7 @@
     ]
   },
   {
-    "name": "Chocolate Cake",
+    "name": "chocolate cake",
     "volume": 0.5,
     "ingredients": [
       { "name": "flour",   "weight": 200 },
@@ -227,7 +227,7 @@
     ]
   },
   {
-    "name": "Chocolate Mousse",
+    "name": "chocolate mousse",
     "volume": 0.3,
     "ingredients": [
       { "name": "chocolate","weight": 100 },
@@ -236,7 +236,7 @@
     ]
   },
   {
-    "name": "Churros",
+    "name": "churros",
     "volume": 0.3,
     "ingredients": [
       { "name": "flour",   "weight": 150 },
@@ -245,7 +245,7 @@
     ]
   },
   {
-    "name": "Clam Chowder",
+    "name": "clam chowder",
     "volume": 0.5,
     "ingredients": [
       { "name": "clam",    "weight": 200 },
@@ -255,7 +255,7 @@
     ]
   },
   {
-    "name": "Club Sandwich",
+    "name": "club sandwich",
     "volume": 0.35,
     "ingredients": [
       { "name": "bread",   "weight": 150 },
@@ -265,7 +265,7 @@
     ]
   },
   {
-    "name": "Crab Cakes",
+    "name": "crab cakes",
     "volume": 0.3,
     "ingredients": [
       { "name": "crab",    "weight": 200 },
@@ -274,7 +274,7 @@
     ]
   },
   {
-    "name": "Creme Brulee",
+    "name": "creme brulee",
     "volume": 0.25,
     "ingredients": [
       { "name": "cream",   "weight": 150 },
@@ -283,7 +283,7 @@
     ]
   },
   {
-    "name": "Croque Madame",
+    "name": "croque madame",
     "volume": 0.3,
     "ingredients": [
       { "name": "bread",   "weight": 100 },
@@ -293,7 +293,7 @@
     ]
   },
   {
-    "name": "Cup Cakes",
+    "name": "cup cakes",
     "volume": 0.3,
     "ingredients": [
       { "name": "flour",   "weight": 150 },
@@ -303,7 +303,7 @@
     ]
   },
   {
-    "name": "Deviled Eggs",
+    "name": "deviled eggs",
     "volume": 0.2,
     "ingredients": [
       { "name": "egg",     "weight": 200 },
@@ -312,7 +312,7 @@
     ]
   },
   {
-    "name": "Donuts",
+    "name": "donuts",
     "volume": 0.3,
     "ingredients": [
       { "name": "flour",   "weight": 200 },
@@ -322,7 +322,7 @@
     ]
   },
   {
-    "name": "Dumplings",
+    "name": "dumplings",
     "volume": 0.3,
     "ingredients": [
       { "name": "flour",   "weight": 200 },
@@ -331,7 +331,7 @@
     ]
   },
   {
-    "name": "Edamame",
+    "name": "edamame",
     "volume": 0.2,
     "ingredients": [
       { "name": "soybean", "weight": 200 },
@@ -339,7 +339,7 @@
     ]
   },
   {
-    "name": "Eggs Benedict",
+    "name": "eggs benedict",
     "volume": 0.3,
     "ingredients": [
       { "name": "egg",     "weight": 200 },
@@ -349,7 +349,7 @@
     ]
   },
   {
-    "name": "Escargots",
+    "name": "escargots",
     "volume": 0.2,
     "ingredients": [
       { "name": "snail",   "weight": 100 },
@@ -358,7 +358,7 @@
     ]
   },
   {
-    "name": "Falafel",
+    "name": "falafel",
     "volume": 0.3,
     "ingredients": [
       { "name": "chickpea","weight": 200 },
@@ -367,7 +367,7 @@
     ]
   },
   {
-    "name": "Filet Mignon",
+    "name": "filet mignon",
     "volume": 0.25,
     "ingredients": [
       { "name": "beef",    "weight": 200 },
@@ -376,7 +376,7 @@
     ]
   },
   {
-    "name": "Fish And Chips",
+    "name": "fish and chips",
     "volume": 0.5,
     "ingredients": [
       { "name": "fish",    "weight": 200 },
@@ -386,7 +386,7 @@
     ]
   },
   {
-    "name": "Foie Gras",
+    "name": "foie gras",
     "volume": 0.2,
     "ingredients": [
       { "name": "liver",   "weight": 150 },
@@ -394,7 +394,7 @@
     ]
   },
   {
-    "name": "French Fries",
+    "name": "french fries",
     "volume": 0.4,
     "ingredients": [
       { "name": "potato",  "weight": 300 },
@@ -403,7 +403,7 @@
     ]
   },
   {
-    "name": "French Onion Soup",
+    "name": "french onion soup",
     "volume": 0.4,
     "ingredients": [
       { "name": "onion",   "weight": 200 },
@@ -413,7 +413,7 @@
     ]
   },
   {
-    "name": "French Toast",
+    "name": "french toast",
     "volume": 0.3,
     "ingredients": [
       { "name": "bread",   "weight": 150 },
@@ -423,7 +423,7 @@
     ]
   },
   {
-    "name": "Fried Calamari",
+    "name": "fried calamari",
     "volume": 0.3,
     "ingredients": [
       { "name": "squid",   "weight": 200 },
@@ -433,7 +433,7 @@
     ]
   },
   {
-    "name": "Fried Rice",
+    "name": "fried rice",
     "volume": 0.5,
     "ingredients": [
       { "name": "rice",    "weight": 200 },
@@ -443,7 +443,7 @@
     ]
   },
   {
-    "name": "Frozen Yogurt",
+    "name": "frozen yogurt",
     "volume": 0.4,
     "ingredients": [
       { "name": "yogurt",  "weight": 200 },
@@ -451,7 +451,7 @@
     ]
   },
   {
-    "name": "Garlic Bread",
+    "name": "garlic bread",
     "volume": 0.3,
     "ingredients": [
       { "name": "bread",   "weight": 150 },
@@ -460,7 +460,7 @@
     ]
   },
   {
-    "name": "Gnocchi",
+    "name": "gnocchi",
     "volume": 0.3,
     "ingredients": [
       { "name": "potato",  "weight": 200 },
@@ -468,7 +468,7 @@
     ]
   },
   {
-    "name": "Greek Salad",
+    "name": "greek salad",
     "volume": 0.3,
     "ingredients": [
       { "name": "tomato",  "weight": 100 },
@@ -478,7 +478,7 @@
     ]
   },
   {
-    "name": "Grilled Cheese Sandwich",
+    "name": "grilled cheese sandwich",
     "volume": 0.25,
     "ingredients": [
       { "name": "bread",   "weight": 100 },
@@ -487,7 +487,7 @@
     ]
   },
   {
-    "name": "Grilled Salmon",
+    "name": "grilled salmon",
     "volume": 0.3,
     "ingredients": [
       { "name": "salmon",  "weight": 200 },
@@ -496,7 +496,7 @@
     ]
   },
   {
-    "name": "Guacamole",
+    "name": "guacamole",
     "volume": 0.3,
     "ingredients": [
       { "name": "avocado", "weight": 200 },
@@ -506,7 +506,7 @@
     ]
   },
   {
-    "name": "Gyoza",
+    "name": "gyoza",
     "volume": 0.3,
     "ingredients": [
       { "name": "dumpling","weight": 200 },
@@ -515,7 +515,7 @@
     ]
   },
   {
-    "name": "Hamburger",
+    "name": "hamburger",
     "volume": 0.3,
     "ingredients": [
       { "name": "bun",     "weight": 100 },
@@ -525,7 +525,7 @@
     ]
   },
   {
-    "name": "Hot And Sour Soup",
+    "name": "hot and sour soup",
     "volume": 0.4,
     "ingredients": [
       { "name": "broth",   "weight": 200 },
@@ -535,7 +535,7 @@
     ]
   },
   {
-    "name": "Hot Dog",
+    "name": "hot dog",
     "volume": 0.25,
     "ingredients": [
       { "name": "bun",     "weight": 80  },
@@ -544,7 +544,7 @@
     ]
   },
   {
-    "name": "Huevos Rancheros",
+    "name": "huevos rancheros",
     "volume": 0.3,
     "ingredients": [
       { "name": "tortilla","weight": 100 },
@@ -553,7 +553,7 @@
     ]
   },
   {
-    "name": "Hummus",
+    "name": "hummus",
     "volume": 0.3,
     "ingredients": [
       { "name": "chickpeas","weight": 250 },
@@ -566,7 +566,7 @@
     ]
   },
   {
-    "name": "Ice Cream",
+    "name": "ice cream",
     "volume": 0.3,
     "ingredients": [
       { "name": "milk",    "weight": 200 },
@@ -575,7 +575,7 @@
     ]
   },
   {
-    "name": "Lasagna",
+    "name": "lasagna",
     "volume": 0.5,
     "ingredients": [
       { "name": "pasta",   "weight": 200 },
@@ -585,7 +585,7 @@
     ]
   },
   {
-    "name": "Lobster Bisque",
+    "name": "lobster bisque",
     "volume": 0.4,
     "ingredients": [
       { "name": "lobster", "weight": 200 },
@@ -594,7 +594,7 @@
     ]
   },
   {
-    "name": "Lobster Roll Sandwich",
+    "name": "lobster roll sandwich",
     "volume": 0.35,
     "ingredients": [
       { "name": "bun",     "weight": 100 },
@@ -603,7 +603,7 @@
     ]
   },
   {
-    "name": "Macaroni And Cheese",
+    "name": "macaroni and cheese",
     "volume": 0.4,
     "ingredients": [
       { "name": "pasta",   "weight": 200 },
@@ -612,7 +612,7 @@
     ]
   },
   {
-    "name": "Macarons",
+    "name": "macarons",
     "volume": 0.2,
     "ingredients": [
       { "name": "egg",     "weight": 100 },
@@ -621,7 +621,7 @@
     ]
   },
   {
-    "name": "Miso Soup",
+    "name": "miso soup",
     "volume": 0.3,
     "ingredients": [
       { "name": "miso",    "weight": 30  },
@@ -630,7 +630,7 @@
     ]
   },
   {
-    "name": "Mussels",
+    "name": "mussels",
     "volume": 0.3,
     "ingredients": [
       { "name": "mussel",  "weight": 200 },
@@ -639,7 +639,7 @@
     ]
   },
   {
-    "name": "Nachos",
+    "name": "nachos",
     "volume": 0.4,
     "ingredients": [
       { "name": "chip",    "weight": 200 },
@@ -648,7 +648,7 @@
     ]
   },
   {
-    "name": "Omelette",
+    "name": "omelette",
     "volume": 0.25,
     "ingredients": [
       { "name": "egg",     "weight": 150 },
@@ -657,7 +657,7 @@
     ]
   },
   {
-    "name": "Onion Rings",
+    "name": "onion rings",
     "volume": 0.3,
     "ingredients": [
       { "name": "onion",   "weight": 150 },
@@ -666,7 +666,7 @@
     ]
   },
   {
-    "name": "Oysters",
+    "name": "oysters",
     "volume": 0.2,
     "ingredients": [
       { "name": "oyster",  "weight": 200 },
@@ -674,7 +674,7 @@
     ]
   },
   {
-    "name": "Pad Thai",
+    "name": "pad thai",
     "volume": 0.4,
     "ingredients": [
       { "name": "noodle",  "weight": 200 },
@@ -684,7 +684,7 @@
     ]
   },
   {
-    "name": "Paella",
+    "name": "paella",
     "volume": 0.5,
     "ingredients": [
       { "name": "rice",    "weight": 300 },
@@ -693,7 +693,7 @@
     ]
   },
   {
-    "name": "Pancakes",
+    "name": "pancakes",
     "volume": 0.3,
     "ingredients": [
       { "name": "flour",   "weight": 150 },
@@ -703,7 +703,7 @@
     ]
   },
   {
-    "name": "Panna Cotta",
+    "name": "panna cotta",
     "volume": 0.25,
     "ingredients": [
       { "name": "cream",   "weight": 150 },
@@ -712,7 +712,7 @@
     ]
   },
   {
-    "name": "Peking Duck",
+    "name": "peking duck",
     "volume": 0.6,
     "ingredients": [
       { "name": "duck",    "weight": 600 },
@@ -720,7 +720,7 @@
     ]
   },
   {
-    "name": "Pho",
+    "name": "pho",
     "volume": 0.5,
     "ingredients": [
       { "name": "noodle",  "weight": 200 },
@@ -729,7 +729,7 @@
     ]
   },
   {
-    "name": "Pizza",
+    "name": "pizza",
     "volume": 0.6,
     "ingredients": [
       { "name": "dough",   "weight": 300 },
@@ -738,7 +738,7 @@
     ]
   },
   {
-    "name": "Pork Chop",
+    "name": "pork chop",
     "volume": 0.3,
     "ingredients": [
       { "name": "pork",    "weight": 200 },
@@ -747,7 +747,7 @@
     ]
   },
   {
-    "name": "Poutine",
+    "name": "poutine",
     "volume": 0.4,
     "ingredients": [
       { "name": "potato",  "weight": 300 },
@@ -756,7 +756,7 @@
     ]
   },
   {
-    "name": "Prime Rib",
+    "name": "prime rib",
     "volume": 0.6,
     "ingredients": [
       { "name": "beef",    "weight": 600 },
@@ -765,7 +765,7 @@
     ]
   },
   {
-    "name": "Pulled Pork Sandwich",
+    "name": "pulled pork sandwich",
     "volume": 0.4,
     "ingredients": [
       { "name": "bun",     "weight": 100 },
@@ -774,7 +774,7 @@
     ]
   },
   {
-    "name": "Ramen",
+    "name": "ramen",
     "volume": 0.5,
     "ingredients": [
       { "name": "noodle",  "weight": 200 },
@@ -784,7 +784,7 @@
     ]
   },
   {
-    "name": "Ravioli",
+    "name": "ravioli",
     "volume": 0.3,
     "ingredients": [
       { "name": "pasta",   "weight": 200 },
@@ -792,7 +792,7 @@
     ]
   },
   {
-    "name": "Red Velvet Cake",
+    "name": "red velvet cake",
     "volume": 0.5,
     "ingredients": [
       { "name": "flour",   "weight": 200 },
@@ -803,7 +803,7 @@
     ]
   },
   {
-    "name": "Risotto",
+    "name": "risotto",
     "volume": 0.4,
     "ingredients": [
       { "name": "rice",    "weight": 200 },
@@ -812,7 +812,7 @@
     ]
   },
   {
-    "name": "Samosa",
+    "name": "samosa",
     "volume": 0.3,
     "ingredients": [
       { "name": "flour",   "weight": 150 },
@@ -821,7 +821,7 @@
     ]
   },
   {
-    "name": "Sashimi",
+    "name": "sashimi",
     "volume": 0.2,
     "ingredients": [
       { "name": "fish",    "weight": 200 },
@@ -829,7 +829,7 @@
     ]
   },
   {
-    "name": "Scallops",
+    "name": "scallops",
     "volume": 0.3,
     "ingredients": [
       { "name": "scallop", "weight": 200 },
@@ -837,7 +837,7 @@
     ]
   },
   {
-    "name": "Seaweed Salad",
+    "name": "seaweed salad",
     "volume": 0.25,
     "ingredients": [
       { "name": "seaweed", "weight": 100 },
@@ -846,7 +846,7 @@
     ]
   },
   {
-    "name": "Shrimp And Grits",
+    "name": "shrimp and grits",
     "volume": 0.4,
     "ingredients": [
       { "name": "shrimp",  "weight": 150 },
@@ -855,7 +855,7 @@
     ]
   },
   {
-    "name": "Spaghetti Bolognese",
+    "name": "spaghetti bolognese",
     "volume": 0.5,
     "ingredients": [
       { "name": "pasta",   "weight": 200 },
@@ -864,7 +864,7 @@
     ]
   },
   {
-    "name": "Spaghetti Carbonara",
+    "name": "spaghetti carbonara",
     "volume": 0.5,
     "ingredients": [
       { "name": "pasta",   "weight": 200 },
@@ -874,7 +874,7 @@
     ]
   },
   {
-    "name": "Spring Rolls",
+    "name": "spring rolls",
     "volume": 0.3,
     "ingredients": [
       { "name": "wrapper", "weight": 100 },
@@ -883,7 +883,7 @@
     ]
   },
   {
-    "name": "Steak",
+    "name": "steak",
     "volume": 0.3,
     "ingredients": [
       { "name": "beef",    "weight": 300 },
@@ -892,7 +892,7 @@
     ]
   },
   {
-    "name": "Strawberry Shortcake",
+    "name": "strawberry shortcake",
     "volume": 0.4,
     "ingredients": [
       { "name": "strawberry","weight": 100 },
@@ -902,7 +902,7 @@
     ]
   },
   {
-    "name": "Sushi",
+    "name": "sushi",
     "volume": 0.3,
     "ingredients": [
       { "name": "rice",    "weight": 150 },
@@ -911,7 +911,7 @@
     ]
   },
   {
-    "name": "Tacos",
+    "name": "tacos",
     "volume": 0.3,
     "ingredients": [
       { "name": "tortilla","weight": 100 },
@@ -920,7 +920,7 @@
     ]
   },
   {
-    "name": "Takoyaki",
+    "name": "takoyaki",
     "volume": 0.3,
     "ingredients": [
       { "name": "flour",   "weight": 150 },
@@ -929,7 +929,7 @@
     ]
   },
   {
-    "name": "Tiramisu",
+    "name": "tiramisu",
     "volume": 0.4,
     "ingredients": [
       { "name": "cheese",  "weight": 200 },
@@ -939,7 +939,7 @@
     ]
   },
   {
-    "name": "Tuna Tartare",
+    "name": "tuna tartare",
     "volume": 0.3,
     "ingredients": [
       { "name": "tuna",    "weight": 200 },
@@ -948,7 +948,7 @@
     ]
   },
   {
-    "name": "Waffles",
+    "name": "waffles",
     "volume": 0.3,
     "ingredients": [
       { "name": "flour",   "weight": 150 },

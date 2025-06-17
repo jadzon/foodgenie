@@ -73,7 +73,7 @@ func (s *seeder) seedIngredients(ingredients []*dto.CreateIngredientRequestDTO) 
 	return nil
 }
 func loadRecipes() ([]*dto.CreateRecipeRequestDTO, error) {
-	data, err := os.ReadFile("seeds/recipies.json")
+	data, err := os.ReadFile("seeds/recipes.json")
 	if err != nil {
 		return nil, fmt.Errorf("failed to read recipes.json: %w", err)
 	}

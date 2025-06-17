@@ -1,0 +1,60 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres
+    container_name: postgres_db
+    restart: always
+    env_file:
+      - .env
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init:/docker-entrypoint-initdb.d/
+    networks:
+      - app-network
+
+  server:
+    env_file:
+      - .env
+    build: ./server
+    depends_on:
+      - postgres
+      - food-recognition
+    ports:
+      - 8080:8080
+    networks:
+      - app-network
+
+  food-recognition:
+    build:
+      context: ./ai/FoodRecognition
+      dockerfile: Dockerfile
+    image: food-recognition-service
+    ports:
+      - "8084:8084"  # Exposed so Go server can call it
+    depends_on:
+      - volume-service
+    networks:
+      - app-network
+
+  volume-service:
+    build:
+      context: ./ai/volume
+      dockerfile: Dockerfile
+    image: food-volume-estimation
+    # No external ports - only accessible via internal network
+    volumes:
+      - ./ai/volume/assets:/app/assets
+    networks:
+      - app-network
+
+volumes:
+  postgres_data:
+
+networks:
+  app-network:
+    driver: bridge

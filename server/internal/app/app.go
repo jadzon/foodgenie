@@ -26,7 +26,7 @@ func Init(db *gorm.DB, cfg *config.AppConfig) *App {
 	recipeRepository := repositories.NewRecipeRepository(db)
 	recipeService := services.NewRecipeService(recipeRepository, ingredientRepository)
 	mealRepository := repositories.NewMealRepository(db)
-	aiService := ai.NewMockAIService()
+	aiService := ai.NewRealAIService()
 	mealService := services.NewMealService(mealRepository, recipeRepository, aiService)
 	return &App{
 		UserService:       userService,

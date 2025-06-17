@@ -258,5 +258,14 @@
   {
     "name": "gelatin",
     "caloriesPerGram": 0.0
+  },
+  {
+    "name": "pasta",
+    "caloriesPerGram": 3.5
+  },
+  {
+    "name": "dough",
+    "caloriesPerGram": 2.65
   }
+
 ]
