@@ -25,6 +25,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import { api } from '../../../utils/httpClient';
 import useAuthStore from '../../../store/authStore';
+import dishImages from '../../../assets/dish_images/dishImages';
 
 const { width } = Dimensions.get('window');
 
@@ -41,6 +42,21 @@ interface ServerMeal {
     calories: number;
   }>;
 }
+
+// Helper function to get dish image based on name
+const getDishImage = (dishName: string) => {
+  if (!dishName) return null;
+  
+  // Convert dish name to lowercase for case-insensitive matching
+  const normalizedName = dishName.toLowerCase().trim();
+  
+  // Check if the dish name contains any of the keys from dishImages
+  const imageKey = Object.keys(dishImages).find(key => 
+    normalizedName.includes(key.toLowerCase())
+  );
+  
+  return imageKey ? dishImages[imageKey] : null;
+};
 
 // Komponent Skeleton Loading dla pojedynczego dania
 const DishItemSkeleton = ({ index }: { index: number }) => {
@@ -119,6 +135,7 @@ const DishItem = ({ item, index }: { item: ServerMeal; index: number }) => {
   if (!item || !item.id) return null;
 
   const topIngredients = item.ingredients?.slice(0, 2) || [];
+  const dishImage = getDishImage(item.name);
 
   return (
     <Animated.View 
@@ -127,8 +144,21 @@ const DishItem = ({ item, index }: { item: ServerMeal; index: number }) => {
       <Link href={`/library/${item.id}`} asChild>
         <TouchableOpacity className="flex items-center bg-transparent p-4 rounded-2xl mb-4 border-b-[1px] border-onyx active:bg-onyx/10 transition-all">
           <View className='flex-row items-center'>
-            <View className="w-20 h-20 rounded-xl mr-4 bg-gray-700 flex items-center justify-center">
-              <Text className="text-white text-2xl">🍽️</Text>
+            <View className="w-20 h-20 rounded-xl mr-4  flex items-center justify-center overflow-hidden">
+              {dishImage ? (
+                <Image 
+                  source={dishImage}
+                  className="w-full h-full"
+                  style={{ 
+                    width: 80, 
+                    height: 80,
+                    borderRadius: 12
+                  }}
+                  resizeMode="cover"
+                />
+              ) : (
+                <Text className="text-white text-2xl">🍽️</Text>
+              )}
             </View>
 
             <View className="flex-1">

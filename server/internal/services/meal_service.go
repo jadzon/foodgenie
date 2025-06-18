@@ -138,6 +138,13 @@ func (s *mealService) DeleteMealByID(ctx context.Context, userID uuid.UUID, meal
 	}
 	return nil
 }
+func (s *mealService) GetMealCountForUser(ctx context.Context, userID uuid.UUID) (int64, error) {
+	count, err := s.mealRepo.GetMealCountForUser(ctx, userID)
+	if err != nil {
+		return 0, fmt.Errorf("failed to get meal count: %w", err)
+	}
+	return count, nil
+}
 
 type MealService interface {
 	CreateMealForUser(ctx context.Context, req *dto.CreateMealRequestDTO) (*dto.MealDetailResponseDTO, error)
@@ -145,6 +152,7 @@ type MealService interface {
 	GetMealsForUser(ctx context.Context, userID uuid.UUID, page int) ([]*dto.MealResponseDTO, error)
 	GetMealDetails(ctx context.Context, userID uuid.UUID, mealID uuid.UUID) (*dto.MealDetailResponseDTO, error)
 	DeleteMealByID(ctx context.Context, userID uuid.UUID, mealID uuid.UUID) error
+	GetMealCountForUser(ctx context.Context, userID uuid.UUID) (int64, error)
 }
 
 func NewMealService(mealRepo repositories.MealRepository, recipeRepo repositories.RecipeRepository, aiService ai.AIService) MealService {

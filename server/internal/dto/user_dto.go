@@ -26,6 +26,7 @@ type UserResponseDTO struct {
 	LastName    string    `json:"lastName"`
 	DateOfBirth string    `json:"dateOfBirth"`
 	CreatedAt   time.Time `json:"createdAt"`
+	MealCount   int64     `json:"mealCount"`
 }
 type LoginResponseDTO struct {
 	AccessToken  string `json:"accessToken"`

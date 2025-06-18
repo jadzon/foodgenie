@@ -1,5 +1,3 @@
-// app/store/authStore.ts - Ulepszona wersja z lepszą obsługą 401
-
 import { router } from 'expo-router';
 import * as SecureStore from 'expo-secure-store';
 import * as SplashScreen from 'expo-splash-screen';
@@ -49,6 +47,7 @@ interface User {
   lastName: string;
   dateOfBirth: string;
   createdAt: string;
+  mealCount:number
 }
 
 interface RegisterData {

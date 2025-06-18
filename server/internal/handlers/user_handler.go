@@ -118,6 +118,13 @@ func (h *UserHandler) GetMe(c *gin.Context) {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"message": "Failed to retrieve user data"})
 		return
 	}
+	mealCount, err := h.App.MealService.GetMealCountForUser(c.Request.Context(), userUUID)
+	if err != nil {
+		// Log the error but don't fail the entire request
+		mealCount = 0
+	}
+	userDTO.MealCount = mealCount
+
 	c.JSON(http.StatusOK, userDTO)
 
 }

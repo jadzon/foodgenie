@@ -61,12 +61,21 @@ func (r *mealRepository) DeleteMealByID(ctx context.Context, userID uuid.UUID, m
 	}
 	return nil
 }
+func (r *mealRepository) GetMealCountForUser(ctx context.Context, userID uuid.UUID) (int64, error) {
+	var count int64
+	tx := r.db.WithContext(ctx).Model(&models.Meal{}).Where("user_id = ?", userID).Count(&count)
+	if tx.Error != nil {
+		return 0, tx.Error
+	}
+	return count, nil
+}
 
 type MealRepository interface {
 	GetMealsForUser(ctx context.Context, userID uuid.UUID, page int) ([]*models.Meal, error)
 	CreateMeal(loggedMeal *models.Meal) (*models.Meal, error)
 	GetMealByID(ctx context.Context, userID uuid.UUID, mealID uuid.UUID) (*models.Meal, error)
 	DeleteMealByID(ctx context.Context, userID uuid.UUID, mealID uuid.UUID) error
+	GetMealCountForUser(ctx context.Context, userID uuid.UUID) (int64, error)
 }
 
 func NewMealRepository(db *gorm.DB) MealRepository {

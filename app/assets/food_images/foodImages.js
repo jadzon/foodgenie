@@ -50,6 +50,10 @@ const foodImages = {
   'food.water': require('./water.png'),
   'food.yoghurt': require('./yoghurt.png'),
   'food.brocoli': require('./brocoli.png'),
+  'food.dough': require('./dough.png'),
+  'food.almond': require('./almond.png'),
+  'food.sauce': require('./sauce.png'),
+  'food.meat': require('./meat.png'),
 };
 
 export default foodImages;

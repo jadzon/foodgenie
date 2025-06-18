@@ -7,6 +7,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import useAuthStore from '../../../store/authStore';
 import { MEALS_URL } from '../../../config/config';
 import foodImages from '../../../assets/food_images/foodImages';
+import dishImages from '../../../assets/dish_images/dishImages';
 
 interface ServerMealDetails {
   id: string;
@@ -22,6 +23,21 @@ interface ServerMealDetails {
     calories: number;
   }>;
 }
+
+// Helper function to get dish image based on name
+const getDishImage = (dishName: string) => {
+  if (!dishName) return null;
+  
+  // Convert dish name to lowercase for case-insensitive matching
+  const normalizedName = dishName.toLowerCase().trim();
+  
+  // Check if the dish name contains any of the keys from dishImages
+  const imageKey = Object.keys(dishImages).find(key => 
+    normalizedName.includes(key.toLowerCase())
+  );
+  
+  return imageKey ? dishImages[imageKey] : null;
+};
 
 // Function to get the correct food image key based on ingredient name
 const getFoodImageKey = (ingredientName: string): string | null => {
@@ -93,6 +109,10 @@ const getFoodImageKey = (ingredientName: string): string | null => {
     'yoghurt': 'food.yoghurt',
     'broccoli': 'food.brocoli',
     'brocoli': 'food.brocoli',
+    'dough': 'food.dough',
+    'almond': 'food.almond',
+    'sauce': 'food.sauce',
+    'meat': 'food.meat',
   };
   
   // Try exact match first
@@ -129,7 +149,7 @@ const IngredientItem = ({ item }: { item: any }) => {
         )}
       </View>
       <View className="flex-1">
-        <Text className="text-lg text-slate-50 font-exo2-semibold tracking-tight">{item.name}</Text>
+        <Text className="text-lg text-slate-50 font-exo2-semibold tracking-tight">{item.name.charAt(0).toUpperCase() + item.name.slice(1)}</Text>
         <View className="flex-row items-baseline mt-1.5">
           <Text className="text-sm text-slate-400 font-exo2">{item.weight}g</Text>
           <View className="flex-row ml-3">
@@ -298,6 +318,9 @@ export default function DishDetailScreen() {
     );
   }
 
+  // Get dish image for the hero section
+  const dishImage = getDishImage(meal.name);
+
   return (
     <View className="flex-1 bg-brand-pink">
       <StatusBar barStyle="light-content" />
@@ -390,9 +413,21 @@ export default function DishDetailScreen() {
             </Text>
           </View>
 
-          <View className='p-6 rounded-full overflow-hidden bg-white w-80 h-80 mb-8 flex items-center align-center'>
-            <View className="w-60 h-60 md:w-64 md:h-64 mb-6 justify-center items-center bg-gray-200 rounded-lg">
-              <Text className="text-6xl">🍽️</Text>
+          <View className='p-6 rounded-full overflow-hidden bg-brand-pink w-80 h-80 mb-8 flex items-center align-center'>
+            <View className="w-60 h-60 md:w-64 md:h-64 mb-6 justify-center items-center rounded-lg overflow-hidden">
+              {dishImage ? (
+                <Image 
+                  source={dishImage}
+                  style={{ 
+                    width: '100%', 
+                    height: '100%',
+                    borderRadius: 8
+                  }}
+                  resizeMode="cover"
+                />
+              ) : (
+                <Text className="text-6xl">🍽️</Text>
+              )}
             </View>
           </View>
         </Animated.View>
@@ -400,7 +435,7 @@ export default function DishDetailScreen() {
         {/* Karta z informacjami */}
         <View className="bg-night pt-8 pb-8 px-6 rounded-t-[50px] border-t border-brand-pink/20">
           <Text className="text-4xl text-white font-exo2-bold text-center tracking-tighter mb-4">
-            {meal.name}
+            {meal.name.charAt(0).toUpperCase() + meal.name.slice(1)}
           </Text>
           
           {/* Stats Section - New Design */}
@@ -457,7 +492,7 @@ export default function DishDetailScreen() {
           {/* Additional Info */}
           <View className="bg-raisin-black/30 rounded-2xl p-4 mb-6">
             <Text className="text-gray-400 font-exo2 text-sm text-center mb-2">
-              Analiza AI • {formatDate(meal.createdAt)}
+              Analiza • {formatDate(meal.createdAt)}
             </Text>
             <Text className="text-gray-500 font-exo2 text-xs text-center">
               ID: {meal.id.split('-')[0]}...

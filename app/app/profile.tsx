@@ -85,7 +85,7 @@ const Profile = () => {
                 <View className="bg-brand-pink/20 p-4 rounded-2xl mb-3">
                   <Zap size={28} color="#f7438d" strokeWidth={2.5} />
                 </View>
-                <Text className="text-white text-2xl font-exo2-bold">47</Text>
+                <Text className="text-white text-2xl font-exo2-bold">{user.mealCount}</Text>
                 <Text className="text-brand-pink text-base font-exo2-semibold">Posiłki</Text>
                 <Text className="text-gray-400 text-xs font-exo2 mt-1">zeskanowane</Text>
               </View>
@@ -107,26 +107,6 @@ const Profile = () => {
         </Animated.View>
 
         {/* Quick Actions */}
-        <Animated.View 
-          entering={FadeInUp.delay(400).duration(600)}
-          className="px-6 mb-6"
-        >
-          <Text className="text-white text-xl font-exo2-bold mb-4 tracking-tight">Mój profil</Text>
-          
-          <View className="space-y-3">
-            <TouchableOpacity className="bg-raisin-black p-5 rounded-2xl border border-brand-pink/30 active:bg-brand-pink/10 transition-all">
-              <View className="flex-row items-center">
-                <View className="bg-brand-pink/20 p-3 rounded-2xl mr-4">
-                  <User size={22} color="#f7438d" strokeWidth={2} />
-                </View>
-                <View className="flex-1">
-                  <Text className="text-white font-exo2-bold text-lg">Edytuj profil</Text>
-                  <Text className="text-gray-400 text-sm font-exo2">Zmień swoje dane i preferencje</Text>
-                </View>
-              </View>
-            </TouchableOpacity>
-          </View>
-        </Animated.View>
 
         {/* Account Info */}
         <Animated.View 
